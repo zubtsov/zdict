@@ -1,8 +1,9 @@
 package org.zubtsov.dictionary.zaliznyak.stress
 
+import org.zubtsov.dictionary.zaliznyak.attributes.common.HasNumber
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.{Case, PrimaryStressType, SecondaryStressType}
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.{PrimaryStressType, SecondaryStressType, common}
-import org.zubtsov.dictionary.zaliznyak.attributes.{HasCase, HasNumber, HasStressType}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.common
+import org.zubtsov.dictionary.zaliznyak.attributes.declension.{HasCase, HasStressType}
 
 //aka Ударение
 object Stress {

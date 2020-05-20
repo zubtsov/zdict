@@ -1,4 +1,4 @@
-package org.zubtsov.dictionary.zaliznyak.attributes
+package org.zubtsov.dictionary.zaliznyak.attributes.declension
 
 trait HasStress {
   private var _isEndingStressed: Boolean = _

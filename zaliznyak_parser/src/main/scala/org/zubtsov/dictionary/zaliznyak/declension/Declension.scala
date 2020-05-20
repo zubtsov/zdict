@@ -1,7 +1,8 @@
 package org.zubtsov.dictionary.zaliznyak.declension
 
-import org.zubtsov.dictionary.zaliznyak.attributes.common.HasStem
+import org.zubtsov.dictionary.zaliznyak.attributes.common.{HasGender, HasNumber, HasStem}
 import org.zubtsov.dictionary.zaliznyak.attributes._
+import org.zubtsov.dictionary.zaliznyak.attributes.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasInitialForm, HasStress, HasSyntacticAndMorphologicalCharacteristics}
 import org.zubtsov.dictionary.zaliznyak.declension.types.CommonDeclensions
 
 //aka Склонение имени

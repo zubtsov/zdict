@@ -6,9 +6,9 @@ import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.DeclensionTy
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Gender.Gender
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.PrimaryStressType.PrimaryStressType
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.SecondaryStressType.SecondaryStressType
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.{Animacy, DeclensionType, Number}
 import org.zubtsov.dictionary.zaliznyak.attributes.{enums, _}
-import org.zubtsov.dictionary.zaliznyak.attributes.common.HasStem
+import org.zubtsov.dictionary.zaliznyak.attributes.common.{HasGender, HasNumber, HasStem, IsPartOfSpeech}
+import org.zubtsov.dictionary.zaliznyak.attributes.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasInitialForm, HasStress, HasStressType, HasSyntacticAndMorphologicalCharacteristics}
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Gender
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.{Animacy, Case, DeclensionType}
 import org.zubtsov.dictionary.zaliznyak.declension.Declension

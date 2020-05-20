@@ -1,6 +1,7 @@
-package org.zubtsov.dictionary.zaliznyak.attributes
+package org.zubtsov.dictionary.zaliznyak.attributes.declension
 
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.Case.Case
+
 //rCase stands for "Russian case", because the word "case" conflicts with the corresponding Scala keyword
 trait HasCase {
   private var _case: Case = _

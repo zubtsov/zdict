@@ -2,7 +2,8 @@ package org.zubtsov.dictionary.zaliznyak.partsofspeech
 
 import org.zubtsov.dictionary.zaliznyak.Stem
 import org.zubtsov.dictionary.zaliznyak.attributes.{enums, _}
-import org.zubtsov.dictionary.zaliznyak.attributes.common.HasStem
+import org.zubtsov.dictionary.zaliznyak.attributes.common.{HasGender, HasNumber, HasStem, IsPartOfSpeech}
+import org.zubtsov.dictionary.zaliznyak.attributes.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasInitialForm, HasStress, HasStressType, HasSyntacticAndMorphologicalCharacteristics}
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Gender
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.Animacy.Animacy
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.Case.Case
@@ -12,7 +13,6 @@ import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Number.Number
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.{Animacy, Case, DeclensionType}
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.PrimaryStressType.PrimaryStressType
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.SecondaryStressType.SecondaryStressType
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.{Animacy, DeclensionType, Number}
 import org.zubtsov.dictionary.zaliznyak.declension.Declension
 import org.zubtsov.dictionary.zaliznyak.entities.NameDictionaryRecord
 import org.zubtsov.dictionary.zaliznyak.partsofspeech.PartOfSpeech.PartOfSpeech

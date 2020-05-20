@@ -1,4 +1,4 @@
-package org.zubtsov.dictionary.zaliznyak.attributes
+package org.zubtsov.dictionary.zaliznyak.attributes.common
 
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Gender.Gender
 

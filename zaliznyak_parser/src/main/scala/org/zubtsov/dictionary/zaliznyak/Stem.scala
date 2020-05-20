@@ -1,7 +1,7 @@
 package org.zubtsov.dictionary.zaliznyak
 
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.DeclensionType.DeclensionType
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.DeclensionType
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.DeclensionType.DeclensionType
 
 //aka Графическая основа (не путать с основой) слова
 object Stem {
@@ -20,4 +20,6 @@ object Stem {
     }
     case _ => ???
   }
+
+
 }

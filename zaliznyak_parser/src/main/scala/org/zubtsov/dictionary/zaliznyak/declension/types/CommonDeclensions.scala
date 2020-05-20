@@ -1,6 +1,8 @@
 package org.zubtsov.dictionary.zaliznyak.declension.types
 
 import org.zubtsov.dictionary.zaliznyak.attributes._
+import org.zubtsov.dictionary.zaliznyak.attributes.common.{HasGender, HasNumber}
+import org.zubtsov.dictionary.zaliznyak.attributes.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasStress}
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.DeclensionType
 //aka Основные склонения имен
 object CommonDeclensions {

@@ -1,8 +1,8 @@
 package org.zubtsov.dictionary.zaliznyak.declension
 
 import org.zubtsov.dictionary.zaliznyak.Utils.RussianLetter
-import org.zubtsov.dictionary.zaliznyak.attributes.common.HasStem
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.{DeclensionType, Number}
+import org.zubtsov.dictionary.zaliznyak.attributes.common.{HasGender, HasNumber, HasStem}
+import org.zubtsov.dictionary.zaliznyak.attributes.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasStress}
 import org.zubtsov.dictionary.zaliznyak.attributes.{enums, _}
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Gender
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.{Case, DeclensionType}

@@ -19,11 +19,6 @@ object DictRecordMapper {
   }
 
   def map(dictrecord: VerbDictionaryRecord) = {
-    ??? match {
-      case "св" | "нсв" | "нп" => {
-        Verb(dictrecord)
-      }
-      case _ => ???
-    }
+    Verb(dictrecord)
   }
 }
