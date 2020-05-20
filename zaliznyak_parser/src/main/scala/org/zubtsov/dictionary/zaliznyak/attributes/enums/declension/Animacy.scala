@@ -1,4 +1,5 @@
-package org.zubtsov.dictionary.zaliznyak.attributes.enums
+package org.zubtsov.dictionary.zaliznyak.attributes.enums.declension
+
 //aka Одушевленность
 object Animacy extends Enumeration {
   type Animacy = Value

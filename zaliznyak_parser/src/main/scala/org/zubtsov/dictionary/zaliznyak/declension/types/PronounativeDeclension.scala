@@ -1,7 +1,9 @@
 package org.zubtsov.dictionary.zaliznyak.declension.types
 
-import org.zubtsov.dictionary.zaliznyak.attributes._
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.{Animacy, Case, Gender, Number}
+import org.zubtsov.dictionary.zaliznyak.attributes.{enums, _}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Gender
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.{Animacy, Case}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.{Animacy, Number}
 
 //todo: add recursive calls?
 //aka Местоименное склонение
@@ -18,7 +20,7 @@ object PronounativeDeclension {
   def endingOfSubtype1(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy ) = {
     import declensionParameters._
     number match {
-      case Number.Singular => gender match {
+      case enums.common.Number.Singular => gender match {
         case Gender.Masculine => rCase match {
           case Case.Nominative => ""
           case Case.Genetive => "ого"
@@ -52,7 +54,7 @@ object PronounativeDeclension {
         }
         case _ => ???
       }
-      case Number.Plural => rCase match {
+      case enums.common.Number.Plural => rCase match {
         case Case.Nominative => "ы"
         case Case.Genetive => "ых"
         case Case.Dative => "ым"
@@ -72,7 +74,7 @@ object PronounativeDeclension {
   def endingOfSubtype2(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters._
     number match {
-      case Number.Singular => gender match {
+      case enums.common.Number.Singular => gender match {
         case Gender.Masculine => rCase match {
           case Case.Nominative => "ь"
           case Case.Genetive => "его"
@@ -105,7 +107,7 @@ object PronounativeDeclension {
         }
         case _ => ???
       }
-      case Number.Plural => rCase match {
+      case enums.common.Number.Plural => rCase match {
         case Case.Nominative => "и"
         case Case.Genetive => "их"
         case Case.Dative => "им"

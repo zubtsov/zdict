@@ -1,4 +1,5 @@
-package org.zubtsov.dictionary.zaliznyak.attributes.enums
+package org.zubtsov.dictionary.zaliznyak.attributes.enums.common
+
 //aka Число
 object Number extends Enumeration {
   type Number = Value

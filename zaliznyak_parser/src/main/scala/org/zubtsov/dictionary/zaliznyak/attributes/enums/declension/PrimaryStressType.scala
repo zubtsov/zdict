@@ -1,4 +1,5 @@
-package org.zubtsov.dictionary.zaliznyak.attributes.enums
+package org.zubtsov.dictionary.zaliznyak.attributes.enums.declension
+
 //aka Схема ударения
 object PrimaryStressType extends Enumeration {
   type PrimaryStressType = Value

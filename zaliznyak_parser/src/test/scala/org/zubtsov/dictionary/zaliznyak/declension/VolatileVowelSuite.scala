@@ -2,7 +2,7 @@ package org.zubtsov.dictionary.zaliznyak.declension
 
 import org.scalatest.FunSuite
 import org.zubtsov.dictionary.zaliznyak.DictRecordMapper
-import org.zubtsov.dictionary.zaliznyak.entities.DictionaryRecord
+import org.zubtsov.dictionary.zaliznyak.entities.NameDictionaryRecord
 
 class VolatileVowelSuite extends FunSuite {
   test("сон 2 м 1*в") {
@@ -24,6 +24,6 @@ class VolatileVowelSuite extends FunSuite {
   }
 
   def generateAllInflectedForms(line: String): List[String] = {
-    DictRecordMapper.map(DictionaryRecord(line)).inflectedForms.map(_._2).toList
+    DictRecordMapper.map(NameDictionaryRecord(line)).inflectedForms.map(_._2).toList
   }
 }

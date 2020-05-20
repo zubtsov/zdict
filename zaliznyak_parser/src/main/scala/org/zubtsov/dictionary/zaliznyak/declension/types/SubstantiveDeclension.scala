@@ -1,7 +1,9 @@
 package org.zubtsov.dictionary.zaliznyak.declension.types
 
-import org.zubtsov.dictionary.zaliznyak.attributes._
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.{Animacy, Case, Gender, Number}
+import org.zubtsov.dictionary.zaliznyak.attributes.{enums, _}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Gender
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.{Animacy, Case}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.{Animacy, Number}
 
 //todo: how to treat Common gender?
 //todo: add recursive calls?
@@ -20,7 +22,7 @@ object SubstantiveDeclension {
   def endingOfSubtype1(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy) = {
     import declensionParameters._
     number match {
-      case Number.Singular => gender match {
+      case enums.common.Number.Singular => gender match {
         case Gender.Masculine => rCase match {
           case Case.Nominative => ""
           case Case.Genetive => "а"
@@ -51,7 +53,7 @@ object SubstantiveDeclension {
           case _ => ???
         }
       }
-      case Number.Plural => gender match {
+      case enums.common.Number.Plural => gender match {
         case Gender.Masculine => rCase match {
           case Case.Nominative => "ы"
           case Case.Genetive => "ов"
@@ -99,7 +101,7 @@ object SubstantiveDeclension {
   def endingOfSubtype2(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters._
     number match {
-      case Number.Singular => gender match {
+      case enums.common.Number.Singular => gender match {
         case Gender.Masculine => rCase match {
           case Case.Nominative => "ь"
           case Case.Genetive => "я"
@@ -130,7 +132,7 @@ object SubstantiveDeclension {
           case _ => ???
         }
       }
-      case Number.Plural => gender match {
+      case enums.common.Number.Plural => gender match {
         case Gender.Masculine => rCase match {
           case Case.Nominative => "и"
           case Case.Genetive => "ей"

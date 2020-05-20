@@ -1,4 +1,5 @@
-package org.zubtsov.dictionary.zaliznyak.attributes.enums
+package org.zubtsov.dictionary.zaliznyak.attributes.enums.common
+
 //aka Род
 object Gender extends Enumeration {
   type Gender = Value

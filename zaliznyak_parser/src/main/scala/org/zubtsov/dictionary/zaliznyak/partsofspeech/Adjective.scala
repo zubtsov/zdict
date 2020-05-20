@@ -1,16 +1,18 @@
 package org.zubtsov.dictionary.zaliznyak.partsofspeech
 
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.Animacy.Animacy
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.Case.Case
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.DeclensionType.DeclensionType
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.Gender.Gender
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.PrimaryStressType.PrimaryStressType
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.SecondaryStressType.SecondaryStressType
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.{Animacy, Case, DeclensionType, Gender, Number}
-import org.zubtsov.dictionary.zaliznyak.attributes._
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.Animacy.Animacy
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.Case.Case
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.DeclensionType.DeclensionType
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Gender.Gender
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.PrimaryStressType.PrimaryStressType
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.SecondaryStressType.SecondaryStressType
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.{Animacy, DeclensionType, Number}
+import org.zubtsov.dictionary.zaliznyak.attributes.{enums, _}
 import org.zubtsov.dictionary.zaliznyak.attributes.common.HasStem
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Gender
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.{Animacy, Case, DeclensionType}
 import org.zubtsov.dictionary.zaliznyak.declension.Declension
-import org.zubtsov.dictionary.zaliznyak.entities.DictionaryRecord
+import org.zubtsov.dictionary.zaliznyak.entities.NameDictionaryRecord
 import org.zubtsov.dictionary.zaliznyak.partsofspeech.PartOfSpeech.PartOfSpeech
 import org.zubtsov.dictionary.zaliznyak.stress.Stress
 import org.zubtsov.dictionary.zaliznyak.{Stem, Utils}
@@ -58,7 +60,7 @@ class Adjective extends CommonName {
     override def initialForm: String = outer.initialForm
   }
 
-  private def newForm(gender: Gender, number: Number.Number, rCase: Case, animacy: Animacy): AdjectiveForm = {
+  private def newForm(gender: Gender, number: enums.common.Number.Number, rCase: Case, animacy: Animacy): AdjectiveForm = {
     val form = new AdjectiveForm()
     form._gender = gender
     form.number = number
@@ -70,7 +72,7 @@ class Adjective extends CommonName {
 }
 
 object Adjective {
-  def apply(dictrecord: DictionaryRecord) = {
+  def apply(dictrecord: NameDictionaryRecord) = {
     import dictrecord.{declensionSubtype, primaryMorphologicalCharacteristic, primarySyntacticCharacteristic}
 
     primarySyntacticCharacteristic match {
@@ -90,7 +92,7 @@ object Adjective {
 
         adjective._inflectedForms = for (
           gender <- Gender.commonValues.toSeq;
-          number <- Number.values.toSeq;
+          number <- enums.common.Number.values.toSeq;
           rCase <- Case.values.toSeq;
           animacy <- Animacy.values.toSeq
         )

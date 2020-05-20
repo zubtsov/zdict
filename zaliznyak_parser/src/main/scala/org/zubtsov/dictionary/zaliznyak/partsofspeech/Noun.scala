@@ -1,18 +1,20 @@
 package org.zubtsov.dictionary.zaliznyak.partsofspeech
 
 import org.zubtsov.dictionary.zaliznyak.Stem
-import org.zubtsov.dictionary.zaliznyak.attributes._
+import org.zubtsov.dictionary.zaliznyak.attributes.{enums, _}
 import org.zubtsov.dictionary.zaliznyak.attributes.common.HasStem
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.Animacy.Animacy
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.Case.Case
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.DeclensionType.DeclensionType
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.Gender.Gender
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.Number.Number
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.PrimaryStressType.PrimaryStressType
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.SecondaryStressType.SecondaryStressType
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.{Animacy, Case, DeclensionType, Gender, Number}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Gender
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.Animacy.Animacy
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.Case.Case
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.DeclensionType.DeclensionType
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Gender.Gender
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Number.Number
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.{Animacy, Case, DeclensionType}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.PrimaryStressType.PrimaryStressType
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.SecondaryStressType.SecondaryStressType
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.{Animacy, DeclensionType, Number}
 import org.zubtsov.dictionary.zaliznyak.declension.Declension
-import org.zubtsov.dictionary.zaliznyak.entities.DictionaryRecord
+import org.zubtsov.dictionary.zaliznyak.entities.NameDictionaryRecord
 import org.zubtsov.dictionary.zaliznyak.partsofspeech.PartOfSpeech.PartOfSpeech
 import org.zubtsov.dictionary.zaliznyak.stress.Stress
 
@@ -76,7 +78,7 @@ class Noun private() extends CommonName with HasGender with HasAnimacy {
 }
 
 object Noun {
-  def apply(dictrecord: DictionaryRecord) = {
+  def apply(dictrecord: NameDictionaryRecord) = {
     import dictrecord.{declensionSubtype, primaryMorphologicalCharacteristic, primarySyntacticCharacteristic}
 
     primarySyntacticCharacteristic match {
@@ -97,7 +99,7 @@ object Noun {
         noun._primaryMorphologicalCharacteristic = dictrecord.primaryMorphologicalCharacteristic
         noun._initialForm = dictrecord.initialForm
 
-        noun._inflectedForms = for (number <- Number.values.toSeq;
+        noun._inflectedForms = for (number <- enums.common.Number.values.toSeq;
                                     rCase <- Case.values.toSeq)
           yield {
             val form = noun.newForm(number, rCase)

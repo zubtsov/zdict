@@ -1,6 +1,6 @@
 package org.zubtsov.dictionary.zaliznyak
 
-import org.zubtsov.dictionary.zaliznyak.entities.DictionaryRecord
+import org.zubtsov.dictionary.zaliznyak.entities.NameDictionaryRecord
 
 import scala.io.Source
 import scala.util.Try
@@ -14,7 +14,7 @@ class ZaliznyakParser(filepath: String) {
     .map(line => {
       Try(
         {
-          val dictRecord = DictionaryRecord(line)
+          val dictRecord = NameDictionaryRecord(line)
           val parsedWord = DictRecordMapper.map(dictRecord)
           parsedWord.toString
         }

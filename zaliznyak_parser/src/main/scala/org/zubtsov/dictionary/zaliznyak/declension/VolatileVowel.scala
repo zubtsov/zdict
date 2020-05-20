@@ -4,7 +4,9 @@ import org.zubtsov.dictionary.zaliznyak.Utils.RussianWord._
 import org.zubtsov.dictionary.zaliznyak.Utils.{RussianLetter, RussianWord, _}
 import org.zubtsov.dictionary.zaliznyak.attributes._
 import org.zubtsov.dictionary.zaliznyak.attributes.common.HasStem
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.{Case, DeclensionType, Gender, Number}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.{Gender, Number}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.{Case, DeclensionType}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.{DeclensionType, Number}
 
 //todo: try to remove dependency on at least primarySyntacticCharacteristic and (if possible) primaryMorphologicalCharacteristic
 //aka Беглая гласная

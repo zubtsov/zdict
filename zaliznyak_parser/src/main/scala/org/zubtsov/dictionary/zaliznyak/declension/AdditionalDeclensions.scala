@@ -1,8 +1,10 @@
 package org.zubtsov.dictionary.zaliznyak.declension
 
-import org.zubtsov.dictionary.zaliznyak.attributes._
+import org.zubtsov.dictionary.zaliznyak.attributes.{enums, _}
 import org.zubtsov.dictionary.zaliznyak.attributes.common.HasStem
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.{Case, DeclensionType, Gender, Number}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Gender
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.{Case, DeclensionType}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.{DeclensionType, Number}
 import org.zubtsov.dictionary.zaliznyak.declension.types.CommonDeclensions
 
 //aka Дополнительные склонения имен
@@ -54,7 +56,7 @@ object AdditionalDeclensions {
     }
 
     (declensionType, rCase, number) match {
-      case (DeclensionType.Substantive, Case.Genetive, Number.Plural) => {
+      case (DeclensionType.Substantive, Case.Genetive, enums.common.Number.Plural) => {
         gender match {
           case Gender.Masculine => "ей" //todo: добавить проверку окончания на равенство "ов", "ёв" или "ев"?
           case Gender.Feminine | Gender.Neuter => if (isEndingStressed) "ей" else "" //todo: добавить проверку нулевого окончания?
@@ -92,7 +94,7 @@ object AdditionalDeclensions {
     }
 
     (declensionType, rCase, number) match {
-      case (DeclensionType.Substantive, Case.Genetive, Number.Plural) =>
+      case (DeclensionType.Substantive, Case.Genetive, enums.common.Number.Plural) =>
         gender match {
           case Gender.Masculine => if (isEndingStressed) "ёв" else "ев" //todo: добавить проверку окончания на равенство "ей"?
           case Gender.Feminine | Gender.Neuter => "й" //todo: добавить проверку окончания на равенство "ь", "ей"?
@@ -118,9 +120,9 @@ object AdditionalDeclensions {
 
     declensionType match {
       case DeclensionType.Substantive => (rCase, number, gender) match {
-        case (Case.Genetive, Number.Plural, Gender.Masculine) => if (isEndingStressed) "ёв" else "ев" //todo: добавить проверку окончания на равенство "ей"?
-        case (Case.Genetive, Number.Plural, Gender.Feminine) | (Case.Genetive, Number.Plural, Gender.Neuter) => "й" //todo: добавить проверку окончания на равенство "ь", "ей"?
-        case (Case.Dative, Number.Singular, Gender.Feminine) | (Case.Prepositional, Number.Singular, _) => if (isEndingStressed) "е" else "и" //todo: добавить проверку окончания на равенство "е"?
+        case (Case.Genetive, enums.common.Number.Plural, Gender.Masculine) => if (isEndingStressed) "ёв" else "ев" //todo: добавить проверку окончания на равенство "ей"?
+        case (Case.Genetive, enums.common.Number.Plural, Gender.Feminine) | (Case.Genetive, enums.common.Number.Plural, Gender.Neuter) => "й" //todo: добавить проверку окончания на равенство "ь", "ей"?
+        case (Case.Dative, enums.common.Number.Singular, Gender.Feminine) | (Case.Prepositional, enums.common.Number.Singular, _) => if (isEndingStressed) "е" else "и" //todo: добавить проверку окончания на равенство "е"?
         case _ => ending
       }
     }

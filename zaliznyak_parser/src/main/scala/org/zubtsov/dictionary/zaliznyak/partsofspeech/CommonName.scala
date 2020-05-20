@@ -2,9 +2,9 @@ package org.zubtsov.dictionary.zaliznyak.partsofspeech
 
 import org.zubtsov.dictionary.zaliznyak.attributes.common.HasStem
 import org.zubtsov.dictionary.zaliznyak.attributes.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasGender, HasInitialForm, HasNumber, HasStressType, HasSyntacticAndMorphologicalCharacteristics, IsPartOfSpeech}
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.DeclensionType.DeclensionType
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.PrimaryStressType.PrimaryStressType
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.SecondaryStressType.SecondaryStressType
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.DeclensionType.DeclensionType
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.PrimaryStressType.PrimaryStressType
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.SecondaryStressType.SecondaryStressType
 
 //common trait for any Name (aka Имя [существительное/прилагательное/местоимение])
 trait CommonName extends HasDeclensionTypeAndSubtype with HasStressType with HasStem with IsPartOfSpeech

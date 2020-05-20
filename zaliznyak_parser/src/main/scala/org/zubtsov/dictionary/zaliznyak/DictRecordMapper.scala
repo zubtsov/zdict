@@ -1,19 +1,27 @@
 package org.zubtsov.dictionary.zaliznyak
 
-import org.zubtsov.dictionary.zaliznyak.entities.DictionaryRecord
-import org.zubtsov.dictionary.zaliznyak.partsofspeech.{Adjective, Noun}
+import org.zubtsov.dictionary.zaliznyak.entities.{NameDictionaryRecord, VerbDictionaryRecord}
+import org.zubtsov.dictionary.zaliznyak.partsofspeech.{Adjective, Noun, Verb}
 
 object DictRecordMapper {
-  def map(dictrecord: DictionaryRecord) = {
+  def map(dictrecord: NameDictionaryRecord) = {
     import dictrecord.primarySyntacticCharacteristic
 
     primarySyntacticCharacteristic match {
-      //Существительное
       case "м" | "ж" | "с" | "мо" | "жо" | "со" | "мн. одуш." | "мн. неод." => {
         Noun(dictrecord)
       }
       case "п" => {
         Adjective(dictrecord)
+      }
+      case _ => ???
+    }
+  }
+
+  def map(dictrecord: VerbDictionaryRecord) = {
+    ??? match {
+      case "св" | "нсв" | "нп" => {
+        Verb(dictrecord)
       }
       case _ => ???
     }

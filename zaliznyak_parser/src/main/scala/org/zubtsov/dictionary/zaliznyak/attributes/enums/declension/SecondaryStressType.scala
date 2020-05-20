@@ -1,4 +1,5 @@
-package org.zubtsov.dictionary.zaliznyak.attributes.enums
+package org.zubtsov.dictionary.zaliznyak.attributes.enums.declension
+
 //aka Второстепеная схема ударения
 object SecondaryStressType extends Enumeration {
   type SecondaryStressType = Value

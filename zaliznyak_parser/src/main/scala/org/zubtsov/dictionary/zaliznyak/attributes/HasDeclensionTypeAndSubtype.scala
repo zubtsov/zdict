@@ -1,6 +1,6 @@
 package org.zubtsov.dictionary.zaliznyak.attributes
 
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.DeclensionType.DeclensionType
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.DeclensionType.DeclensionType
 
 trait HasDeclensionTypeAndSubtype {
   def declensionType: DeclensionType

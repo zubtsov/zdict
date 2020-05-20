@@ -1,4 +1,5 @@
-package org.zubtsov.dictionary.zaliznyak.attributes.enums
+package org.zubtsov.dictionary.zaliznyak.attributes.enums.declension
+
 //aka Падеж
 object Case extends Enumeration {
   type Case = Value

@@ -1,7 +1,9 @@
 package org.zubtsov.dictionary.zaliznyak.declension.types
 
-import org.zubtsov.dictionary.zaliznyak.attributes._
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.{Animacy, Case, Gender, Number}
+import org.zubtsov.dictionary.zaliznyak.attributes.{enums, _}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Gender
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.{Animacy, Case}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.{Animacy, Number}
 
 //todo: add recursive calls?
 //aka Адъективное склонение
@@ -27,7 +29,7 @@ object AdjectiveDeclension {
   def endingOfSubtype1(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters._
     number match {
-      case Number.Singular => gender match {
+      case enums.common.Number.Singular => gender match {
         case Gender.Masculine => rCase match {
           case Case.Nominative => if (isEndingStressed) "ой" else "ый"
           case Case.Genetive => "ого"
@@ -61,7 +63,7 @@ object AdjectiveDeclension {
         }
         case _ => ???
       }
-      case Number.Plural => rCase match {
+      case enums.common.Number.Plural => rCase match {
         case Case.Nominative => "ые"
         case Case.Genetive => "ых"
         case Case.Dative => "ым"
@@ -81,7 +83,7 @@ object AdjectiveDeclension {
   def endingOfSubtype2(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy) = {
     import declensionParameters._
     number match {
-      case Number.Singular => gender match {
+      case enums.common.Number.Singular => gender match {
         case Gender.Masculine => rCase match {
           case Case.Nominative => "ий"
           case Case.Genetive => "его"
@@ -115,7 +117,7 @@ object AdjectiveDeclension {
         }
         case _ => ???
       }
-      case Number.Plural => rCase match {
+      case enums.common.Number.Plural => rCase match {
         case Case.Nominative => "ие"
         case Case.Genetive => "их"
         case Case.Dative => "им"
@@ -135,13 +137,13 @@ object AdjectiveDeclension {
   def shortFormEndingOfSubtype1(declensionParameters: HasGender with HasNumber) = {
     import declensionParameters._
     number match {
-      case Number.Singular => gender match {
+      case enums.common.Number.Singular => gender match {
         case Gender.Masculine => ""
         case Gender.Feminine => "а"
         case Gender.Neuter => "о"
         case _ => ???
       }
-      case Number.Plural => "ы"
+      case enums.common.Number.Plural => "ы"
       case _ => ???
     }
   }
@@ -149,13 +151,13 @@ object AdjectiveDeclension {
   def shortFormEndingOfSubtype2(declensionParameters: HasGender with HasNumber with HasStress) = {
     import declensionParameters._
     number match {
-      case Number.Singular => gender match {
+      case enums.common.Number.Singular => gender match {
         case Gender.Masculine => "ь"
         case Gender.Feminine => "я"
         case Gender.Neuter => if (isEndingStressed) "ё" else "е"
         case _ => ???
       }
-      case Number.Plural => "и"
+      case enums.common.Number.Plural => "и"
       case _ => ???
     }
   }

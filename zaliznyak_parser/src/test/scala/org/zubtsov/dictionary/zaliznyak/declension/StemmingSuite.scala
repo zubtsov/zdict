@@ -2,7 +2,7 @@ package org.zubtsov.dictionary.zaliznyak.declension
 
 import org.scalatest.FunSuite
 import org.zubtsov.dictionary.zaliznyak.Stem
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.DeclensionType
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.DeclensionType
 
 class StemmingSuite extends FunSuite {
   test("Stemming test") {

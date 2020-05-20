@@ -1,12 +1,13 @@
 package org.zubtsov.dictionary.zaliznyak.entities
 
 import org.zubtsov.dictionary.zaliznyak.Utils
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.DeclensionType.DeclensionType
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.PrimaryStressType.PrimaryStressType
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.SecondaryStressType.SecondaryStressType
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.DeclensionType.DeclensionType
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.PrimaryStressType.PrimaryStressType
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.SecondaryStressType.SecondaryStressType
 import org.zubtsov.dictionary.zaliznyak.attributes.enums._
-
-case class DictionaryRecord(
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.{DeclensionType, PrimaryStressType, SecondaryStressType}
+//aka Запись словаря для имен
+case class NameDictionaryRecord(
                              initialForm: String,
                              stressedVowelsPositions: String,
                              primarySyntacticCharacteristic: String,
@@ -19,33 +20,29 @@ case class DictionaryRecord(
                              volatileVowel: Boolean
                            )
 
-object DictionaryRecord {
-  val DictionaryRecordRegex = (
+object NameDictionaryRecord {
+  val regex = (
     //начальная форма слова
     raw"^([а-яА-Я\-]+)\s" +
       //позиция ударной гласной
       raw"([0-9]+\.?[0-9]?)\s" +
-      //модификатор склонения 1
+      //основная синтаксическая характеристика
       raw"(" +
       //имена
       raw"м|ж|с|мо|жо|со|мо\-жо" +
       raw"|п" +
       raw"|мс|мс-п" +
       raw"|мн\. одуш\.|мн\. неод\." +
-      //глаголы
-      //    raw"|св|нсв|св\-нсв" +
       //проч
       //    raw"|н|числ\.|числ\.-п|част\." +
       raw")\s" +
-      //модификатор склонения 2
+      //основная морфологическая характеристика
       raw"(" +
       //имена
       raw"м|ж|с|мо|жо|со|мо\-жо" +
       raw"|п" +
       raw"|мс|мс-п" +
       raw"|мн\. одуш\.|мн\. неод\." +
-      //глаголы
-      //    raw"|св|нсв|св\-нсв" +
       //проч
       //    raw"|н|числ\.|числ\.-п|част\." +
       raw")?\s?" +
@@ -57,13 +54,13 @@ object DictionaryRecord {
       raw"([а|в|с|е|D|F])?" +
       //второстепенная схема ударения (штрих)
       raw"('{1,2})?" +
-//      raw"[\w\W]*" +
+      //      raw"[\w\W]*" +
       "$"
     ).r
 
-  def apply(record: String): DictionaryRecord = {
+  def apply(record: String): NameDictionaryRecord = {
     record match {
-      case DictionaryRecordRegex(
+      case regex(
       initialForm,
       stressedVowelsPositions,
       primarySyntacticCharacteristic,
@@ -76,7 +73,7 @@ object DictionaryRecord {
         val primMorphChar = Utils.firstNotNull(primaryMorphologicCharacteristic, primarySyntacticCharacteristic)
         val declensionType = DeclensionType(primMorphChar)
 
-        DictionaryRecord(initialForm,
+        NameDictionaryRecord(initialForm,
           stressedVowelsPositions,
           primarySyntacticCharacteristic,
           primMorphChar,

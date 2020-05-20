@@ -1,4 +1,5 @@
-package org.zubtsov.dictionary.zaliznyak.attributes.enums
+package org.zubtsov.dictionary.zaliznyak.attributes.enums.declension
+
 //aka Тип склонения
 object DeclensionType extends Enumeration {
   type DeclensionType = Value

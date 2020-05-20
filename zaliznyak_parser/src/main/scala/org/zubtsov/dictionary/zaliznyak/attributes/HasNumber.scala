@@ -1,6 +1,6 @@
 package org.zubtsov.dictionary.zaliznyak.attributes
 
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.Number.Number
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Number.Number
 //doesn't necessarily mean countable
 trait HasNumber {
   private var _number: Number = _

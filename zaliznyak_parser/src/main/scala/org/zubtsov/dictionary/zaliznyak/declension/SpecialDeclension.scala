@@ -2,8 +2,10 @@ package org.zubtsov.dictionary.zaliznyak.declension
 
 import org.zubtsov.dictionary.zaliznyak.Utils.RussianLetter
 import org.zubtsov.dictionary.zaliznyak.attributes.common.HasStem
-import org.zubtsov.dictionary.zaliznyak.attributes.enums.{Case, DeclensionType, Gender, Number}
-import org.zubtsov.dictionary.zaliznyak.attributes._
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.{DeclensionType, Number}
+import org.zubtsov.dictionary.zaliznyak.attributes.{enums, _}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Gender
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.declension.{Case, DeclensionType}
 import org.zubtsov.dictionary.zaliznyak.declension.types.CommonDeclensions
 
 //aka Особое склонение имен
@@ -12,7 +14,7 @@ object SpecialDeclension {
     import declensionParameters._
     assert(declensionType == DeclensionType.Substantive) //todo: только у существительных бывает Substantive declension?
     number match {
-      case Number.Singular => rCase match {
+      case enums.common.Number.Singular => rCase match {
         case Case.Nominative | Case.Accusative => "ь"
         case Case.Genetive | Case.Dative | Case.Prepositional => "и"
         case Case.Instrumental => gender match {
@@ -23,8 +25,8 @@ object SpecialDeclension {
         }
         case _ => ???
       }
-      case Number.Plural =>
-        if (rCase == Case.Genetive && number == Number.Plural)
+      case enums.common.Number.Plural =>
+        if (rCase == Case.Genetive && number == enums.common.Number.Plural)
           "ей"
         else {
           val oldDeclensionSubtype = declensionParameters.declensionSubtype
