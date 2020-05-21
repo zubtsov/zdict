@@ -10,14 +10,14 @@ case class VerbDictionaryRecord(
                                  stressedVowelsPositions: String,
                                  aspect: Aspect,
                                  transitive: Transitivity,
-                                 conjugationIndex: Int,
+                                 conjugationType: Int,
                                  volatileVowelIndicator: String,
                                  stressType: String
                                )
 
 object VerbDictionaryRecord {
   val regex = (
-    //начальная форма слова
+    //начальная форма глагола (инфинитив)
     raw"^([а-яА-Я\-]+)\s" +
       //позиция ударной гласной
       raw"([0-9]+\.?[0-9]?)\s" +
@@ -39,7 +39,7 @@ object VerbDictionaryRecord {
     import org.zubtsov.dictionary.zaliznyak.Utils.RussianWord
     record match {
       case regex(
-      initialForm,
+      infinitive,
       stressedVowelsPositions,
       aspect,
       transitive,
@@ -47,10 +47,10 @@ object VerbDictionaryRecord {
       volatileVowelIndicator,
       stressType
       ) => {
-        val reflexive = initialForm.endsWithAnyOf("ся", "сь")
+        val reflexive = infinitive.endsWithAnyOf("ся", "сь")
 
         VerbDictionaryRecord(
-          initialForm,
+          infinitive,
           stressedVowelsPositions,
           Aspect(aspect),
           Transitivity(reflexive, Option(transitive)),
