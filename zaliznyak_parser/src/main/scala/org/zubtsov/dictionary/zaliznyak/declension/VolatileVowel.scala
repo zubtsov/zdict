@@ -55,7 +55,7 @@ object VolatileVowel {
               perviousLetters + "о" + lastConsonant + followingLetters
             else if (!isEndingStressed || lastConsonant == "ц")
               perviousLetters + "е" + lastConsonant + followingLetters
-            else if (isEndingStressed && perviousLetters.takeRight(1).fizzingConsonant())
+            else if (isEndingStressed && perviousLetters.takeRight(1).isFizzingConsonant())
               perviousLetters + "о" + lastConsonant + followingLetters
             else
               perviousLetters + "ё" + lastConsonant + followingLetters

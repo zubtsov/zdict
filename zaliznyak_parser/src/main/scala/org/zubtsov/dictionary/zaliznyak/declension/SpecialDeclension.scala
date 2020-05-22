@@ -34,7 +34,7 @@ object SpecialDeclension {
           val initialEnding = CommonDeclensions.ending(declensionParameters)
           declensionParameters.declensionSubtype = oldDeclensionSubtype
 
-          if (stem.takeRight(1).fizzingConsonant())
+          if (stem.takeRight(1).isFizzingConsonant())
             initialEnding.replace("я", "а")
           else
             initialEnding

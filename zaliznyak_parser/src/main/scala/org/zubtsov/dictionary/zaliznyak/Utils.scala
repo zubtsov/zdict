@@ -32,12 +32,16 @@ object Utils {
     }
     //todo: fizzing or hissing?
     //aka Шипящая согласная
-    def fizzingConsonant() = {
+    def isFizzingConsonant() = {
       letter.matches("[ЖШЧЩжшчщ]")
     }
   }
 
   implicit class RussianWord(word: String) {
+    def endsWithFizzingConsonant() = {
+      word.takeRight(1).isFizzingConsonant()
+    }
+
     def endsWithAnyOf(endings: String*): Boolean = {
       endings.exists(word.endsWith(_))
     }
