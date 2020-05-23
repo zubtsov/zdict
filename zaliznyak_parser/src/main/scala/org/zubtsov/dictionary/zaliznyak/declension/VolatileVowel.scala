@@ -1,7 +1,7 @@
 package org.zubtsov.dictionary.zaliznyak.declension
 
-import org.zubtsov.dictionary.zaliznyak.Utils.RussianWord._
-import org.zubtsov.dictionary.zaliznyak.Utils.{RussianLetter, RussianWord, _}
+import org.zubtsov.dictionary.zaliznyak.helpers.Utils.RussianWord._
+import org.zubtsov.dictionary.zaliznyak.helpers.Utils.{RussianLetter, RussianWord, _}
 import org.zubtsov.dictionary.zaliznyak.attributes.common.{HasGender, HasNumber, HasStem}
 import org.zubtsov.dictionary.zaliznyak.attributes.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasInitialForm, HasStress, HasSyntacticAndMorphologicalCharacteristics}
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.{Gender, Number}
@@ -45,7 +45,7 @@ object VolatileVowel {
       stem match {
         case LastConsonantRegex(perviousLetters, lastConsonant, followingLetters) => primaryMorphologicalCharacteristic match {
           case "ж" | "жо" | "с" | "со" if declensionSubtype == 6 =>
-            stem.replaceLastLetter("ь", if (isEndingStressed) "ё" else "е")
+            stem.replaceLastOccurence("ь", if (isEndingStressed) "ё" else "е")
           case _ if (perviousLetters.endsWithAnyOf("ь", "й")) =>
             stem.patch(perviousLetters.length - 1, if (!isEndingStressed || perviousLetters.endsWith("ц")) "е" else "ё", 1)
           case _ => {

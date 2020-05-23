@@ -15,7 +15,8 @@ import org.zubtsov.dictionary.zaliznyak.declension.Declension
 import org.zubtsov.dictionary.zaliznyak.entities.NameDictionaryRecord
 import org.zubtsov.dictionary.zaliznyak.partsofspeech.PartOfSpeech.PartOfSpeech
 import org.zubtsov.dictionary.zaliznyak.stress.Stress
-import org.zubtsov.dictionary.zaliznyak.{Stem, Utils}
+import org.zubtsov.dictionary.zaliznyak.Stem
+import org.zubtsov.dictionary.zaliznyak.helpers.Utils
 
 class Adjective extends CommonName {
   outer =>

@@ -1,6 +1,6 @@
 package org.zubtsov.dictionary.zaliznyak.declension
 
-import org.zubtsov.dictionary.zaliznyak.Utils.RussianLetter
+import org.zubtsov.dictionary.zaliznyak.helpers.Utils.RussianLetter
 import org.zubtsov.dictionary.zaliznyak.attributes.common.{HasGender, HasNumber, HasStem}
 import org.zubtsov.dictionary.zaliznyak.attributes.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasStress}
 import org.zubtsov.dictionary.zaliznyak.attributes.{enums, _}

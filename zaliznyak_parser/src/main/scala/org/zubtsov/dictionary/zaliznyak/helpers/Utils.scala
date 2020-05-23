@@ -1,24 +1,6 @@
-package org.zubtsov.dictionary.zaliznyak
+package org.zubtsov.dictionary.zaliznyak.helpers
 
 object Utils {
-
-
-  def firstNotNull(args: String*) = {
-    args.dropWhile(_ == null).head
-  }
-
-  def determinePartOfSpeech(declensionIndicator: String): String = declensionIndicator match {
-    case "м" | "ж" | "с" | "мо" | "жо" | "со" | "мо-жо" => "сущ."
-    case "св" | "нсв" | "св-нсв" => "глаг."
-    case "п" => "прил."
-    case _ => ???
-  }
-
-  implicit class RichString(string: String) {
-    def among(letters: String*) = {
-      letters.toSet.contains(string)
-    }
-  }
 
   implicit class RussianLetter(letter: String) {
     assert(letter.length == 1)
@@ -30,6 +12,7 @@ object Utils {
     def isConsonant() = {
       letter.matches("[БВГДЖЗЙКЛМНПРСТФХЦЧШЩбвгджзйклмнпрстфхцчшщ]")
     }
+
     //todo: fizzing or hissing?
     //aka Шипящая согласная
     def isFizzingConsonant() = {
@@ -43,15 +26,20 @@ object Utils {
     }
 
     def endsWithAnyOf(endings: String*): Boolean = {
-      endings.exists(word.endsWith(_))
+      endings.exists(word.endsWith)
+    }
+
+    def endsWithAnyOf(endings: Iterable[String]): Boolean = {
+      endings.exists(word.endsWith)
     }
 
     def replaceLastVowel(replacement: String) = {
       word.replaceAll(RussianWord.LastVowelOnlyExpr, replacement)
     }
 
-    def replaceLastLetter(character: String, replacement: String) = {
-      word.patch(word.lastIndexOf(character), Seq(character), 1)
+    def replaceLastOccurence(substring: String, replacement: String) = {
+      word.patch(word.lastIndexOf(substring), Seq(substring), substring.length)
+        .asInstanceOf[String]
     }
 
     def lastConsonant() = {
@@ -80,6 +68,16 @@ object Utils {
     val LastVowelRegex = LastVowelExpr.r
 
     val LastVowelOnlyExpr = raw"([АЕЁИОУЫЭЮЯаеёиоуыэюя])(?=([БВГДЖЗЙКЛМНПРСТФХЦЧШЩбвгджзйклмнпрстфхцчшщ]*$$))"
+  }
+
+  def firstNotNull(args: String*) = {
+    args.dropWhile(_ == null).head
+  }
+
+  implicit class RichString(string: String) {
+    def among(strings: String*) = {
+      strings.toSet.contains(string)
+    }
   }
 
 }

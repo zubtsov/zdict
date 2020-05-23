@@ -1,10 +1,29 @@
 package org.zubtsov.dictionary.zaliznyak.conjugation
 
+import org.zubtsov.dictionary.zaliznyak.attributes.common.{HasNumber, HasStem}
+import org.zubtsov.dictionary.zaliznyak.attributes.enums.common.Number
 import org.zubtsov.dictionary.zaliznyak.attributes.conjugation.{HasConjugationType, HasPerson, HasTense}
 import org.zubtsov.dictionary.zaliznyak.attributes.declension.HasInitialForm
 import org.zubtsov.dictionary.zaliznyak.attributes.enums.conjugation.{Person, Tense}
 
 object Conjugation {
+  private val ConsonantRotation = Map(
+    "ск" -> "щ",
+    "ст" -> "щ",
+    "к" -> "ч",
+    "т" -> "ч", //sometimes it's "щ"
+    "б" -> "бл",
+    "п" -> "пл",
+    "в" -> "вл",
+    "ф" -> "фл",
+    "м" -> "мл",
+    "з" -> "ж",
+    "с" -> "ш",
+    "д" -> "ж",
+    "г" -> "ж",
+    "х" -> "ш",
+  )
+
   def firstThirdPersonEnding(hasPerson: HasPerson, first: String, third: String) = {
     hasPerson.person match {
       case Person.First => first
@@ -13,10 +32,51 @@ object Conjugation {
     }
   }
 
-  def basicEnding(conjugationParameters: HasInitialForm with HasConjugationType with HasTense with HasPerson) = {
+  def applyConsonantRotation(infinitive: String, endingHint: Option[String]) = {
+    import org.zubtsov.dictionary.zaliznyak.helpers.Utils._
+
+    val truncated = infinitive.dropRight(3)
+    val ending = infinitive.takeRight(3)
+
+    val replaced = if (!truncated.endsWithAnyOf(ConsonantRotation.keys))
+      truncated
+    else if (endingHint.forall(_ == "-щ-")
+      && !truncated.endsWith("ст")
+      && truncated.endsWith("т")) {
+      truncated.dropRight(1) + "щ"
+    } else {
+      //use first replacement from the map
+      val replacement = ConsonantRotation.dropWhile(t => !truncated.endsWith(t._1)).head
+      truncated.replaceLastOccurence(replacement._1, replacement._2)
+    }
+
+    replaced + ending
+  }
+
+  def basicConjugation(conjugationParameters: HasInitialForm with HasStem with HasConjugationType with HasTense with HasPerson with HasNumber,
+                       endingHint: Option[String] = None): (String, String) = {
     import conjugationParameters._
-    import org.zubtsov.dictionary.zaliznyak.Utils._
-    tense match {
+    import org.zubtsov.dictionary.zaliznyak.helpers.Utils._
+
+    val newStem = conjugationType match {
+      case 4 | 5 if (
+        person == Person.First
+          && number == Number.Singular
+          && (tense == Tense.Present || tense == Tense.Future)
+        ) => {
+        applyConsonantRotation(initialForm, endingHint)
+      }
+      case 6 if (
+        (person == Person.First || person == Person.Third)
+          && number == Number.Singular
+          && (tense == Tense.Present || tense == Tense.Future)
+        ) => {
+        applyConsonantRotation(initialForm, endingHint)
+      }
+      case _ => stem
+    }
+
+    val ending = tense match {
       case Tense.Present | Tense.Future => {
         conjugationType match {
           case 1 => {
@@ -46,7 +106,7 @@ object Conjugation {
               case _ => ???
             }
           }
-          case 4 => { //todo: implement additional guidelines
+          case 4 => {
             initialForm.takeRight(3) match {
               case "ить" => person match {
                 case Person.First => if (initialForm.dropRight(3).endsWithFizzingConsonant()) "у" else "ю"
@@ -56,7 +116,7 @@ object Conjugation {
               case _ => ???
             }
           }
-          case 5 => { //todo: implement additional guidelines
+          case 5 => {
             initialForm.takeRight(3) match {
               case "ать" | "ять" | "еть" => person match {
                 case Person.First => if (initialForm.dropRight(3).endsWithFizzingConsonant()) "у" else "ю"
@@ -66,7 +126,7 @@ object Conjugation {
               case _ => ???
             }
           }
-          case 6 => { //todo: implement additional guidelines
+          case 6 => {
             initialForm.takeRight(3) match {
               case "ать" | "ять" => person match {
                 case Person.First => if (initialForm.dropRight(3).endsWithFizzingConsonant()) "у" else "ю"
@@ -145,5 +205,6 @@ object Conjugation {
       }
       case _ => ???
     }
+    (newStem, ending)
   }
 }

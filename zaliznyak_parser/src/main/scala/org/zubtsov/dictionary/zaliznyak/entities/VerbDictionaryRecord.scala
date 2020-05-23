@@ -36,7 +36,7 @@ object VerbDictionaryRecord {
     ).r
 
   def apply(record: String): VerbDictionaryRecord = {
-    import org.zubtsov.dictionary.zaliznyak.Utils.RussianWord
+    import org.zubtsov.dictionary.zaliznyak.helpers.Utils.RussianWord
     record match {
       case regex(
       infinitive,
