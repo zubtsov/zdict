@@ -1,12 +1,13 @@
 import requests
 import time
-from os import listdir
+from os import listdir, path
 from os.path import isfile, join
 import pathlib
 import datetime
+import sys
 
 output_dir = "wictionary/raw"
-dict_file = 'C:\\Users\\zubtsov\\Downloads\\zalizniak.txt'
+dict_file = fn = sys.argv[1]
 
 pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
 
@@ -18,8 +19,7 @@ number_of_words_to_crawl = len(words_to_be_crawled)
 start_time_secs = time.perf_counter()
 current_number_of_crawled_words = 0
 for word in words_to_be_crawled:
-    output_file_name = output_dir + '\\' + word + '.html'
-
+    output_file_name = output_dir + path.sep + word + '.html'
     if pathlib.Path(output_file_name).exists():
         print("Word '" + word + "' already exists")
         continue
