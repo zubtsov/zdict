@@ -136,16 +136,31 @@ object Conjugation {
               case _ => ???
             }
           }
-          case 7 => { //todo: implement additional guidelines
+          case 7 => {
             initialForm.takeRight(3) match {
               case "зти" | "зть" => firstThirdPersonEnding(conjugationParameters, "зу", "зет")
-              case "сти" | "сть" => ??? //todo: implement
+              case "сти" | "сть" => {
+                val (first, third) = Map(
+                  "-c-" -> ("су", "сет"),
+                  "-д-" -> ("ду", "дет"),
+                  "-т-" -> ("ту", "тет"),
+                  "-ст-" -> ("сту", "стет"),
+                  "-б-" -> ("бу", "бсет")
+                )(endingHint.get)
+                firstThirdPersonEnding(conjugationParameters, first, third)
+              }
               case _ => ???
             }
           }
-          case 8 => { //todo: implement additional guidelines
+          case 8 => {
             initialForm.takeRight(2) match {
-              case "чь" => ??? //todo: implement
+              case "чь" => {
+                val (first, third) = Map(
+                  "-г-" -> ("гу", "жет"),
+                  "-к-" -> ("ку", "чет")
+                )(endingHint.get)
+                firstThirdPersonEnding(conjugationParameters, first, third)
+              }
               case _ => ???
             }
           }
@@ -184,7 +199,14 @@ object Conjugation {
           }
           case 14 => { //todo: implement additional guidelines
             initialForm.takeRight(3) match {
-              case "ать" | "ять" => ??? //todo: implement
+              case "ать" | "ять" => {
+                val (first, third) = Map(
+                  "-н-" -> ("ну", "нет"),
+                  "-м-" -> ("му", "мет"),
+                  "-им-" -> ("иму", "имет")
+                )(endingHint.get)
+                firstThirdPersonEnding(conjugationParameters, first, third)
+              }
               case _ => ???
             }
           }
