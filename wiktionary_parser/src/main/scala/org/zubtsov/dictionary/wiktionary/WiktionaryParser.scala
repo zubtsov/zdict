@@ -1,57 +1,53 @@
 package org.zubtsov.dictionary.wiktionary
 
+import java.io.FileWriter
+
+import com.google.gson.Gson
+import org.zubtsov.dictionary.config.{AdjectiveConfig, Config, NounConfig}
+import org.zubtsov.dictionary.extractor.URLExtractor
+
 import scala.io.Source
-import scala.xml.{NodeSeq, XML}
+import scala.xml.Elem
 
 //todo: add multithreading
 object WiktionaryParser {
 
-  def parse(filepath: String): Unit = {
+  def parse(filepath: String, outputPath: String): Unit = {
     Source.fromFile(filepath, "Windows-1251").getLines()
       .filter(_.trim.nonEmpty)
       .map(line => line.split("\\s+")(0))
-      .foreach(extractData(_))
+      .toList
+      .distinct
+      .foreach(extractData(_, outputPath))
   }
 
-  def extractData(word: String): Unit = {
+  def extractData(word: String, outputPath: String): Unit = {
     try {
-      val xmlFile = XML.load("https://ru.wiktionary.org/wiki/" + word)
+      val xmlFile = URLExtractor.extractDataFromHTML("https://ru.wiktionary.org/wiki/" + word)
 
-      //todo: add common table match for noun and adjectives
-      val nounNode = (xmlFile \\ "a")
-        .filter(href => href.attribute("title").toString.contains("существительное"))
-      if (nounNode.length != 0) {
-        val casesTable =
-          for {
-            table <- xmlFile \\ "tbody"
-            thNodes = table \\ "tr" \\ "th"
-            if isCasesTable(thNodes)
-          } yield table
-
-        val trNodes = casesTable.head.child.filter(_.child.nonEmpty)
-        val cases = scala.collection.mutable.Map[String, (String, String)]()
-
-        for (rowNum <- 1 until trNodes.size) {
-          val row = trNodes(rowNum) \\ "td"
-          //todo: switch to class representation
-          cases += (row(0) \\ "a") (0).attribute("title").toString -> (row(1).text, row(2).text)
+      (xmlFile \\ "a").foreach(h => {
+        h.attribute("title").getOrElse("").toString match {
+          case "существительное" => parseConfig(NounConfig, xmlFile, word, outputPath)
+          case "прилагательное" => parseConfig(AdjectiveConfig, xmlFile, word, outputPath)
+          case _ => "not noun or adj."
         }
-      }
+      })
     }
     catch {
       case ex: Exception => {
         //todo: handle exceptions
       }
     }
-
   }
 
-  private def isCasesTable(thNodes: NodeSeq): Boolean = {
-    if (thNodes.length == 3 && (thNodes(0) \\ "a").text.matches(".*падеж.*")
-      && (thNodes(1) \\ "a").text.matches(".*ед\\..*\\ч.*")
-      && (thNodes(2) \\ "a").text.matches(".*мн\\..*ч\\..*")) {
-      true
+  private def parseConfig(config: Config, xmlFile: Elem, word: String, outputPath: String) {
+    val lexemeList = config.getParser.parse(xmlFile, word)
+    val gson = new Gson
+
+    for (lexeme <- lexemeList.indices) {
+      val writer = new FileWriter(outputPath + word + "_" + lexeme + ".json")
+      writer.write(gson.toJson(lexemeList(lexeme)))
+      writer.close()
     }
-    else false
   }
 }
