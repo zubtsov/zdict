@@ -1,7 +1,0 @@
-package org.zubtsov.dictionary.zaliznyak.attributes.common
-
-import org.zubtsov.dictionary.zaliznyak.partsofspeech.PartOfSpeech.PartOfSpeech
-
-trait IsPartOfSpeech {
-  def partOfSpeech: PartOfSpeech
-}
