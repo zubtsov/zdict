@@ -1,7 +1,6 @@
 package nlp.dictionary.zaliznyak.declension
 
 import nlp.dictionary.zaliznyak.DictRecordMapper
-import nlp.dictionary.zaliznyak.entity.NameDictionaryRecord
 import org.scalatest.FunSuite
 
 class VolatileVowelSuite extends FunSuite {
@@ -24,6 +23,6 @@ class VolatileVowelSuite extends FunSuite {
   }
 
   def generateAllInflectedForms(line: String): List[String] = {
-    DictRecordMapper.map(NameDictionaryRecord(line)).inflectedForms.map(_._2).toList
+    DictRecordMapper.map(line).inflectedForms.map(_._2).toList
   }
 }

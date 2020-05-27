@@ -2,19 +2,19 @@ package nlp.dictionary.zaliznyak.partofspeech
 
 import nlp.dictionary.zaliznyak.Stem
 import nlp.dictionary.zaliznyak.declension.Declension
-import nlp.dictionary.zaliznyak.entity.NameDictionaryRecord
 import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, HasStem, IsPartOfSpeech}
-import nlp.dictionary.zaliznyak.feature.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasInitialForm, HasStress, HasStressType, HasSyntacticAndMorphologicalCharacteristics}
+import nlp.dictionary.zaliznyak.feature.declension._
 import nlp.dictionary.zaliznyak.feature.enums.common
 import nlp.dictionary.zaliznyak.feature.enums.common.Gender
-import nlp.dictionary.zaliznyak.feature.enums.common.Number.Number
 import nlp.dictionary.zaliznyak.feature.enums.common.Gender.Gender
+import nlp.dictionary.zaliznyak.feature.enums.common.Number.Number
 import nlp.dictionary.zaliznyak.feature.enums.declension.Animacy.Animacy
 import nlp.dictionary.zaliznyak.feature.enums.declension.Case.Case
 import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType.DeclensionType
 import nlp.dictionary.zaliznyak.feature.enums.declension.PrimaryStressType.PrimaryStressType
 import nlp.dictionary.zaliznyak.feature.enums.declension.SecondaryStressType.SecondaryStressType
-import nlp.dictionary.zaliznyak.feature.enums.declension.{Animacy, Case, DeclensionType}
+import nlp.dictionary.zaliznyak.feature.enums.declension._
+import nlp.dictionary.zaliznyak.helper.Utils
 import nlp.dictionary.zaliznyak.partofspeech.PartOfSpeech.PartOfSpeech
 import nlp.dictionary.zaliznyak.stress.Stress
 
@@ -78,26 +78,37 @@ class Noun private() extends CommonName with HasGender with HasAnimacy {
 }
 
 object Noun {
-  def apply(dictrecord: NameDictionaryRecord) = {
-    import dictrecord.{declensionSubtype, primaryMorphologicalCharacteristic, primarySyntacticCharacteristic}
+  private val primarySyntacticCharacteristic = raw"м|ж|с|мо|жо|со|мо\-жо"
+  private val regex = CommonName.regexPattern.format(primarySyntacticCharacteristic).r
 
-    primarySyntacticCharacteristic match {
-      //Существительное
-      case "м" | "ж" | "с" | "мо" | "жо" | "со" | "мн. одуш." | "мн. неод." => {
-        val declensionType = DeclensionType(primaryMorphologicalCharacteristic)
+  def apply(record: String) = {
+    record match {
+      case regex(
+      initialForm,
+      stressedVowelsPositions,
+      primarySyntacticCharacteristic,
+      primaryMorphologicCharacteristic,
+      declensionSubtype,
+      volatileVowelIndicator,
+      primaryStressType,
+      secondaryStressType
+      ) => {
+        val primMorphChar = Utils.firstNotNull(primaryMorphologicCharacteristic, primarySyntacticCharacteristic)
+        val declensionType = DeclensionType(primMorphChar)
         val gender = Gender(primarySyntacticCharacteristic)
         val noun = new Noun()
-        noun._stem = Stem.getStem(declensionType, dictrecord.initialForm)
-        noun._hasVolatileVowel = dictrecord.volatileVowel
+        val volatileVowel = volatileVowelIndicator == "*"
+        noun._stem = Stem.getStem(declensionType, initialForm)
+        noun._hasVolatileVowel = volatileVowel
         noun._gender = gender
         noun._animacy = Animacy(primarySyntacticCharacteristic).orNull
         noun._declensionType = declensionType
-        noun._declensionSubtype = declensionSubtype
-        noun._primaryStressType = dictrecord.primaryStressType
-        noun._secondaryStressType = dictrecord.secondaryStressType
-        noun._primarySyntacticCharacteristic = dictrecord.primarySyntacticCharacteristic
-        noun._primaryMorphologicalCharacteristic = dictrecord.primaryMorphologicalCharacteristic
-        noun._initialForm = dictrecord.initialForm
+        noun._declensionSubtype = declensionSubtype.toInt
+        noun._primaryStressType = PrimaryStressType(primaryStressType)
+        noun._secondaryStressType = SecondaryStressType(secondaryStressType)
+        noun._primarySyntacticCharacteristic = primarySyntacticCharacteristic
+        noun._primaryMorphologicalCharacteristic = primMorphChar
+        noun._initialForm = initialForm
 
         noun._inflectedForms = for (number <- common.Number.values.toSeq;
                                     rCase <- Case.values.toSeq)

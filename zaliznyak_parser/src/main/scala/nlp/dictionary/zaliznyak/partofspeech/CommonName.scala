@@ -8,7 +8,7 @@ import nlp.dictionary.zaliznyak.feature.enums.declension.SecondaryStressType.Sec
 
 //common trait for any Name (aka Имя [существительное/прилагательное/местоимение])
 trait CommonName extends HasDeclensionTypeAndSubtype with HasStressType with HasStem with IsPartOfSpeech
-  with HasSyntacticAndMorphologicalCharacteristics with HasInitialForm {//todo: remove this trait
+  with HasSyntacticAndMorphologicalCharacteristics with HasInitialForm { //todo: remove this trait
   protected var _declensionType: DeclensionType = _
   protected var _declensionSubtype: Int = _
   protected var _primaryStressType: PrimaryStressType = _
@@ -48,4 +48,40 @@ trait CommonName extends HasDeclensionTypeAndSubtype with HasStressType with Has
   override def primaryMorphologicalCharacteristic: String = _primaryMorphologicalCharacteristic
 
   override def initialForm: String = _initialForm
+}
+
+object CommonName {
+  var regexPattern = raw"^([а-яА-Я\-]+)\s" +
+    //позиция ударной гласной
+    raw"([0-9]+\.?[0-9]?)\s" +
+    //основная синтаксическая характеристика
+    raw"(" +
+    //имена
+    raw"%s" +
+    //    raw"|п" +
+    //    raw"|мс|мс-п" +
+    //    raw"|мн\. одуш\.|мн\. неод\." +
+    //проч
+    //    raw"|н|числ\.|числ\.-п|част\." +
+    raw")\s" +
+    //основная морфологическая характеристика
+    raw"(" +
+    //имена
+    raw"м|ж|с|мо|жо|со|мо\-жо" +
+    raw"|п" +
+    raw"|мс|мс-п" +
+    raw"|мн\. одуш\.|мн\. неод\." +
+    //проч
+    //    raw"|н|числ\.|числ\.-п|част\." +
+    raw")?\s?" +
+    //индекс типа склонения
+    raw"([0-8])?" +
+    //беглая гласная
+    raw"(\*{1,2})?" +
+    //схема ударения
+    raw"([а|в|с|е|D|F])?" +
+    //второстепенная схема ударения (штрих)
+    raw"('{1,2})?" +
+    //      raw"[\w\W]*" +
+    "$"
 }

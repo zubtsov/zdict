@@ -1,20 +1,21 @@
 package nlp.dictionary.zaliznyak
 
-import nlp.dictionary.zaliznyak.entity.{NameDictionaryRecord, VerbDictionaryRecord}
+import nlp.dictionary.zaliznyak.entity.VerbDictionaryRecord
 import nlp.dictionary.zaliznyak.partofspeech.{Adjective, Noun, Verb}
 
-object DictRecordMapper {
-  def map(dictrecord: NameDictionaryRecord) = {
-    import dictrecord.primarySyntacticCharacteristic
+import scala.util.Try
 
-    primarySyntacticCharacteristic match {
-      case "м" | "ж" | "с" | "мо" | "жо" | "со" | "мн. одуш." | "мн. неод." => {
-        Noun(dictrecord)
-      }
-      case "п" => {
-        Adjective(dictrecord)
-      }
-      case _ => ???
+object DictRecordMapper {
+  def map(dictrecord: String) = {
+    val noun = Try(Noun(dictrecord))
+    if (noun.isSuccess)
+      noun.get
+    else {
+      val adjective = Try(Adjective(dictrecord))
+      if (adjective.isSuccess)
+        adjective.get
+      else
+        ???
     }
   }
 

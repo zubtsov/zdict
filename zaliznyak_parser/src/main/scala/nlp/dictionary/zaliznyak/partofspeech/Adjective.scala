@@ -2,9 +2,8 @@ package nlp.dictionary.zaliznyak.partofspeech
 
 import nlp.dictionary.zaliznyak.Stem
 import nlp.dictionary.zaliznyak.declension.Declension
-import nlp.dictionary.zaliznyak.entity.NameDictionaryRecord
 import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, HasStem, IsPartOfSpeech}
-import nlp.dictionary.zaliznyak.feature.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasInitialForm, HasStress, HasStressType, HasSyntacticAndMorphologicalCharacteristics}
+import nlp.dictionary.zaliznyak.feature.declension._
 import nlp.dictionary.zaliznyak.feature.enums.common.Gender.Gender
 import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}
 import nlp.dictionary.zaliznyak.feature.enums.declension.Animacy.Animacy
@@ -12,7 +11,7 @@ import nlp.dictionary.zaliznyak.feature.enums.declension.Case.Case
 import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType.DeclensionType
 import nlp.dictionary.zaliznyak.feature.enums.declension.PrimaryStressType.PrimaryStressType
 import nlp.dictionary.zaliznyak.feature.enums.declension.SecondaryStressType.SecondaryStressType
-import nlp.dictionary.zaliznyak.feature.enums.declension.{Animacy, Case, DeclensionType}
+import nlp.dictionary.zaliznyak.feature.enums.declension._
 import nlp.dictionary.zaliznyak.helper.Utils
 import nlp.dictionary.zaliznyak.partofspeech.PartOfSpeech.PartOfSpeech
 import nlp.dictionary.zaliznyak.stress.Stress
@@ -72,23 +71,34 @@ class Adjective extends CommonName {
 }
 
 object Adjective {
-  def apply(dictrecord: NameDictionaryRecord) = {
-    import dictrecord.{declensionSubtype, primaryMorphologicalCharacteristic, primarySyntacticCharacteristic}
+  private val primarySyntacticCharacteristic = raw"п"
+  private val regex = CommonName.regexPattern.format(primarySyntacticCharacteristic).r
 
-    primarySyntacticCharacteristic match {
-      //Прилагательное
-      case "п" => {
-        val declensionType = DeclensionType(Utils.firstNotNull(primaryMorphologicalCharacteristic, primarySyntacticCharacteristic))
+  def apply(record: String) = {
+    record match {
+      case regex(
+      initialForm,
+      stressedVowelsPositions,
+      primarySyntacticCharacteristic,
+      primaryMorphologicCharacteristic,
+      declensionSubtype,
+      volatileVowelIndicator,
+      primaryStressType,
+      secondaryStressType
+      ) => {
+        val primMorphChar = Utils.firstNotNull(primaryMorphologicCharacteristic, primarySyntacticCharacteristic)
+        val declensionType = DeclensionType(primMorphChar)
+        val volatileVowel = volatileVowelIndicator == "*"
         val adjective = new Adjective()
-        adjective._stem = Stem.getStem(declensionType, dictrecord.initialForm)
-        adjective._hasVolatileVowel = dictrecord.volatileVowel
+        adjective._stem = Stem.getStem(declensionType, initialForm)
+        adjective._hasVolatileVowel = volatileVowel
         adjective._declensionType = declensionType
-        adjective._declensionSubtype = declensionSubtype
-        adjective._primaryStressType = dictrecord.primaryStressType
-        adjective._secondaryStressType = dictrecord.secondaryStressType
-        adjective._primarySyntacticCharacteristic = dictrecord.primarySyntacticCharacteristic
-        adjective._primaryMorphologicalCharacteristic = dictrecord.primaryMorphologicalCharacteristic
-        adjective._initialForm = dictrecord.initialForm
+        adjective._declensionSubtype = declensionSubtype.toInt
+        adjective._primaryStressType = PrimaryStressType(primaryStressType)
+        adjective._secondaryStressType = SecondaryStressType(secondaryStressType)
+        adjective._primarySyntacticCharacteristic = primarySyntacticCharacteristic
+        adjective._primaryMorphologicalCharacteristic = primMorphChar
+        adjective._initialForm = initialForm
 
         adjective._inflectedForms = for (
           gender <- Gender.commonValues.toSeq;

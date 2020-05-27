@@ -1,7 +1,5 @@
 package nlp.dictionary.zaliznyak
 
-import nlp.dictionary.zaliznyak.entity.NameDictionaryRecord
-
 import scala.io.Source
 import scala.util.Try
 
@@ -14,8 +12,7 @@ class ZaliznyakParser(filepath: String) {
     .map(line => {
       Try(
         {
-          val dictRecord = NameDictionaryRecord(line)
-          val parsedWord = DictRecordMapper.map(dictRecord)
+          val parsedWord = DictRecordMapper.map(line)
           parsedWord.toString
         }
       )
