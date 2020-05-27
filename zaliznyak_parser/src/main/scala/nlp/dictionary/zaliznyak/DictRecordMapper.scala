@@ -4,7 +4,7 @@ import nlp.dictionary.zaliznyak.entity.VerbDictionaryRecord
 import nlp.dictionary.zaliznyak.partofspeech.{Adjective, Noun, Verb}
 
 import scala.util.Try
-
+//todo: refactor
 object DictRecordMapper {
   def map(dictrecord: String) = {
     val noun = Try(Noun(dictrecord))
