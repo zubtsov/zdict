@@ -1,7 +1,7 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
-import nlp.dictionary.zaliznyak.Stem
-import nlp.dictionary.zaliznyak.declension.Declension
+import nlp.dictionary.zaliznyak.Stemmer
+import nlp.dictionary.zaliznyak.declension.InflectedForm
 import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, HasStem, IsPartOfSpeech}
 import nlp.dictionary.zaliznyak.feature.declension._
 import nlp.dictionary.zaliznyak.feature.enums.common.Gender.Gender
@@ -89,7 +89,7 @@ object Adjective {
         val declensionType = DeclensionType(primMorphChar)
         val volatileVowel = volatileVowelIndicator == "*"
         val adjective = new Adjective()
-        adjective._stem = Stem.getStem(declensionType, initialForm)
+        adjective._stem = CommonName.stemmer.getStem(declensionType, initialForm)
         adjective._hasVolatileVowel = volatileVowel
         adjective._declensionType = declensionType
         adjective._declensionSubtype = declensionSubtype.toInt
@@ -107,7 +107,7 @@ object Adjective {
         )
           yield {
             val form = adjective.newForm(gender, number, rCase, animacy)
-            form -> Declension.inflectedForm(form)
+            form -> CommonName.inflectedForm.produce(form)
           }
 
         adjective

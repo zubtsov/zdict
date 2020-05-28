@@ -1,6 +1,6 @@
 package nlp.dictionary.zaliznyak.declension
 
-import nlp.dictionary.zaliznyak.declension.types.CommonDeclensions
+import nlp.dictionary.zaliznyak.declension.types.CommonDeclensionsTable
 import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, HasStem}
 import nlp.dictionary.zaliznyak.feature.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasStress}
 import nlp.dictionary.zaliznyak.feature.enums.common
@@ -9,7 +9,9 @@ import nlp.dictionary.zaliznyak.feature.enums.declension.{Case, DeclensionType}
 import nlp.dictionary.zaliznyak.helper.Utils._
 
 //aka Особое склонение имен
-object SpecialDeclension {
+class SpecialDeclensionTable {
+  private val commonDeclensionsTable = new CommonDeclensionsTable()
+
   def ending(declensionParameters: HasDeclensionTypeAndSubtype with HasStem with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters._
     assert(declensionType == DeclensionType.Substantive) //todo: только у существительных бывает Substantive declension?
@@ -31,7 +33,7 @@ object SpecialDeclension {
         else {
           val oldDeclensionSubtype = declensionParameters.declensionSubtype
           declensionParameters.declensionSubtype = 2
-          val initialEnding = CommonDeclensions.ending(declensionParameters)
+          val initialEnding = commonDeclensionsTable.ending(declensionParameters)
           declensionParameters.declensionSubtype = oldDeclensionSubtype
 
           if (stem.takeRight(1).isFizzingConsonant())

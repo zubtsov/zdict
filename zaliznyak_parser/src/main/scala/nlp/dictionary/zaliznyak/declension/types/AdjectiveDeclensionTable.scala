@@ -8,7 +8,7 @@ import nlp.dictionary.zaliznyak.feature.enums.declension.{Animacy, Case}
 
 //todo: add recursive calls?
 //aka Адъективное склонение
-object AdjectiveDeclension {
+class AdjectiveDeclensionTable {
   def ending(declensionParameters: HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters.declensionSubtype
     declensionSubtype match {
@@ -27,7 +27,7 @@ object AdjectiveDeclension {
     }
   }
 
-  def endingOfSubtype1(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
+  private def endingOfSubtype1(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters._
     number match {
       case Number.Singular => gender match {
@@ -81,7 +81,7 @@ object AdjectiveDeclension {
     }
   }
 
-  def endingOfSubtype2(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy) = {
+  private def endingOfSubtype2(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy) = {
     import declensionParameters._
     number match {
       case common.Number.Singular => gender match {
@@ -135,7 +135,7 @@ object AdjectiveDeclension {
     }
   }
 
-  def shortFormEndingOfSubtype1(declensionParameters: HasGender with HasNumber) = {
+  private def shortFormEndingOfSubtype1(declensionParameters: HasGender with HasNumber) = {
     import declensionParameters._
     number match {
       case common.Number.Singular => gender match {
@@ -149,7 +149,7 @@ object AdjectiveDeclension {
     }
   }
 
-  def shortFormEndingOfSubtype2(declensionParameters: HasGender with HasNumber with HasStress) = {
+  private def shortFormEndingOfSubtype2(declensionParameters: HasGender with HasNumber with HasStress) = {
     import declensionParameters._
     number match {
       case common.Number.Singular => gender match {

@@ -5,7 +5,7 @@ import nlp.dictionary.zaliznyak.partofspeech.{Adjective, Noun, Verb}
 
 import scala.util.Try
 //todo: refactor
-object DictRecordMapper {
+class DictionaryRecordToPartOfSpeechMapping {
   def map(dictrecord: String) = {
     val noun = Try(Noun(dictrecord))
     if (noun.isSuccess)

@@ -1,6 +1,6 @@
 package nlp.dictionary.zaliznyak.declension
 
-import nlp.dictionary.zaliznyak.Stem
+import nlp.dictionary.zaliznyak.Stemmer
 import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType
 import org.scalatest.FunSuite
 
@@ -24,6 +24,6 @@ class StemmingSuite extends FunSuite {
       ("п", "запятая", "запят"),
       ("п", "лёгкое", "лёгк"),
       ("п", "пресмыкающееся", "пресмыкающ")
-    ).foreach(t => assertResult(t._3)(Stem.getStem(DeclensionType(t._1), t._2)))
+    ).foreach(t => assertResult(t._3)(new Stemmer().getStem(DeclensionType(t._1), t._2)))
   }
 }

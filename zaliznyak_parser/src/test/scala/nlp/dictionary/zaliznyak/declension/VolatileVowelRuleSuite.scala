@@ -1,9 +1,9 @@
 package nlp.dictionary.zaliznyak.declension
 
-import nlp.dictionary.zaliznyak.DictRecordMapper
+import nlp.dictionary.zaliznyak.DictionaryRecordToPartOfSpeechMapping
 import org.scalatest.FunSuite
 
-class VolatileVowelSuite extends FunSuite {
+class VolatileVowelRuleSuite extends FunSuite {
   test("сон 2 м 1*в") {
     assertResult(
       List("сон", "сна", "сну", "сон", "сном", "сне", "сны", "снов", "снам", "сны", "снами", "снах")
@@ -23,6 +23,6 @@ class VolatileVowelSuite extends FunSuite {
   }
 
   def generateAllInflectedForms(line: String): List[String] = {
-    DictRecordMapper.map(line).inflectedForms.map(_._2).toList
+    new DictionaryRecordToPartOfSpeechMapping().map(line).inflectedForms.map(_._2).toList
   }
 }

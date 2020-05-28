@@ -9,14 +9,14 @@ import nlp.dictionary.zaliznyak.helper.Utils.{RussianLetter, RussianWord, _}
 
 //todo: try to remove dependency on at least primarySyntacticCharacteristic and (if possible) primaryMorphologicalCharacteristic
 //aka Беглая гласная
-object VolatileVowel {
-  def stemWithVolatileEnding(declensionParameters: HasDeclensionTypeAndSubtype with HasStem with HasGender with HasNumber with HasCase with HasAnimacy with HasStress
-    with HasSyntacticAndMorphologicalCharacteristics with HasInitialForm, ending: String) = {
+class VolatileVowelRule {
+  def applyRule(declensionParameters: HasDeclensionTypeAndSubtype with HasStem with HasGender with HasNumber with HasCase with HasAnimacy with HasStress
+    with HasSyntacticAndMorphologicalCharacteristics with HasInitialForm, ending: String): String = {
     import declensionParameters._
     //todo: добавить проверки со стр. 29 Пункт А
     val potentialInflectedForm = stem + ending
 
-    val newStem = if (VolatileVowel.isVolatileVowelInInitialForm(declensionParameters)
+    val newStem: String = if (isVolatileVowelInInitialForm(declensionParameters)
       && (potentialInflectedForm != initialForm) && !(rCase == Case.Instrumental && ending == "ью")) {
       stem match {
         case LastVowelRegex(_, "о", rest) => stem.replaceLastVowel("")
@@ -27,7 +27,7 @@ object VolatileVowel {
           val previousLetter = previousLetters.takeRight(1)
           if (previousLetter.isVowel())
             stem.replaceLastVowel("й")
-          else if (primaryMorphologicalCharacteristic.matches("(м|мо)"))
+          else if (primaryMorphologicalCharacteristic.matches("(м|мо)")) {
             if (declensionSubtype == 6 ||
               (declensionSubtype == 3
                 && previousLetter.isConsonant()
@@ -37,6 +37,9 @@ object VolatileVowel {
               stem.replaceLastVowel("ь")
             else
               stem.replaceLastVowel("")
+          }
+          else
+            ???
         }
         case _ => ???
       }
@@ -70,7 +73,7 @@ object VolatileVowel {
     newStem
   }
 
-  def isVolatileVowelInInitialForm(declensionParameters: HasDeclensionTypeAndSubtype with HasGender with HasSyntacticAndMorphologicalCharacteristics) = {
+  private def isVolatileVowelInInitialForm(declensionParameters: HasDeclensionTypeAndSubtype with HasGender with HasSyntacticAndMorphologicalCharacteristics) = {
     import declensionParameters._
 
     (declensionType == DeclensionType.Substantive &&
@@ -80,14 +83,14 @@ object VolatileVowel {
       declensionType == DeclensionType.Pronounative
   }
 
-  def noVolatileVowelInInitialForm(declensionParameters: HasDeclensionTypeAndSubtype with HasGender with HasSyntacticAndMorphologicalCharacteristics) = {
+  private def noVolatileVowelInInitialForm(declensionParameters: HasDeclensionTypeAndSubtype with HasGender with HasSyntacticAndMorphologicalCharacteristics) = {
     import declensionParameters._
 
     (declensionType == DeclensionType.Substantive &&
       gender == Gender.Feminine && declensionSubtype != 8) || gender == Gender.Neuter
   }
 
-  def volatileVowelIsInInflectedForm(declensionParameters: HasDeclensionTypeAndSubtype with HasCase with HasNumber with HasSyntacticAndMorphologicalCharacteristics) = {
+  private def volatileVowelIsInInflectedForm(declensionParameters: HasDeclensionTypeAndSubtype with HasCase with HasNumber with HasSyntacticAndMorphologicalCharacteristics) = {
     import declensionParameters._
 
     ((primaryMorphologicalCharacteristic.among("ж", "жо")

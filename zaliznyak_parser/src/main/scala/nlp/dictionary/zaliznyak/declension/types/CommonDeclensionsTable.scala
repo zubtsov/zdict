@@ -5,14 +5,18 @@ import nlp.dictionary.zaliznyak.feature.declension.{HasAnimacy, HasCase, HasDecl
 import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType
 
 //aka Основные склонения имен
-object CommonDeclensions {
+class CommonDeclensionsTable {
+  val adjectiveDeclensionTable = new AdjectiveDeclensionTable()
+  val substantiveDeclensionTable = new SubstantiveDeclensionTable()
+  val pronounativeDeclensionTable = new PronounativeDeclensionTable()
+
   def ending(declensionParameters: HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters.{declensionSubtype, declensionType}
     assert(Set(1, 2).contains(declensionSubtype))
     declensionType match {
-      case DeclensionType.Adjectival => AdjectiveDeclension.ending(declensionParameters)
-      case DeclensionType.Substantive => SubstantiveDeclension.ending(declensionParameters)
-      case DeclensionType.Pronounative => PronounativeDeclension.ending(declensionParameters)
+      case DeclensionType.Adjectival => adjectiveDeclensionTable.ending(declensionParameters)
+      case DeclensionType.Substantive => substantiveDeclensionTable.ending(declensionParameters)
+      case DeclensionType.Pronounative => pronounativeDeclensionTable.ending(declensionParameters)
       case _ => ???
     }
   }

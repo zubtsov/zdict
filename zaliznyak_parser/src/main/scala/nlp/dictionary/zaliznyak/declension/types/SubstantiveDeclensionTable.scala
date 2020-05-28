@@ -10,7 +10,7 @@ import nlp.dictionary.zaliznyak.feature.enums.declension.{Animacy, Case}
 //todo: add recursive calls?
 
 //aka Субстантивное склонение
-object SubstantiveDeclension {
+class SubstantiveDeclensionTable {
   def ending(declensionParameters: HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters.declensionSubtype
     declensionSubtype match {
@@ -20,7 +20,7 @@ object SubstantiveDeclension {
     }
   }
 
-  def endingOfSubtype1(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy) = {
+  private def endingOfSubtype1(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy) = {
     import declensionParameters._
     number match {
       case Number.Singular => gender match {
@@ -99,7 +99,7 @@ object SubstantiveDeclension {
     }
   }
 
-  def endingOfSubtype2(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
+  private def endingOfSubtype2(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters._
     number match {
       case common.Number.Singular => gender match {

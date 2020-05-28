@@ -8,7 +8,7 @@ import nlp.dictionary.zaliznyak.feature.enums.declension.{Animacy, Case}
 
 //todo: add recursive calls?
 //aka Местоименное склонение
-object PronounativeDeclension {
+class PronounativeDeclensionTable {
   def ending(declensionParameters: HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters.declensionSubtype
     declensionSubtype match {
@@ -18,7 +18,7 @@ object PronounativeDeclension {
     }
   }
 
-  def endingOfSubtype1(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy ) = {
+  private def endingOfSubtype1(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy ) = {
     import declensionParameters._
     number match {
       case Number.Singular => gender match {
@@ -72,7 +72,7 @@ object PronounativeDeclension {
     }
   }
 
-  def endingOfSubtype2(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
+  private def endingOfSubtype2(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters._
     number match {
       case common.Number.Singular => gender match {

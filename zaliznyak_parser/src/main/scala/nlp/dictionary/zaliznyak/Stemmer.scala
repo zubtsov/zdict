@@ -4,7 +4,7 @@ import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType
 import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType.DeclensionType
 
 //aka Графическая основа (не путать с основой) слова
-object Stem {
+class Stemmer {
   val toRemoveOneLetter = ".*[а|А|е|Е|ё|Ё|и|И|о|О|у|У|ы|Ы|э|Э|ю|Ю|я|Я|й|Й|ь|Ь]$".r
   val toRemoveNothing = ".*[б|Б|в|В|г|Г|д|Д|ж|Ж|з|З|к|К|л|Л|м|М|н|Н|п|П|р|Р|с|С|т|Т|ф|Ф|х|Х|ц|Ц|ч|Ч|ш|Ш|щ|Щ]$".r
   val toRemoveFourLastLetters = ".*ся$".r

@@ -1,5 +1,7 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
+import nlp.dictionary.zaliznyak.Stemmer
+import nlp.dictionary.zaliznyak.declension.InflectedForm
 import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, HasStem, IsPartOfSpeech}
 import nlp.dictionary.zaliznyak.feature.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasInitialForm, HasStressType, HasSyntacticAndMorphologicalCharacteristics}
 import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType.DeclensionType
@@ -55,6 +57,9 @@ trait CommonName extends HasDeclensionTypeAndSubtype with HasStressType with Has
 }
 
 object CommonName {
+  protected[partofspeech] val stemmer = new Stemmer()
+  protected[partofspeech] val inflectedForm = new InflectedForm()
+
   protected[partofspeech] var regexPattern = raw"^([а-яА-Я\-]+)\s" +
     //позиция ударной гласной
     raw"([0-9]+\.?[0-9]?)\s" +

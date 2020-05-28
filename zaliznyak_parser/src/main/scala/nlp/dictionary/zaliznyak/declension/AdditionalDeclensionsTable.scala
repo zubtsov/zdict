@@ -1,6 +1,6 @@
 package nlp.dictionary.zaliznyak.declension
 
-import nlp.dictionary.zaliznyak.declension.types.CommonDeclensions
+import nlp.dictionary.zaliznyak.declension.types.CommonDeclensionsTable
 import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, HasStem}
 import nlp.dictionary.zaliznyak.feature.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasStress}
 import nlp.dictionary.zaliznyak.feature.enums.common
@@ -8,7 +8,9 @@ import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}
 import nlp.dictionary.zaliznyak.feature.enums.declension.{Case, DeclensionType}
 
 //aka Дополнительные склонения имен
-object AdditionalDeclensions {
+class AdditionalDeclensionsTable {
+  val commonDeclensionsTable = new CommonDeclensionsTable()
+
   def ending(declensionParameters: HasDeclensionTypeAndSubtype with HasStem with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters.declensionSubtype
     assert(List(3, 4, 5, 6, 7).contains(declensionSubtype))
@@ -22,12 +24,12 @@ object AdditionalDeclensions {
     }
   }
 
-  def endingOfType3(declensionParameters: HasStem with HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
+  private def endingOfType3(declensionParameters: HasStem with HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters.stem
 
     val oldDeclenstionSubtype = declensionParameters.declensionSubtype
     declensionParameters.declensionSubtype = 1
-    val endingOfSubtype1 = CommonDeclensions.ending(declensionParameters)
+    val endingOfSubtype1 = commonDeclensionsTable.ending(declensionParameters)
     declensionParameters.declensionSubtype = oldDeclenstionSubtype
     val lastLetterOfStem = stem.takeRight(1)
     lastLetterOfStem match {
@@ -36,12 +38,12 @@ object AdditionalDeclensions {
     }
   }
 
-  def endingOfType4(declensionParameters: HasStem with HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
+  private def endingOfType4(declensionParameters: HasStem with HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters._
 
     val oldDeclenstionSubtype = declensionParameters.declensionSubtype
     declensionParameters.declensionSubtype = 1
-    val endingOfSubtype1 = CommonDeclensions.ending(declensionParameters)
+    val endingOfSubtype1 = commonDeclensionsTable.ending(declensionParameters)
     declensionParameters.declensionSubtype = oldDeclenstionSubtype
 
     val lastLetterOfStem = stem.takeRight(1)
@@ -67,24 +69,24 @@ object AdditionalDeclensions {
     }
   }
 
-  def endingOfType5(declensionParameters: HasStem with HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
+  private def endingOfType5(declensionParameters: HasStem with HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters._
 
     val oldDeclenstionSubtype = declensionParameters.declensionSubtype
     declensionParameters.declensionSubtype = 1
-    val endingOfType1 = CommonDeclensions.ending(declensionParameters)
+    val endingOfType1 = commonDeclensionsTable.ending(declensionParameters)
     declensionParameters.declensionSubtype = oldDeclenstionSubtype
     if (stem.endsWith("ц") && !isEndingStressed)
       endingOfType1.replace("о", "е")
     else endingOfType1
   }
 
-  def endingOfType6(declensionParameters: HasStem with HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
+  private def endingOfType6(declensionParameters: HasStem with HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters._
 
     val oldDeclenstionSubtype = declensionParameters.declensionSubtype
     declensionParameters.declensionSubtype = 2
-    val endingOfSubtype2 = CommonDeclensions.ending(declensionParameters)
+    val endingOfSubtype2 = commonDeclensionsTable.ending(declensionParameters)
     declensionParameters.declensionSubtype = oldDeclenstionSubtype
 
     val lastLetterOfStem = stem.takeRight(1)
@@ -104,12 +106,12 @@ object AdditionalDeclensions {
     }
   }
 
-  def endingOfType7(declensionParameters: HasStem with HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
+  private def endingOfType7(declensionParameters: HasStem with HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
     import declensionParameters._
 
     val oldDeclenstionSubtype = declensionParameters.declensionSubtype
     declensionParameters.declensionSubtype = 2
-    val endingOfSubtype2 = CommonDeclensions.ending(declensionParameters)
+    val endingOfSubtype2 = commonDeclensionsTable.ending(declensionParameters)
     declensionParameters.declensionSubtype = oldDeclenstionSubtype
 
     val lastLetterOfStem = stem.takeRight(1)

@@ -4,6 +4,8 @@ import scala.io.Source
 import scala.util.Try
 
 class ZaliznyakParser(filepath: String) {
+  private val mapping = new DictionaryRecordToPartOfSpeechMapping()
+
   private var successes: Seq[String] = _
   private var failures: Seq[Throwable] = _
 
@@ -16,7 +18,7 @@ class ZaliznyakParser(filepath: String) {
       .map(line => {
         Try(
           {
-            val parsedWord = DictRecordMapper.map(line)
+            val parsedWord = mapping.map(line)
             parsedWord.toString
           }
         )
@@ -35,11 +37,13 @@ class ZaliznyakParser(filepath: String) {
 
   def printSuccesses() = {
     println(successes.mkString("\n"))
+    println(s"Number of parsed records: ${successes.size}")
     this
   }
 
   def printFailures() = {
     println(failures.mkString("\n"))
+    println(s"Number of not-parsed records: ${failures.size}")
     this
   }
 }
