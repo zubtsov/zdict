@@ -5,9 +5,9 @@ import java.io.FileWriter
 import com.google.gson.Gson
 import org.zubtsov.dictionary.config.{AdjectiveConfig, Config, NounConfig}
 import org.zubtsov.dictionary.extractor.URLExtractor
+import org.zubtsov.dictionary.html.WiktionaryArticle
 
 import scala.io.Source
-import scala.xml.Elem
 
 //todo: add multithreading
 object WiktionaryParser {
@@ -23,12 +23,13 @@ object WiktionaryParser {
 
   def extractData(word: String, outputPath: String): Unit = {
     try {
-      val xmlFile = URLExtractor.extractDataFromHTML("https://ru.wiktionary.org/wiki/" + word)
+      val wiktionaryArticle = URLExtractor.extractDataFromHTML("https://ru.wiktionary.org/wiki/" + word)
 
-      (xmlFile \\ "a").foreach(h => {
-        h.attribute("title").getOrElse("").toString match {
-          case "существительное" => parseConfig(NounConfig, xmlFile, word, outputPath)
-          case "прилагательное" => parseConfig(AdjectiveConfig, xmlFile, word, outputPath)
+      wiktionaryArticle.getElementsFromArticleByTag("a")
+        .foreach(anchor => {
+          anchor.attribute("title").getOrElse("").toString match {
+          case "существительное" => parseConfig(NounConfig, wiktionaryArticle, word, outputPath)
+          case "прилагательное" => parseConfig(AdjectiveConfig, wiktionaryArticle, word, outputPath)
           case _ => "not noun or adj."
         }
       })
@@ -40,8 +41,8 @@ object WiktionaryParser {
     }
   }
 
-  private def parseConfig(config: Config, xmlFile: Elem, word: String, outputPath: String) {
-    val lexemeList = config.getParser.parse(xmlFile, word)
+  private def parseConfig(config: Config, wiktionaryArticle: WiktionaryArticle, word: String, outputPath: String) {
+    val lexemeList = config.getParser.parse(wiktionaryArticle, word)
     val gson = new Gson
 
     for (lexeme <- lexemeList.indices) {
@@ -49,5 +50,7 @@ object WiktionaryParser {
       writer.write(gson.toJson(lexemeList(lexeme)))
       writer.close()
     }
+    lexemeList.foreach(println(_))
+
   }
 }

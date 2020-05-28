@@ -1,22 +1,30 @@
 package org.zubtsov.dictionary.parser
 
 import org.zubtsov.dictionary.entity.Lexeme
+import org.zubtsov.dictionary.html.WiktionaryArticle
+import org.zubtsov.dictionary.html.elemet.HTMLTable
 
 import scala.collection.mutable.ListBuffer
-import scala.xml.{Elem, Node, NodeSeq}
+import scala.xml.{Node, NodeSeq}
 
 trait Parser {
 
-  def parse(xmlFile: Elem, word: String): ListBuffer[Lexeme]
+  def parse(wiktionaryArticle: WiktionaryArticle, word: String): ListBuffer[Lexeme]
 
-  def getCasesTable(xmlFile: Elem): Seq[Node] = {
-      for {
-        table <- xmlFile \\ "tbody"
-        tableHeader = table \\ "tr" \\ "th"
-        if isCasesTable(tableHeader)
-      } yield table
+  def getTableHeader(): HTMLTable
+
+  def getCasesTable(wiktionaryArticle: WiktionaryArticle): Seq[Node] = {
+    for {
+      table <- wiktionaryArticle.getElementsFromArticleByTag("tbody")
+      tableHeader = table \\ "tr" \\ "th"
+      if isCasesTable(tableHeader)
+    } yield table
   }
 
-  def isCasesTable(seq: NodeSeq): Boolean
-
+  def isCasesTable(thNodes: NodeSeq): Boolean = {
+    val htmlTableHeader = getTableHeader
+    (thNodes.length == htmlTableHeader.headerSize
+      && (thNodes.map(thNode => (thNode \\ "a").text) zip htmlTableHeader.header)
+      .forall(column => column._1.matches(column._2)))
+  }
 }
