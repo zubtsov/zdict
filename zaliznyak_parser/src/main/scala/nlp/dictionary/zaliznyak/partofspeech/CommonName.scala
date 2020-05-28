@@ -5,10 +5,14 @@ import nlp.dictionary.zaliznyak.feature.declension.{HasAnimacy, HasCase, HasDecl
 import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType.DeclensionType
 import nlp.dictionary.zaliznyak.feature.enums.declension.PrimaryStressType.PrimaryStressType
 import nlp.dictionary.zaliznyak.feature.enums.declension.SecondaryStressType.SecondaryStressType
+import nlp.dictionary.zaliznyak.stress.StressTable
 
 //common trait for any Name (aka Имя [существительное/прилагательное/местоимение])
 trait CommonName extends HasDeclensionTypeAndSubtype with HasStressType with HasStem with IsPartOfSpeech
   with HasSyntacticAndMorphologicalCharacteristics with HasInitialForm { //todo: remove this trait
+
+  protected var stressTable: StressTable = new StressTable()
+
   protected var _declensionType: DeclensionType = _
   protected var _declensionSubtype: Int = _
   protected var _primaryStressType: PrimaryStressType = _
@@ -51,7 +55,7 @@ trait CommonName extends HasDeclensionTypeAndSubtype with HasStressType with Has
 }
 
 object CommonName {
-  var regexPattern = raw"^([а-яА-Я\-]+)\s" +
+  protected[partofspeech] var regexPattern = raw"^([а-яА-Я\-]+)\s" +
     //позиция ударной гласной
     raw"([0-9]+\.?[0-9]?)\s" +
     //основная синтаксическая характеристика

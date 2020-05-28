@@ -16,7 +16,6 @@ import nlp.dictionary.zaliznyak.feature.enums.declension.SecondaryStressType.Sec
 import nlp.dictionary.zaliznyak.feature.enums.declension._
 import nlp.dictionary.zaliznyak.helper.Utils
 import nlp.dictionary.zaliznyak.partofspeech.PartOfSpeech.PartOfSpeech
-import nlp.dictionary.zaliznyak.stress.Stress
 
 //aka Существительное
 class Noun private() extends CommonName with HasGender with HasAnimacy {
@@ -72,7 +71,7 @@ class Noun private() extends CommonName with HasGender with HasAnimacy {
     val form = new NounForm()
     form.number = number
     form.rCase = rCase
-    form.isEndingStressed = Stress.isEndingStressed(form)
+    form.isEndingStressed = stressTable.isEndingStressed(form)
     form
   }
 }
@@ -93,10 +92,10 @@ object Noun {
       primaryStressType,
       secondaryStressType
       ) => {
+        val noun = new Noun()
         val primMorphChar = Utils.firstNotNull(primaryMorphologicCharacteristic, primarySyntacticCharacteristic)
         val declensionType = DeclensionType(primMorphChar)
         val gender = Gender(primarySyntacticCharacteristic)
-        val noun = new Noun()
         val volatileVowel = volatileVowelIndicator == "*"
         noun._stem = Stem.getStem(declensionType, initialForm)
         noun._hasVolatileVowel = volatileVowel

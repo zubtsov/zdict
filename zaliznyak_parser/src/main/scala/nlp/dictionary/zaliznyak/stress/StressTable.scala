@@ -7,7 +7,7 @@ import nlp.dictionary.zaliznyak.feature.enums.common.Number
 import nlp.dictionary.zaliznyak.feature.enums.declension.{Case, PrimaryStressType, SecondaryStressType}
 
 //aka Ударение
-object Stress {
+class StressTable {
   def isStemStressed(parameters: HasStressType with HasNumber with HasCase): Boolean = {
     import parameters._
 

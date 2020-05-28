@@ -14,7 +14,6 @@ import nlp.dictionary.zaliznyak.feature.enums.declension.SecondaryStressType.Sec
 import nlp.dictionary.zaliznyak.feature.enums.declension._
 import nlp.dictionary.zaliznyak.helper.Utils
 import nlp.dictionary.zaliznyak.partofspeech.PartOfSpeech.PartOfSpeech
-import nlp.dictionary.zaliznyak.stress.Stress
 
 class Adjective extends CommonName {
   outer =>
@@ -65,7 +64,7 @@ class Adjective extends CommonName {
     form.number = number
     form.rCase = rCase
     form._animacy = animacy
-    form.isEndingStressed = Stress.isEndingStressed(form)
+    form.isEndingStressed = stressTable.isEndingStressed(form)
     form
   }
 }
