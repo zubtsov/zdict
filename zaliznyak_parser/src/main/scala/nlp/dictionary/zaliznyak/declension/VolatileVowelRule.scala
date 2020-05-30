@@ -1,15 +1,16 @@
 package nlp.dictionary.zaliznyak.declension
 
 import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, HasStem}
-import nlp.dictionary.zaliznyak.feature.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasInitialForm, HasStress, HasSyntacticAndMorphologicalCharacteristics}
+import nlp.dictionary.zaliznyak.feature.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasInitialForm, HasSyntacticAndMorphologicalCharacteristics}
 import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}
 import nlp.dictionary.zaliznyak.feature.enums.declension.{Case, DeclensionType}
 import nlp.dictionary.zaliznyak.helper.Utils.RussianWord._
 import nlp.dictionary.zaliznyak.helper.Utils.{RussianLetter, RussianWord, _}
+import nlp.dictionary.zaliznyak.stress.WordWithStress
 
 //todo: try to remove dependency on at least primarySyntacticCharacteristic and (if possible) primaryMorphologicalCharacteristic
 //aka Беглая гласная
-trait VolatileVowelRule extends HasDeclensionTypeAndSubtype with HasStem with HasGender with HasNumber with HasCase with HasAnimacy with HasStress
+trait VolatileVowelRule extends HasDeclensionTypeAndSubtype with HasStem with HasGender with HasNumber with HasCase with HasAnimacy with WordWithStress
   with HasSyntacticAndMorphologicalCharacteristics with HasInitialForm {
   protected def applyVolatileVowelRule(ending: String): String = {
     //todo: добавить проверки со стр. 29 Пункт А

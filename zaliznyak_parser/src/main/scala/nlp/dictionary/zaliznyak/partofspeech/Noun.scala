@@ -1,7 +1,7 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
 import nlp.dictionary.zaliznyak.declension.InflectedFormOfName
-import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, HasStem, IsPartOfSpeech}
+import nlp.dictionary.zaliznyak.feature.common.{HasGender, IsPartOfSpeech}
 import nlp.dictionary.zaliznyak.feature.declension._
 import nlp.dictionary.zaliznyak.feature.enums.common
 import nlp.dictionary.zaliznyak.feature.enums.common.Gender
@@ -30,16 +30,13 @@ class Noun private() extends CommonName with HasGender with HasAnimacy {
 
   override def animacy: Animacy = _animacy
 
-  //todo: perhaps, create one more interface for CommonName and move it to package object
-  private[Noun] trait NounSpecificAttributes extends HasDeclensionTypeAndSubtype with HasStressType with HasStem with IsPartOfSpeech
-    with HasSyntacticAndMorphologicalCharacteristics with HasInitialForm with HasGender with HasAnimacy
-
-  private[Noun] trait NounFormSpecificAttributes extends HasNumber with HasCase with HasStress
-
   //todo: remove fields from some (all?) traits
   // todo: why can't we define type as mixin of multiple traits and inherit it?
-  class NounForm private[Noun](number: Number, rCase: Case) extends InflectedFormOfName
+  class NounForm private[Noun](n: Number, c: Case) extends InflectedFormOfName
     with WordWithStress with IsPartOfSpeech {
+    override def rCase: Case = c
+
+    override def number: Number = n
 
     override def gender: Gender = outer.gender
 
@@ -68,7 +65,10 @@ class Noun private() extends CommonName with HasGender with HasAnimacy {
     override def initialForm: String = outer.initialForm
 
     val form: String = inflectedForm()
+
+    override def toString: String = form
   }
+
 }
 
 object Noun {
@@ -107,8 +107,7 @@ object Noun {
         noun._inflectedForms = for (number <- common.Number.values.toSeq;
                                     rCase <- Case.values.toSeq)
           yield {
-            val form = noun.newForm(number, rCase)
-            form -> CommonName.inflectedForm.inflectedForm(form)
+            new noun.NounForm(number, rCase)
           }
 
         noun

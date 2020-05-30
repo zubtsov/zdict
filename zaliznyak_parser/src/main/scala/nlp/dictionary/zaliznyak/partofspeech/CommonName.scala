@@ -1,19 +1,15 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
 import nlp.dictionary.zaliznyak.Stemmer
-import nlp.dictionary.zaliznyak.declension.InflectedFormOfName
 import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, HasStem, IsPartOfSpeech}
-import nlp.dictionary.zaliznyak.feature.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasInitialForm, HasStressType, HasSyntacticAndMorphologicalCharacteristics}
+import nlp.dictionary.zaliznyak.feature.declension._
 import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType.DeclensionType
 import nlp.dictionary.zaliznyak.feature.enums.declension.PrimaryStressType.PrimaryStressType
 import nlp.dictionary.zaliznyak.feature.enums.declension.SecondaryStressType.SecondaryStressType
-import nlp.dictionary.zaliznyak.stress.WordWithStress
 
 //common trait for any Name (aka Имя [существительное/прилагательное/местоимение])
 trait CommonName extends HasDeclensionTypeAndSubtype with HasStressType with HasStem with IsPartOfSpeech
   with HasSyntacticAndMorphologicalCharacteristics with HasInitialForm { //todo: remove this trait
-
-  protected var stressTable: WordWithStress = new WordWithStress()
 
   protected var _declensionType: DeclensionType = _
   protected var _declensionSubtype: Int = _
@@ -21,7 +17,7 @@ trait CommonName extends HasDeclensionTypeAndSubtype with HasStressType with Has
   protected var _secondaryStressType: Option[SecondaryStressType] = None
   protected var _stem: String = _
   protected var _hasVolatileVowel: Boolean = _
-  protected var _inflectedForms: Seq[(HasGender with HasNumber with HasCase with HasAnimacy, String)] = _
+  protected var _inflectedForms: Seq[HasGender with HasNumber with HasCase with HasAnimacy] = _
 
   protected var _primarySyntacticCharacteristic: String = _
   protected var _primaryMorphologicalCharacteristic: String = _
@@ -46,7 +42,7 @@ trait CommonName extends HasDeclensionTypeAndSubtype with HasStressType with Has
   override def hasVolatileVowel: Boolean = _hasVolatileVowel
 
   override def toString: String = {
-    partOfSpeech + ": " + _inflectedForms.map(_._2).mkString(",")
+    partOfSpeech + ": " + _inflectedForms.mkString(",")
   }
 
   override def primarySyntacticCharacteristic: String = _primarySyntacticCharacteristic
@@ -58,7 +54,6 @@ trait CommonName extends HasDeclensionTypeAndSubtype with HasStressType with Has
 
 object CommonName {
   protected[partofspeech] val stemmer = new Stemmer()
-  protected[partofspeech] val inflectedForm = new InflectedFormOfName()
 
   protected[partofspeech] var regexPattern = raw"^([а-яА-Я\-]+)\s" +
     //позиция ударной гласной

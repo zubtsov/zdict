@@ -26,7 +26,7 @@ class Verb extends HasInitialForm with HasConjugationType with IsPartOfSpeech {
 
   private[Verb] trait VerbFormSpecificAttributes extends HasStem with HasTense with HasPerson with HasNumber
 
-  private[Verb] class VerbForm(p: Person, iForm: String, t: Tense, s: String) extends VerbSpecificAttributes with VerbFormSpecificAttributes {
+  abstract private[Verb] class VerbForm(p: Person, iForm: String, t: Tense, s: String) extends VerbSpecificAttributes with VerbFormSpecificAttributes {
     private val _person: Person = p
     private val _initialForm: String = iForm
     private val _tense: Tense = t

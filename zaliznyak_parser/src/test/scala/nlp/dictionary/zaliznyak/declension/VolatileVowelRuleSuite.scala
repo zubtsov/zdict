@@ -23,6 +23,6 @@ class VolatileVowelRuleSuite extends FunSuite {
   }
 
   def generateAllInflectedForms(line: String): List[String] = {
-    new DictionaryRecordToPartOfSpeechMapping().map(line).inflectedForms.map(_._2).toList
+    new DictionaryRecordToPartOfSpeechMapping().map(line).inflectedForms.map(_.toString).toList
   }
 }

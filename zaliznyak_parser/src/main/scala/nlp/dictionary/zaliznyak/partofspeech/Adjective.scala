@@ -1,10 +1,9 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
-import nlp.dictionary.zaliznyak.Stemmer
 import nlp.dictionary.zaliznyak.declension.InflectedFormOfName
-import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, HasStem, IsPartOfSpeech}
-import nlp.dictionary.zaliznyak.feature.declension._
+import nlp.dictionary.zaliznyak.feature.common.IsPartOfSpeech
 import nlp.dictionary.zaliznyak.feature.enums.common.Gender.Gender
+import nlp.dictionary.zaliznyak.feature.enums.common.Number.Number
 import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}
 import nlp.dictionary.zaliznyak.feature.enums.declension.Animacy.Animacy
 import nlp.dictionary.zaliznyak.feature.enums.declension.Case.Case
@@ -14,26 +13,23 @@ import nlp.dictionary.zaliznyak.feature.enums.declension.SecondaryStressType.Sec
 import nlp.dictionary.zaliznyak.feature.enums.declension._
 import nlp.dictionary.zaliznyak.helper.Utils
 import nlp.dictionary.zaliznyak.partofspeech.PartOfSpeech.PartOfSpeech
+import nlp.dictionary.zaliznyak.stress.WordWithStress
 
 class Adjective extends CommonName {
   outer =>
 
   override def partOfSpeech: PartOfSpeech = PartOfSpeech.Adjective
 
-  private[Adjective] trait AdjectiveSpecificAttributes extends HasDeclensionTypeAndSubtype with HasStressType with HasStem with IsPartOfSpeech
-    with HasSyntacticAndMorphologicalCharacteristics with HasInitialForm
-
-  private[Adjective] trait AdjectiveFormSpecificAttributes extends HasGender with HasNumber with HasCase with HasAnimacy with HasStress
-
   // todo: why can't we define type as mixin of multiple traits and inherit it?
-  class AdjectiveForm private[Adjective]() extends AdjectiveSpecificAttributes
-    with AdjectiveFormSpecificAttributes {
-    private[Adjective] var _gender: Gender = _
-    private[Adjective] var _animacy: Animacy = _
+  class AdjectiveForm private[Adjective](n: Number, c: Case, g: Gender, a: Animacy) extends InflectedFormOfName
+    with WordWithStress with IsPartOfSpeech {
+    override def rCase: Case = c
 
-    override def gender: Gender = _gender
+    override def number: Number = n
 
-    override def animacy: Animacy = _animacy
+    override def gender: Gender = g
+
+    override def animacy: Animacy = a
 
     override def stem: String = outer.stem
 
@@ -56,17 +52,12 @@ class Adjective extends CommonName {
     override def primaryMorphologicalCharacteristic: String = outer.primaryMorphologicalCharacteristic
 
     override def initialForm: String = outer.initialForm
+
+    val form: String = inflectedForm()
+
+    override def toString: String = form
   }
 
-  private def newForm(gender: Gender, number: Number.Number, rCase: Case, animacy: Animacy): AdjectiveForm = {
-    val form = new AdjectiveForm()
-    form._gender = gender
-    form.number = number
-    form.rCase = rCase
-    form._animacy = animacy
-    form.isEndingStressed = stressTable.isEndingStressed(form)
-    form
-  }
 }
 
 object Adjective {
@@ -106,8 +97,7 @@ object Adjective {
           animacy <- Animacy.values.toSeq
         )
           yield {
-            val form = adjective.newForm(gender, number, rCase, animacy)
-            form -> CommonName.inflectedForm.inflectedForm(form)
+            new adjective.AdjectiveForm(number, rCase, gender, animacy)
           }
 
         adjective
