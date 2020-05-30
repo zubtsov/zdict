@@ -2,7 +2,7 @@ package nlp.dictionary.zaliznyak
 
 import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType
 import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType.DeclensionType
-
+//todo: refactor. make it a trait?
 //aka Графическая основа (не путать с основой) слова
 class Stemmer {
   val toRemoveOneLetter = ".*[а|А|е|Е|ё|Ё|и|И|о|О|у|У|ы|Ы|э|Э|ю|Ю|я|Я|й|Й|ь|Ь]$".r

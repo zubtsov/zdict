@@ -6,7 +6,8 @@ import nlp.dictionary.zaliznyak.feature.declension.HasInitialForm
 import nlp.dictionary.zaliznyak.feature.enums.common.Number
 import nlp.dictionary.zaliznyak.feature.enums.conjugation.{Person, Tense}
 
-class Conjugation {
+//aka Спряжение
+trait BasicConjugatedForm extends HasInitialForm with HasStem with HasConjugationType with HasTense with HasPerson with HasNumber {
   private val ConsonantRotation = Map(
     "ск" -> "щ",
     "ст" -> "щ",
@@ -24,38 +25,7 @@ class Conjugation {
     "х" -> "ш",
   )
 
-  private def firstThirdPersonEnding(hasPerson: HasPerson, first: String, third: String) = {
-    hasPerson.person match {
-      case Person.First => first
-      case Person.Third => third
-      case _ => ???
-    }
-  }
-
-  private def applyConsonantRotation(infinitive: String, endingHint: Option[String]) = {
-    import nlp.dictionary.zaliznyak.helper.Utils._
-
-    val truncated = infinitive.dropRight(3)
-    val ending = infinitive.takeRight(3)
-
-    val replaced = if (!truncated.endsWithAnyOf(ConsonantRotation.keys))
-      truncated
-    else if (endingHint.forall(_ == "-щ-")
-      && !truncated.endsWith("ст")
-      && truncated.endsWith("т")) {
-      truncated.dropRight(1) + "щ"
-    } else {
-      //use first replacement from the map
-      val replacement = ConsonantRotation.dropWhile(t => !truncated.endsWith(t._1)).head
-      truncated.replaceLastOccurence(replacement._1, replacement._2)
-    }
-
-    replaced + ending
-  }
-
-  def ending(conjugationParameters: HasInitialForm with HasStem with HasConjugationType with HasTense with HasPerson with HasNumber,
-                       endingHint: Option[String] = None): (String, String) = {
-    import conjugationParameters._
+  def endingOfFirstOrThirdPersonPresentSingular(endingHint: Option[String] = None): (String, String) = {
     import nlp.dictionary.zaliznyak.helper.Utils._
 
     val newStem = conjugationType match {
@@ -81,28 +51,28 @@ class Conjugation {
         conjugationType match {
           case 1 => {
             initialForm.takeRight(3) match {
-              case "ать" => firstThirdPersonEnding(conjugationParameters, "аю", "ает")
-              case "ять" => firstThirdPersonEnding(conjugationParameters, "яю", "яет")
-              case "еть" => firstThirdPersonEnding(conjugationParameters, "ею", "еет")
+              case "ать" => firstThirdPersonEnding("аю", "ает")
+              case "ять" => firstThirdPersonEnding("яю", "яет")
+              case "еть" => firstThirdPersonEnding("ею", "еет")
               case _ => ???
             }
           }
           case 2 => {
-            initialForm.takeRight(4) match {
-              case "овать" => firstThirdPersonEnding(conjugationParameters, "ую", "ует")
+            initialForm.takeRight(5) match {
+              case "овать" => firstThirdPersonEnding("ую", "ует")
               case "евать" => {
                 val previousLetter = initialForm.takeRight(5).take(1)
                 if (previousLetter.isFizzingConsonant() || previousLetter == "ц")
-                  firstThirdPersonEnding(conjugationParameters, "ую", "ует")
+                  firstThirdPersonEnding("ую", "ует")
                 else
-                  firstThirdPersonEnding(conjugationParameters, "юю", "юет")
+                  firstThirdPersonEnding("юю", "юет")
               }
               case _ => ???
             }
           }
           case 3 => {
             initialForm.takeRight(4) match {
-              case "нуть" => firstThirdPersonEnding(conjugationParameters, "ну", "нет")
+              case "нуть" => firstThirdPersonEnding("ну", "нет")
               case _ => ???
             }
           }
@@ -138,7 +108,7 @@ class Conjugation {
           }
           case 7 => {
             initialForm.takeRight(3) match {
-              case "зти" | "зть" => firstThirdPersonEnding(conjugationParameters, "зу", "зет")
+              case "зти" | "зть" => firstThirdPersonEnding("зу", "зет")
               case "сти" | "сть" => {
                 val (first, third) = Map(
                   "-c-" -> ("су", "сет"),
@@ -147,7 +117,7 @@ class Conjugation {
                   "-ст-" -> ("сту", "стет"),
                   "-б-" -> ("бу", "бсет")
                 )(endingHint.get)
-                firstThirdPersonEnding(conjugationParameters, first, third)
+                firstThirdPersonEnding(first, third)
               }
               case _ => ???
             }
@@ -159,41 +129,41 @@ class Conjugation {
                   "-г-" -> ("гу", "жет"),
                   "-к-" -> ("ку", "чет")
                 )(endingHint.get)
-                firstThirdPersonEnding(conjugationParameters, first, third)
+                firstThirdPersonEnding(first, third)
               }
               case _ => ???
             }
           }
           case 9 => {
             initialForm.takeRight(5) match {
-              case "ереть" => firstThirdPersonEnding(conjugationParameters, "ру", "рет")
+              case "ереть" => firstThirdPersonEnding("ру", "рет")
               case _ => ???
             }
           }
           case 10 => {
             initialForm.takeRight(5) match {
-              case "олоть" => firstThirdPersonEnding(conjugationParameters, "олю", "олет")
-              case "ороть" => firstThirdPersonEnding(conjugationParameters, "орю", "орет")
+              case "олоть" => firstThirdPersonEnding("олю", "олет")
+              case "ороть" => firstThirdPersonEnding("орю", "орет")
               case _ => ???
             }
           }
           case 11 => {
             initialForm.takeRight(3) match {
-              case "ить" => firstThirdPersonEnding(conjugationParameters, "ью", "ьет")
+              case "ить" => firstThirdPersonEnding("ью", "ьет")
               case _ => ???
             }
           }
           case 12 => { //todo: implement additional guidelines
             initialForm.takeRight(3) match {
-              case "ыть" => firstThirdPersonEnding(conjugationParameters, "ою", "оет")
-              case "уть" => firstThirdPersonEnding(conjugationParameters, "ую", "ует")
-              case "ить" => firstThirdPersonEnding(conjugationParameters, "ию", "иет")
+              case "ыть" => firstThirdPersonEnding("ою", "оет")
+              case "уть" => firstThirdPersonEnding("ую", "ует")
+              case "ить" => firstThirdPersonEnding("ию", "иет")
               case _ => ???
             }
           }
           case 13 => {
             initialForm.takeRight(5) match {
-              case "авать" => firstThirdPersonEnding(conjugationParameters, "аю", "ает")
+              case "авать" => firstThirdPersonEnding("аю", "ает")
               case _ => ???
             }
           }
@@ -205,20 +175,20 @@ class Conjugation {
                   "-м-" -> ("му", "мет"),
                   "-им-" -> ("иму", "имет")
                 )(endingHint.get)
-                firstThirdPersonEnding(conjugationParameters, first, third)
+                firstThirdPersonEnding(first, third)
               }
               case _ => ???
             }
           }
           case 15 => {
             initialForm.takeRight(2) match {
-              case "ть" => firstThirdPersonEnding(conjugationParameters, "ну", "нет")
+              case "ть" => firstThirdPersonEnding("ну", "нет")
               case _ => ???
             }
           }
           case 16 => {
             initialForm.takeRight(2) match {
-              case "ть" => firstThirdPersonEnding(conjugationParameters, "ву", "вет")
+              case "ть" => firstThirdPersonEnding("ву", "вет")
               case _ => ???
             }
           }
@@ -228,5 +198,34 @@ class Conjugation {
       case _ => ???
     }
     (newStem, ending)
+  }
+
+  private def firstThirdPersonEnding(first: String, third: String) = {
+    person match {
+      case Person.First => first
+      case Person.Third => third
+      case _ => ???
+    }
+  }
+
+  private def applyConsonantRotation(infinitive: String, endingHint: Option[String]) = {
+    import nlp.dictionary.zaliznyak.helper.Utils._
+
+    val truncated = infinitive.dropRight(3)
+    val ending = infinitive.takeRight(3)
+
+    val replaced = if (!truncated.endsWithAnyOf(ConsonantRotation.keys))
+      truncated
+    else if (endingHint.forall(_ == "-щ-")
+      && !truncated.endsWith("ст")
+      && truncated.endsWith("т")) {
+      truncated.dropRight(1) + "щ"
+    } else {
+      //use first replacement from the map
+      val replacement = ConsonantRotation.dropWhile(t => !truncated.endsWith(t._1)).head
+      truncated.replaceLastOccurence(replacement._1, replacement._2)
+    }
+
+    replaced + ending
   }
 }

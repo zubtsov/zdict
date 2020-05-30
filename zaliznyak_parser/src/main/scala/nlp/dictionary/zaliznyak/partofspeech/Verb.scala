@@ -1,12 +1,15 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
-import nlp.dictionary.zaliznyak.conjugation.Conjugation
+import nlp.dictionary.zaliznyak.Stemmer
+import nlp.dictionary.zaliznyak.conjugation.BasicConjugatedForm
 import nlp.dictionary.zaliznyak.feature.common.{HasNumber, HasStem, IsPartOfSpeech}
 import nlp.dictionary.zaliznyak.feature.conjugation.{HasConjugationType, HasPerson, HasTense}
 import nlp.dictionary.zaliznyak.feature.declension.HasInitialForm
+import nlp.dictionary.zaliznyak.feature.enums.common.Number.Number
+import nlp.dictionary.zaliznyak.feature.enums.common.Number
 import nlp.dictionary.zaliznyak.feature.enums.conjugation.Person.Person
 import nlp.dictionary.zaliznyak.feature.enums.conjugation.Tense.Tense
-import nlp.dictionary.zaliznyak.feature.enums.conjugation.{Aspect, Transitivity}
+import nlp.dictionary.zaliznyak.feature.enums.conjugation.{Aspect, Person, Tense, Transitivity}
 import nlp.dictionary.zaliznyak.partofspeech.PartOfSpeech.PartOfSpeech
 
 class Verb extends HasInitialForm with HasConjugationType with IsPartOfSpeech {
@@ -22,16 +25,21 @@ class Verb extends HasInitialForm with HasConjugationType with IsPartOfSpeech {
 
   override def conjugationType: Int = _conjugationType
 
-  private[Verb] trait VerbSpecificAttributes extends HasInitialForm with HasConjugationType with IsPartOfSpeech
-
   private[Verb] trait VerbFormSpecificAttributes extends HasStem with HasTense with HasPerson with HasNumber
 
-  abstract private[Verb] class VerbForm(p: Person, iForm: String, t: Tense, s: String) extends VerbSpecificAttributes with VerbFormSpecificAttributes {
-    private val _person: Person = p
-    private val _initialForm: String = iForm
-    private val _tense: Tense = t
-    private val _stem: String = s
+  private[Verb] class VerbForm(infinitive: String, p: Person, n: Number, t: Tense) extends BasicConjugatedForm
+    with IsPartOfSpeech {
+    override def person: Person = p
 
+    override def initialForm: String = infinitive
+
+    override def tense: Tense = t
+
+    override def stem: String = {
+      new Stemmer().getStemOfInfinitive(infinitive) //todo: generalize
+    }
+
+    override def number: Number = n
 
     override def conjugationType: Int = outer.conjugationType
 
@@ -39,20 +47,17 @@ class Verb extends HasInitialForm with HasConjugationType with IsPartOfSpeech {
 
     override def hasVolatileVowel: Boolean = false
 
-    override def person: Person = _person
+    def form(): String = {
+      val (stem, ending) = endingOfFirstOrThirdPersonPresentSingular(None)
+      stem + ending
+    }
 
-    override def initialForm: String = _initialForm
-
-    override def tense: Tense = _tense
-
-    override def stem: String = _stem
-
-    private val _form: String = stem + new Conjugation().ending(this, None)
-
-    def form(): String = _form
+    override def toString: String = form
   }
 
   private var inflectedForms: Seq[VerbForm] = _
+
+  override def toString: String = partOfSpeech + ": " + inflectedForms.mkString(",")
 }
 
 object Verb {
@@ -83,7 +88,7 @@ object Verb {
       stressedVowelsPositions,
       aspect,
       transitive,
-      conjugationIndex,
+      conjugationType,
       volatileVowelIndicator,
       stressType
       ) => {
@@ -93,7 +98,11 @@ object Verb {
 
         val verb = new Verb()
         verb._infinitive = infinitive
-
+        verb._conjugationType = conjugationType.toInt
+        verb.inflectedForms = Seq(
+          new verb.VerbForm(infinitive, Person.First, Number.Singular, Tense.Present),
+          new verb.VerbForm(infinitive, Person.Third, Number.Singular, Tense.Present)
+        )
         verb
       }
       case _ => ???
