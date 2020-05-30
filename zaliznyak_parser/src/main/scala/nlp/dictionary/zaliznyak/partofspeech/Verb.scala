@@ -35,9 +35,9 @@ class Verb extends HasInitialForm with HasConjugationType with IsPartOfSpeech {
 
     override def tense: Tense = t
 
-    override def stem: String = {
-      new Stemmer().getStemOfInfinitive(infinitive) //todo: generalize
-    }
+//    override def stem: String = {
+//      new Stemmer().getStemOfInfinitive(infinitive) //todo: generalize
+//    }
 
     override def number: Number = n
 
@@ -45,7 +45,7 @@ class Verb extends HasInitialForm with HasConjugationType with IsPartOfSpeech {
 
     override def partOfSpeech: PartOfSpeech = outer.partOfSpeech
 
-    override def hasVolatileVowel: Boolean = false
+//    override def hasVolatileVowel: Boolean = false
 
     def form(): String = {
       val (stem, ending) = endingOfFirstOrThirdPersonPresentSingular(None)
