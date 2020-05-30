@@ -1,7 +1,6 @@
 package nlp.dictionary.zaliznyak
 
-import nlp.dictionary.zaliznyak.entity.VerbDictionaryRecord
-import nlp.dictionary.zaliznyak.partofspeech.{Adjective, Noun, Verb}
+import nlp.dictionary.zaliznyak.partofspeech.{Adjective, Noun}
 
 import scala.util.Try
 //todo: refactor
@@ -17,9 +16,5 @@ class DictionaryRecordToPartOfSpeechMapping {
       else
         ???
     }
-  }
-
-  def map(dictrecord: VerbDictionaryRecord) = {
-    Verb(dictrecord)
   }
 }

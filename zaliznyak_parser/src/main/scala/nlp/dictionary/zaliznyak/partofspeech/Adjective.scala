@@ -1,7 +1,7 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
 import nlp.dictionary.zaliznyak.Stemmer
-import nlp.dictionary.zaliznyak.declension.InflectedForm
+import nlp.dictionary.zaliznyak.declension.InflectedFormOfName
 import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, HasStem, IsPartOfSpeech}
 import nlp.dictionary.zaliznyak.feature.declension._
 import nlp.dictionary.zaliznyak.feature.enums.common.Gender.Gender
@@ -107,7 +107,7 @@ object Adjective {
         )
           yield {
             val form = adjective.newForm(gender, number, rCase, animacy)
-            form -> CommonName.inflectedForm.produce(form)
+            form -> CommonName.inflectedForm.inflectedForm(form)
           }
 
         adjective

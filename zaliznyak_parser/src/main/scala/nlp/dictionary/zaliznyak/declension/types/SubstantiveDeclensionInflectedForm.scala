@@ -10,18 +10,16 @@ import nlp.dictionary.zaliznyak.feature.enums.declension.{Animacy, Case}
 //todo: add recursive calls?
 
 //aka Субстантивное склонение
-class SubstantiveDeclensionTable {
-  def ending(declensionParameters: HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
-    import declensionParameters.declensionSubtype
+trait SubstantiveDeclensionInflectedForm extends HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with HasStress {
+  protected def substantiveEnding() = {
     declensionSubtype match {
-      case 1 => endingOfSubtype1(declensionParameters)
-      case 2 => endingOfSubtype2(declensionParameters)
+      case 1 => substantiveEndingOfSubtype1()
+      case 2 => substantiveEndingOfSubtype2()
       case _ => ???
     }
   }
 
-  private def endingOfSubtype1(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy) = {
-    import declensionParameters._
+  protected def substantiveEndingOfSubtype1() = {
     number match {
       case Number.Singular => gender match {
         case Gender.Masculine => rCase match {
@@ -99,8 +97,7 @@ class SubstantiveDeclensionTable {
     }
   }
 
-  private def endingOfSubtype2(declensionParameters: HasGender with HasNumber with HasCase with HasAnimacy with HasStress) = {
-    import declensionParameters._
+  protected def substantiveEndingOfSubtype2() = {
     number match {
       case common.Number.Singular => gender match {
         case Gender.Masculine => rCase match {
@@ -113,13 +110,13 @@ class SubstantiveDeclensionTable {
             case _ => ???
           }
           case Case.Instrumental => if (isEndingStressed) "ём" else "ем"
-          case Case.Prepositional => endingOfSubtype1(declensionParameters)
+          case Case.Prepositional => substantiveEndingOfSubtype1()
           case _ => ???
         }
         case Gender.Feminine => rCase match {
           case Case.Nominative => "я"
           case Case.Genetive => "и"
-          case Case.Dative | Case.Prepositional => endingOfSubtype1(declensionParameters)
+          case Case.Dative | Case.Prepositional => substantiveEndingOfSubtype1()
           case Case.Accusative => "ю"
           case Case.Instrumental => if (isEndingStressed) "ёй" else "ей" //todo: добавь "ёю", "ею"?
           case _ => ???
@@ -129,7 +126,7 @@ class SubstantiveDeclensionTable {
           case Case.Genetive => "я"
           case Case.Dative => "ю"
           case Case.Instrumental => if (isEndingStressed) "ём" else "ем"
-          case Case.Prepositional => endingOfSubtype1(declensionParameters)
+          case Case.Prepositional => substantiveEndingOfSubtype1()
           case _ => ???
         }
       }

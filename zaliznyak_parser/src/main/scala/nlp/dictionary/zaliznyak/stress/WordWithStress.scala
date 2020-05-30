@@ -7,10 +7,8 @@ import nlp.dictionary.zaliznyak.feature.enums.common.Number
 import nlp.dictionary.zaliznyak.feature.enums.declension.{Case, PrimaryStressType, SecondaryStressType}
 
 //aka Ударение
-class StressTable {
-  def isStemStressed(parameters: HasStressType with HasNumber with HasCase): Boolean = {
-    import parameters._
-
+trait WordWithStress extends HasStressType with HasNumber with HasCase {
+  def isStemStressed(): Boolean = {
     val initialStress = primaryStressType match {
       case PrimaryStressType.a => true //a
       case PrimaryStressType.b => false //b todo: кроме случаев когда stem не содержит гласную
@@ -50,7 +48,7 @@ class StressTable {
       initialStress
   }
 
-  def isEndingStressed(parameters: HasStressType with HasNumber with HasCase): Boolean = {
-    !isStemStressed(parameters)
+  def isEndingStressed(): Boolean = {
+    !isStemStressed()
   }
 }

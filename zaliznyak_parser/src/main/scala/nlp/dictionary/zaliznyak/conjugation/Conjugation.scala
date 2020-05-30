@@ -6,7 +6,7 @@ import nlp.dictionary.zaliznyak.feature.declension.HasInitialForm
 import nlp.dictionary.zaliznyak.feature.enums.common.Number
 import nlp.dictionary.zaliznyak.feature.enums.conjugation.{Person, Tense}
 
-object Conjugation {
+class Conjugation {
   private val ConsonantRotation = Map(
     "ск" -> "щ",
     "ст" -> "щ",
@@ -24,7 +24,7 @@ object Conjugation {
     "х" -> "ш",
   )
 
-  def firstThirdPersonEnding(hasPerson: HasPerson, first: String, third: String) = {
+  private def firstThirdPersonEnding(hasPerson: HasPerson, first: String, third: String) = {
     hasPerson.person match {
       case Person.First => first
       case Person.Third => third
@@ -32,7 +32,7 @@ object Conjugation {
     }
   }
 
-  def applyConsonantRotation(infinitive: String, endingHint: Option[String]) = {
+  private def applyConsonantRotation(infinitive: String, endingHint: Option[String]) = {
     import nlp.dictionary.zaliznyak.helper.Utils._
 
     val truncated = infinitive.dropRight(3)
@@ -53,7 +53,7 @@ object Conjugation {
     replaced + ending
   }
 
-  def basicConjugation(conjugationParameters: HasInitialForm with HasStem with HasConjugationType with HasTense with HasPerson with HasNumber,
+  def ending(conjugationParameters: HasInitialForm with HasStem with HasConjugationType with HasTense with HasPerson with HasNumber,
                        endingHint: Option[String] = None): (String, String) = {
     import conjugationParameters._
     import nlp.dictionary.zaliznyak.helper.Utils._

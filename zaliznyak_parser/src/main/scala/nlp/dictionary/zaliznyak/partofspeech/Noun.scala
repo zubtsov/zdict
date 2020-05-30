@@ -1,7 +1,6 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
-import nlp.dictionary.zaliznyak.Stemmer
-import nlp.dictionary.zaliznyak.declension.InflectedForm
+import nlp.dictionary.zaliznyak.declension.InflectedFormOfName
 import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, HasStem, IsPartOfSpeech}
 import nlp.dictionary.zaliznyak.feature.declension._
 import nlp.dictionary.zaliznyak.feature.enums.common
@@ -16,6 +15,7 @@ import nlp.dictionary.zaliznyak.feature.enums.declension.SecondaryStressType.Sec
 import nlp.dictionary.zaliznyak.feature.enums.declension._
 import nlp.dictionary.zaliznyak.helper.Utils
 import nlp.dictionary.zaliznyak.partofspeech.PartOfSpeech.PartOfSpeech
+import nlp.dictionary.zaliznyak.stress.WordWithStress
 
 //aka Существительное
 class Noun private() extends CommonName with HasGender with HasAnimacy {
@@ -38,8 +38,9 @@ class Noun private() extends CommonName with HasGender with HasAnimacy {
 
   //todo: remove fields from some (all?) traits
   // todo: why can't we define type as mixin of multiple traits and inherit it?
-  class NounForm private[Noun]() extends NounSpecificAttributes
-    with NounFormSpecificAttributes {
+  class NounForm private[Noun](number: Number, rCase: Case) extends InflectedFormOfName
+    with WordWithStress with IsPartOfSpeech {
+
     override def gender: Gender = outer.gender
 
     override def animacy: Animacy = outer.animacy
@@ -65,14 +66,8 @@ class Noun private() extends CommonName with HasGender with HasAnimacy {
     override def primaryMorphologicalCharacteristic: String = outer.primaryMorphologicalCharacteristic
 
     override def initialForm: String = outer.initialForm
-  }
 
-  private def newForm(number: Number, rCase: Case): NounForm = {
-    val form = new NounForm()
-    form.number = number
-    form.rCase = rCase
-    form.isEndingStressed = stressTable.isEndingStressed(form)
-    form
+    val form: String = inflectedForm()
   }
 }
 
@@ -113,7 +108,7 @@ object Noun {
                                     rCase <- Case.values.toSeq)
           yield {
             val form = noun.newForm(number, rCase)
-            form -> CommonName.inflectedForm.produce(form)
+            form -> CommonName.inflectedForm.inflectedForm(form)
           }
 
         noun
