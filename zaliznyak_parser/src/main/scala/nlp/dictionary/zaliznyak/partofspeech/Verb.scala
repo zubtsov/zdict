@@ -33,7 +33,7 @@ class Verb extends HasInitialForm with HasConjugationType with IsPartOfSpeech {
     override def tense: Tense = t
 
 //    override def stem: String = {
-//      new WordWithStem().stemOfInfinitive(infinitive) //todo: generalize
+//      new NameWithStem().stemOfInfinitive(infinitive) //todo: generalize
 //    }
 
     override def number: Number = n
@@ -45,7 +45,7 @@ class Verb extends HasInitialForm with HasConjugationType with IsPartOfSpeech {
 //    override def hasVolatileVowel: Boolean = false
 
     def form(): String = {
-      val (stem, ending) = endingOfFirstOrThirdPersonPresentSingular(None)
+      val (stem, ending) = formOfFirstOrThirdPersonPresentSingular(None)
       stem + ending
     }
 

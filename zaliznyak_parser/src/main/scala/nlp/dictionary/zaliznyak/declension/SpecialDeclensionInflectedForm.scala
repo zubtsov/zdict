@@ -1,14 +1,14 @@
 package nlp.dictionary.zaliznyak.declension
 
 import nlp.dictionary.zaliznyak.declension.types.CommonDeclensionInflectedForm
-import nlp.dictionary.zaliznyak.feature.common.WordWithStem
+import nlp.dictionary.zaliznyak.feature.common.NameWithStem
 import nlp.dictionary.zaliznyak.feature.enums.common
 import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}
 import nlp.dictionary.zaliznyak.feature.enums.declension.{Case, DeclensionType}
 import nlp.dictionary.zaliznyak.helper.Utils._
 
 //aka Особое склонение имен
-trait SpecialDeclensionInflectedForm extends CommonDeclensionInflectedForm with WordWithStem {
+trait SpecialDeclensionInflectedForm extends CommonDeclensionInflectedForm with NameWithStem {
   def specialDeclensionEnding() = {
     assert(declensionType == DeclensionType.Substantive) //todo: только у существительных бывает Substantive declension?
     number match {

@@ -47,7 +47,5 @@ trait NameWithStress extends HasStressType with HasNumber with HasCase {
       initialStress
   }
 
-  def isEndingStressed(): Boolean = {
-    !isStemStressed()
-  }
+  def isEndingStressed(): Boolean = !isStemStressed()
 }

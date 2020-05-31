@@ -1,6 +1,6 @@
 package nlp.dictionary.zaliznyak.conjugation
 
-import nlp.dictionary.zaliznyak.feature.common.{HasNumber, HasStem}
+import nlp.dictionary.zaliznyak.feature.common.HasNumber
 import nlp.dictionary.zaliznyak.feature.conjugation.{HasConjugationType, HasPerson, HasTense}
 import nlp.dictionary.zaliznyak.feature.declension.HasInitialForm
 import nlp.dictionary.zaliznyak.feature.enums.common.Number
@@ -25,7 +25,7 @@ trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with Ha
     "х" -> "ш",
   )
 
-  def endingOfFirstOrThirdPersonPresentSingular(endingHint: Option[String] = None): (String, String) = {
+  def formOfFirstOrThirdPersonPresentSingular(endingHint: Option[String] = None): (String, String) = {
     import nlp.dictionary.zaliznyak.helper.Utils._
 
     val (initialStem, ending) = tense match {

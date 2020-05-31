@@ -1,6 +1,6 @@
 package nlp.dictionary.zaliznyak.declension
 
-import nlp.dictionary.zaliznyak.feature.common.WordWithStem
+import nlp.dictionary.zaliznyak.feature.common.NameWithStem
 import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType
 import org.scalatest.FunSuite
 
@@ -25,6 +25,6 @@ class StemmingSuite extends FunSuite {
       ("п", "лёгкое", "лёгк"),
       ("п", "пресмыкающееся", "пресмыкающ")
     )
-//      .foreach(t => assertResult(t._3)(new WordWithStem().stemOfName(DeclensionType(t._1), t._2)))
+//      .foreach(t => assertResult(t._3)(new NameWithStem().stemOfName(DeclensionType(t._1), t._2)))
   }
 }
