@@ -1,5 +1,6 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
+import nlp.dictionary.zaliznyak.WordWithStem
 import nlp.dictionary.zaliznyak.declension.InflectedFormOfName
 import nlp.dictionary.zaliznyak.feature.common.IsPartOfSpeech
 import nlp.dictionary.zaliznyak.feature.enums.common.Gender.Gender
@@ -22,7 +23,7 @@ class Adjective extends CommonName {
 
   // todo: why can't we define type as mixin of multiple traits and inherit it?
   class AdjectiveForm private[Adjective](n: Number, c: Case, g: Gender, a: Animacy) extends InflectedFormOfName
-    with WordWithStress with IsPartOfSpeech {
+    with WordWithStem with WordWithStress with IsPartOfSpeech {
     override def rCase: Case = c
 
     override def number: Number = n
@@ -31,7 +32,7 @@ class Adjective extends CommonName {
 
     override def animacy: Animacy = a
 
-    override def stem: String = outer.stem
+    override def stem: String = stemOfName()
 
     override def partOfSpeech: PartOfSpeech = outer.partOfSpeech
 
@@ -45,7 +46,7 @@ class Adjective extends CommonName {
 
     override def secondaryStressType: Option[SecondaryStressType] = outer.secondaryStressType
 
-    override def hasVolatileVowel: Boolean = outer.hasVolatileVowel
+    override def hasVolatileVowel: Boolean = _hasVolatileVowel
 
     override def primarySyntacticCharacteristic: String = outer.primarySyntacticCharacteristic
 
@@ -53,9 +54,7 @@ class Adjective extends CommonName {
 
     override def initialForm: String = outer.initialForm
 
-    val form: String = inflectedForm()
-
-    override def toString: String = form
+    override def toString: String = inflectedForm()
   }
 
 }
@@ -80,7 +79,6 @@ object Adjective {
         val declensionType = DeclensionType(primMorphChar)
         val volatileVowel = volatileVowelIndicator == "*"
         val adjective = new Adjective()
-        adjective._stem = CommonName.stemmer.getStem(declensionType, initialForm)
         adjective._hasVolatileVowel = volatileVowel
         adjective._declensionType = declensionType
         adjective._declensionSubtype = declensionSubtype.toInt

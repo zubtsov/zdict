@@ -1,7 +1,8 @@
 package nlp.dictionary.zaliznyak.declension
 
-import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, HasStem}
-import nlp.dictionary.zaliznyak.feature.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasInitialForm, HasSyntacticAndMorphologicalCharacteristics}
+import nlp.dictionary.zaliznyak.WordWithStem
+import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber}
+import nlp.dictionary.zaliznyak.feature.declension._
 import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}
 import nlp.dictionary.zaliznyak.feature.enums.declension.{Case, DeclensionType}
 import nlp.dictionary.zaliznyak.helper.Utils.RussianWord._
@@ -10,8 +11,11 @@ import nlp.dictionary.zaliznyak.stress.WordWithStress
 
 //todo: try to remove dependency on at least primarySyntacticCharacteristic and (if possible) primaryMorphologicalCharacteristic
 //aka Беглая гласная
-trait VolatileVowelRule extends HasDeclensionTypeAndSubtype with HasStem with HasGender with HasNumber with HasCase with HasAnimacy with WordWithStress
+trait FormWithVolatileVowel extends HasDeclensionTypeAndSubtype with WordWithStem with HasGender with HasNumber with HasCase with HasAnimacy with WordWithStress
   with HasSyntacticAndMorphologicalCharacteristics with HasInitialForm {
+
+  def hasVolatileVowel: Boolean
+
   protected def applyVolatileVowelRule(ending: String): String = {
     //todo: добавить проверки со стр. 29 Пункт А
     val potentialInflectedForm = stem + ending

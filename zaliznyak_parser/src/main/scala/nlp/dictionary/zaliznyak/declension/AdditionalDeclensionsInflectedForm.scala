@@ -1,13 +1,13 @@
 package nlp.dictionary.zaliznyak.declension
 
+import nlp.dictionary.zaliznyak.WordWithStem
 import nlp.dictionary.zaliznyak.declension.types.CommonDeclensionInflectedForm
-import nlp.dictionary.zaliznyak.feature.common.HasStem
 import nlp.dictionary.zaliznyak.feature.enums.common
 import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}
 import nlp.dictionary.zaliznyak.feature.enums.declension.{Case, DeclensionType}
 
 //aka Дополнительные склонения имен
-trait AdditionalDeclensionsInflectedForm extends CommonDeclensionInflectedForm with HasStem {
+trait AdditionalDeclensionsInflectedForm extends CommonDeclensionInflectedForm with WordWithStem {
   def additionalDeclensionEnding() = {
     declensionSubtype match {
       case 3 => endingOfType3()

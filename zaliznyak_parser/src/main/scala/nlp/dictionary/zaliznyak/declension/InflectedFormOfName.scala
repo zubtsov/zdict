@@ -3,7 +3,7 @@ package nlp.dictionary.zaliznyak.declension
 import nlp.dictionary.zaliznyak.declension.types.CommonDeclensionInflectedForm
 
 //aka Склонение имени
-trait InflectedFormOfName extends CommonDeclensionInflectedForm with AdditionalDeclensionsInflectedForm with SpecialDeclensionInflectedForm with VolatileVowelRule {
+trait InflectedFormOfName extends CommonDeclensionInflectedForm with AdditionalDeclensionsInflectedForm with SpecialDeclensionInflectedForm with FormWithVolatileVowel {
   def inflectedForm() = {
     val ending = endingForStemWithoutVolatileVowel()
 

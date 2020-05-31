@@ -1,21 +1,19 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
-import nlp.dictionary.zaliznyak.Stemmer
-import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, HasStem, IsPartOfSpeech}
+import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, IsPartOfSpeech}
 import nlp.dictionary.zaliznyak.feature.declension._
 import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType.DeclensionType
 import nlp.dictionary.zaliznyak.feature.enums.declension.PrimaryStressType.PrimaryStressType
 import nlp.dictionary.zaliznyak.feature.enums.declension.SecondaryStressType.SecondaryStressType
 
 //common trait for any Name (aka Имя [существительное/прилагательное/местоимение])
-trait CommonName extends HasDeclensionTypeAndSubtype with HasStressType with HasStem with IsPartOfSpeech
+trait CommonName extends HasDeclensionTypeAndSubtype with HasStressType with IsPartOfSpeech
   with HasSyntacticAndMorphologicalCharacteristics with HasInitialForm { //todo: remove this trait
 
   protected var _declensionType: DeclensionType = _
   protected var _declensionSubtype: Int = _
   protected var _primaryStressType: PrimaryStressType = _
   protected var _secondaryStressType: Option[SecondaryStressType] = None
-  protected var _stem: String = _
   protected var _hasVolatileVowel: Boolean = _
   protected var _inflectedForms: Seq[HasGender with HasNumber with HasCase with HasAnimacy] = _
 
@@ -37,10 +35,6 @@ trait CommonName extends HasDeclensionTypeAndSubtype with HasStressType with Has
 
   override def secondaryStressType: Option[SecondaryStressType] = _secondaryStressType
 
-  override def stem: String = _stem
-
-  override def hasVolatileVowel: Boolean = _hasVolatileVowel
-
   override def toString: String = {
     partOfSpeech + ": " + _inflectedForms.mkString(",")
   }
@@ -53,8 +47,6 @@ trait CommonName extends HasDeclensionTypeAndSubtype with HasStressType with Has
 }
 
 object CommonName {
-  protected[partofspeech] val stemmer = new Stemmer()
-
   protected[partofspeech] var regexPattern = raw"^([а-яА-Я\-]+)\s" +
     //позиция ударной гласной
     raw"([0-9]+\.?[0-9]?)\s" +

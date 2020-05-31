@@ -1,5 +1,6 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
+import nlp.dictionary.zaliznyak.WordWithStem
 import nlp.dictionary.zaliznyak.declension.InflectedFormOfName
 import nlp.dictionary.zaliznyak.feature.common.{HasGender, IsPartOfSpeech}
 import nlp.dictionary.zaliznyak.feature.declension._
@@ -33,7 +34,7 @@ class Noun private() extends CommonName with HasGender with HasAnimacy {
   //todo: remove fields from some (all?) traits
   // todo: why can't we define type as mixin of multiple traits and inherit it?
   class NounForm private[Noun](n: Number, c: Case) extends InflectedFormOfName
-    with WordWithStress with IsPartOfSpeech {
+    with WordWithStem with WordWithStress with IsPartOfSpeech {
     override def rCase: Case = c
 
     override def number: Number = n
@@ -42,7 +43,7 @@ class Noun private() extends CommonName with HasGender with HasAnimacy {
 
     override def animacy: Animacy = outer.animacy
 
-    override def stem: String = outer.stem
+    override def stem: String = stemOfName()
 
     override def partOfSpeech: PartOfSpeech = outer.partOfSpeech
 
@@ -56,7 +57,7 @@ class Noun private() extends CommonName with HasGender with HasAnimacy {
 
     override def secondaryStressType: Option[SecondaryStressType] = outer.secondaryStressType
 
-    override def hasVolatileVowel: Boolean = outer.hasVolatileVowel
+    override def hasVolatileVowel: Boolean = _hasVolatileVowel
 
     override def primarySyntacticCharacteristic: String = outer.primarySyntacticCharacteristic
 
@@ -64,9 +65,7 @@ class Noun private() extends CommonName with HasGender with HasAnimacy {
 
     override def initialForm: String = outer.initialForm
 
-    val form: String = inflectedForm()
-
-    override def toString: String = form
+    override def toString: String = inflectedForm()
   }
 
 }
@@ -92,7 +91,6 @@ object Noun {
         val declensionType = DeclensionType(primMorphChar)
         val gender = Gender(primarySyntacticCharacteristic)
         val volatileVowel = volatileVowelIndicator == "*"
-        noun._stem = CommonName.stemmer.getStem(declensionType, initialForm)
         noun._hasVolatileVowel = volatileVowel
         noun._gender = gender
         noun._animacy = Animacy(primarySyntacticCharacteristic).orNull

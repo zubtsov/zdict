@@ -1,12 +1,11 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
-import nlp.dictionary.zaliznyak.Stemmer
 import nlp.dictionary.zaliznyak.conjugation.BasicConjugatedForm
-import nlp.dictionary.zaliznyak.feature.common.{HasNumber, HasStem, IsPartOfSpeech}
-import nlp.dictionary.zaliznyak.feature.conjugation.{HasConjugationType, HasPerson, HasTense}
+import nlp.dictionary.zaliznyak.feature.common.IsPartOfSpeech
+import nlp.dictionary.zaliznyak.feature.conjugation.HasConjugationType
 import nlp.dictionary.zaliznyak.feature.declension.HasInitialForm
-import nlp.dictionary.zaliznyak.feature.enums.common.Number.Number
 import nlp.dictionary.zaliznyak.feature.enums.common.Number
+import nlp.dictionary.zaliznyak.feature.enums.common.Number.Number
 import nlp.dictionary.zaliznyak.feature.enums.conjugation.Person.Person
 import nlp.dictionary.zaliznyak.feature.enums.conjugation.Tense.Tense
 import nlp.dictionary.zaliznyak.feature.enums.conjugation.{Aspect, Person, Tense, Transitivity}
@@ -25,8 +24,6 @@ class Verb extends HasInitialForm with HasConjugationType with IsPartOfSpeech {
 
   override def conjugationType: Int = _conjugationType
 
-  private[Verb] trait VerbFormSpecificAttributes extends HasStem with HasTense with HasPerson with HasNumber
-
   private[Verb] class VerbForm(infinitive: String, p: Person, n: Number, t: Tense) extends BasicConjugatedForm
     with IsPartOfSpeech {
     override def person: Person = p
@@ -36,7 +33,7 @@ class Verb extends HasInitialForm with HasConjugationType with IsPartOfSpeech {
     override def tense: Tense = t
 
 //    override def stem: String = {
-//      new Stemmer().getStemOfInfinitive(infinitive) //todo: generalize
+//      new WordWithStem().stemOfInfinitive(infinitive) //todo: generalize
 //    }
 
     override def number: Number = n
