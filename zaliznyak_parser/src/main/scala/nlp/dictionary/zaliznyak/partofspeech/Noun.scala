@@ -1,7 +1,7 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
 import nlp.dictionary.zaliznyak.declension.InflectedFormOfName
-import nlp.dictionary.zaliznyak.feature.common.{HasGender, IsPartOfSpeech, WordWithStem, WordWithStress}
+import nlp.dictionary.zaliznyak.feature.common.{HasGender, IsPartOfSpeech, WordWithStem}
 import nlp.dictionary.zaliznyak.feature.declension._
 import nlp.dictionary.zaliznyak.feature.enums.common
 import nlp.dictionary.zaliznyak.feature.enums.common.Gender
@@ -32,7 +32,7 @@ class Noun private() extends CommonName with HasGender with HasAnimacy {
   //todo: remove fields from some (all?) traits
   // todo: why can't we define type as mixin of multiple traits and inherit it?
   class NounForm private[Noun](n: Number, c: Case) extends InflectedFormOfName
-    with WordWithStem with WordWithStress with IsPartOfSpeech {
+    with WordWithStem with NameWithStress with IsPartOfSpeech {
     override def rCase: Case = c
 
     override def number: Number = n

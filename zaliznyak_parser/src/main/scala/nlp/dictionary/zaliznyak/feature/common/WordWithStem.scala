@@ -28,6 +28,7 @@ trait WordWithStem extends HasDeclensionTypeAndSubtype with HasInitialForm {
   }
 
   //todo: add reflexive parameter?
+  // maybe it's better to use a separate interface to get rid of parameters?
   protected def stemOfInfinitive(infinitive: String) = {
     infinitive.replaceAll(toRemoveFromInfinitive, "")
   }

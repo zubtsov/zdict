@@ -1,7 +1,7 @@
 package nlp.dictionary.zaliznyak.declension.types
 
-import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, WordWithStress}
-import nlp.dictionary.zaliznyak.feature.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype}
+import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber}
+import nlp.dictionary.zaliznyak.feature.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, NameWithStress}
 import nlp.dictionary.zaliznyak.feature.enums.common
 import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}
 import nlp.dictionary.zaliznyak.feature.enums.declension.{Animacy, Case}
@@ -10,7 +10,7 @@ import nlp.dictionary.zaliznyak.feature.enums.declension.{Animacy, Case}
 //todo: add recursive calls?
 
 //aka Субстантивное склонение
-trait SubstantiveDeclensionInflectedForm extends HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with WordWithStress {
+trait SubstantiveDeclensionInflectedForm extends HasDeclensionTypeAndSubtype with HasGender with HasNumber with HasCase with HasAnimacy with NameWithStress {
   protected def substantiveEnding() = {
     declensionSubtype match {
       case 1 => substantiveEndingOfSubtype1()

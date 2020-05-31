@@ -2,7 +2,7 @@ package nlp.dictionary.zaliznyak
 
 import scala.io.Source
 import scala.util.Try
-
+//todo: rename to ZaliznyakDictionary?
 class ZaliznyakParser(filepath: String) {
   private val mapping = new DictionaryRecordToPartOfSpeechMapping()
 

@@ -1,6 +1,6 @@
 package nlp.dictionary.zaliznyak.declension
 
-import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, WordWithStem, WordWithStress}
+import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, WordWithStem}
 import nlp.dictionary.zaliznyak.feature.declension._
 import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}
 import nlp.dictionary.zaliznyak.feature.enums.declension.{Case, DeclensionType}
@@ -9,7 +9,7 @@ import nlp.dictionary.zaliznyak.helper.Utils.{RussianLetter, RussianWord, _}
 
 //todo: try to remove dependency on at least primarySyntacticCharacteristic and (if possible) primaryMorphologicalCharacteristic
 //aka Беглая гласная
-trait FormWithVolatileVowel extends HasDeclensionTypeAndSubtype with WordWithStem with HasGender with HasNumber with HasCase with HasAnimacy with WordWithStress
+trait FormWithVolatileVowel extends HasDeclensionTypeAndSubtype with WordWithStem with HasGender with HasNumber with HasCase with HasAnimacy with NameWithStress
   with HasSyntacticAndMorphologicalCharacteristics with HasInitialForm {
 
   def hasVolatileVowel: Boolean

@@ -24,11 +24,11 @@ class Verb extends HasInitialForm with HasConjugationType with IsPartOfSpeech {
 
   override def conjugationType: Int = _conjugationType
 
-  private[Verb] class VerbForm(infinitive: String, p: Person, n: Number, t: Tense) extends BasicConjugatedForm
+  private[Verb] class VerbForm(p: Person, n: Number, t: Tense) extends BasicConjugatedForm
     with IsPartOfSpeech {
     override def person: Person = p
 
-    override def initialForm: String = infinitive
+    override def initialForm: String = _infinitive
 
     override def tense: Tense = t
 
@@ -97,8 +97,8 @@ object Verb {
         verb._infinitive = infinitive
         verb._conjugationType = conjugationType.toInt
         verb.inflectedForms = Seq(
-          new verb.VerbForm(infinitive, Person.First, Number.Singular, Tense.Present),
-          new verb.VerbForm(infinitive, Person.Third, Number.Singular, Tense.Present)
+          new verb.VerbForm(Person.First, Number.Singular, Tense.Present),
+          new verb.VerbForm(Person.Third, Number.Singular, Tense.Present)
         )
         verb
       }

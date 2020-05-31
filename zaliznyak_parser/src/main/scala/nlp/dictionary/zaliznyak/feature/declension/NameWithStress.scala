@@ -1,12 +1,12 @@
-package nlp.dictionary.zaliznyak.feature.common
+package nlp.dictionary.zaliznyak.feature.declension
 
-import nlp.dictionary.zaliznyak.feature.declension.{HasCase, HasStressType}
+import nlp.dictionary.zaliznyak.feature.common.HasNumber
 import nlp.dictionary.zaliznyak.feature.enums.common
 import nlp.dictionary.zaliznyak.feature.enums.common.Number
 import nlp.dictionary.zaliznyak.feature.enums.declension.{Case, PrimaryStressType, SecondaryStressType}
 
 //aka Ударение
-trait WordWithStress extends HasStressType with HasNumber with HasCase {
+trait NameWithStress extends HasStressType with HasNumber with HasCase {
   def isStemStressed(): Boolean = {
     val initialStress = primaryStressType match {
       case PrimaryStressType.a => true //a

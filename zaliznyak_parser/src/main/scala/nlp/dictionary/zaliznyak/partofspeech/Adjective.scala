@@ -1,7 +1,8 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
 import nlp.dictionary.zaliznyak.declension.InflectedFormOfName
-import nlp.dictionary.zaliznyak.feature.common.{IsPartOfSpeech, WordWithStem, WordWithStress}
+import nlp.dictionary.zaliznyak.feature.common.{IsPartOfSpeech, WordWithStem}
+import nlp.dictionary.zaliznyak.feature.declension.NameWithStress
 import nlp.dictionary.zaliznyak.feature.enums.common.Gender.Gender
 import nlp.dictionary.zaliznyak.feature.enums.common.Number.Number
 import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}
@@ -21,7 +22,7 @@ class Adjective extends CommonName {
 
   // todo: why can't we define type as mixin of multiple traits and inherit it?
   class AdjectiveForm private[Adjective](n: Number, c: Case, g: Gender, a: Animacy) extends InflectedFormOfName
-    with WordWithStem with WordWithStress with IsPartOfSpeech {
+    with WordWithStem with NameWithStress with IsPartOfSpeech {
     override def rCase: Case = c
 
     override def number: Number = n
