@@ -1,6 +1,5 @@
-package nlp.dictionary.zaliznyak.stress
+package nlp.dictionary.zaliznyak.feature.common
 
-import nlp.dictionary.zaliznyak.feature.common.HasNumber
 import nlp.dictionary.zaliznyak.feature.declension.{HasCase, HasStressType}
 import nlp.dictionary.zaliznyak.feature.enums.common
 import nlp.dictionary.zaliznyak.feature.enums.common.Number

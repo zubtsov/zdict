@@ -1,8 +1,7 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
-import nlp.dictionary.zaliznyak.WordWithStem
 import nlp.dictionary.zaliznyak.declension.InflectedFormOfName
-import nlp.dictionary.zaliznyak.feature.common.{HasGender, IsPartOfSpeech}
+import nlp.dictionary.zaliznyak.feature.common.{HasGender, IsPartOfSpeech, WordWithStem, WordWithStress}
 import nlp.dictionary.zaliznyak.feature.declension._
 import nlp.dictionary.zaliznyak.feature.enums.common
 import nlp.dictionary.zaliznyak.feature.enums.common.Gender
@@ -16,7 +15,6 @@ import nlp.dictionary.zaliznyak.feature.enums.declension.SecondaryStressType.Sec
 import nlp.dictionary.zaliznyak.feature.enums.declension._
 import nlp.dictionary.zaliznyak.helper.Utils
 import nlp.dictionary.zaliznyak.partofspeech.PartOfSpeech.PartOfSpeech
-import nlp.dictionary.zaliznyak.stress.WordWithStress
 
 //aka Существительное
 class Noun private() extends CommonName with HasGender with HasAnimacy {

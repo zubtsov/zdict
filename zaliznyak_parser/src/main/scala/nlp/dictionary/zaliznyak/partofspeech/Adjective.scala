@@ -1,8 +1,7 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
-import nlp.dictionary.zaliznyak.WordWithStem
 import nlp.dictionary.zaliznyak.declension.InflectedFormOfName
-import nlp.dictionary.zaliznyak.feature.common.IsPartOfSpeech
+import nlp.dictionary.zaliznyak.feature.common.{IsPartOfSpeech, WordWithStem, WordWithStress}
 import nlp.dictionary.zaliznyak.feature.enums.common.Gender.Gender
 import nlp.dictionary.zaliznyak.feature.enums.common.Number.Number
 import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}
@@ -14,7 +13,6 @@ import nlp.dictionary.zaliznyak.feature.enums.declension.SecondaryStressType.Sec
 import nlp.dictionary.zaliznyak.feature.enums.declension._
 import nlp.dictionary.zaliznyak.helper.Utils
 import nlp.dictionary.zaliznyak.partofspeech.PartOfSpeech.PartOfSpeech
-import nlp.dictionary.zaliznyak.stress.WordWithStress
 
 class Adjective extends CommonName {
   outer =>
@@ -56,7 +54,6 @@ class Adjective extends CommonName {
 
     override def toString: String = inflectedForm()
   }
-
 }
 
 object Adjective {

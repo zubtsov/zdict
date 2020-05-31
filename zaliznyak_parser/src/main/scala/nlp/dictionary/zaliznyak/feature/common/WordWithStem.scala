@@ -1,8 +1,8 @@
-package nlp.dictionary.zaliznyak
+package nlp.dictionary.zaliznyak.feature.common
 
 import nlp.dictionary.zaliznyak.feature.declension.{HasDeclensionTypeAndSubtype, HasInitialForm}
 import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType
-//todo: refactor. make it a trait?
+
 //aka Графическая основа (не путать с основой) слова
 trait WordWithStem extends HasDeclensionTypeAndSubtype with HasInitialForm {
   private val toRemoveOneLetter = ".*[а|А|е|Е|ё|Ё|и|И|о|О|у|У|ы|Ы|э|Э|ю|Ю|я|Я|й|Й|ь|Ь]$".r
@@ -15,7 +15,7 @@ trait WordWithStem extends HasDeclensionTypeAndSubtype with HasInitialForm {
 
   def stem: String
 
-  def stemOfName(): String = declensionType match {
+  protected def stemOfName(): String = declensionType match {
     case DeclensionType.Substantive | DeclensionType.Pronounative => initialForm match {
       case toRemoveOneLetter() => initialForm.dropRight(1)
       case toRemoveNothing() => initialForm
@@ -28,15 +28,15 @@ trait WordWithStem extends HasDeclensionTypeAndSubtype with HasInitialForm {
   }
 
   //todo: add reflexive parameter?
-  def stemOfInfinitive(infinitive: String) = {
+  protected def stemOfInfinitive(infinitive: String) = {
     infinitive.replaceAll(toRemoveFromInfinitive, "")
   }
 
-  def stemOfFirstPersonSingularPresentTense(firstPersonSingularPresentForm: String) = {
+  protected def stemOfFirstPersonSingularPresentTense(firstPersonSingularPresentForm: String) = {
     firstPersonSingularPresentForm.replaceAll(toRemoveFromFirstPersonSingularPresent, "")
   }
 
-  def stemOfThirdPersonSingularPresentTense(thirdPersonSingularPresentForm: String) = {
+  protected def stemOfThirdPersonSingularPresentTense(thirdPersonSingularPresentForm: String) = {
     thirdPersonSingularPresentForm.replaceAll(toRemoveFromThirdPersonSingularPresent, "")
   }
 }
