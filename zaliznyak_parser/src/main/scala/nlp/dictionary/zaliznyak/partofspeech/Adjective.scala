@@ -1,8 +1,8 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
 import nlp.dictionary.zaliznyak.declension.InflectedFormOfName
-import nlp.dictionary.zaliznyak.feature.common.{IsPartOfSpeech, NameWithStem}
-import nlp.dictionary.zaliznyak.feature.declension.NameWithStress
+import nlp.dictionary.zaliznyak.feature.common.IsPartOfSpeech
+import nlp.dictionary.zaliznyak.feature.declension.{NameWithStem, NameWithStress}
 import nlp.dictionary.zaliznyak.feature.enums.common.Gender.Gender
 import nlp.dictionary.zaliznyak.feature.enums.common.Number.Number
 import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}

@@ -1,7 +1,7 @@
 package nlp.dictionary.zaliznyak.declension
 
 import nlp.dictionary.zaliznyak.declension.types.CommonDeclensionInflectedForm
-import nlp.dictionary.zaliznyak.feature.common.NameWithStem
+import nlp.dictionary.zaliznyak.feature.declension.NameWithStem
 import nlp.dictionary.zaliznyak.feature.enums.common
 import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}
 import nlp.dictionary.zaliznyak.feature.enums.declension.{Case, DeclensionType}

@@ -1,6 +1,6 @@
 package nlp.dictionary.zaliznyak.declension
 
-import nlp.dictionary.zaliznyak.feature.common.NameWithStem
+import nlp.dictionary.zaliznyak.feature.declension.NameWithStem
 import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType
 import org.scalatest.FunSuite
 
