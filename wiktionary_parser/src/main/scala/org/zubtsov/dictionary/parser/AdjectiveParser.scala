@@ -1,6 +1,7 @@
 package org.zubtsov.dictionary.parser
 
 import org.zubtsov.dictionary.entity.{Lexeme, LexemeForm}
+import org.zubtsov.dictionary.feature.{Animacy, CaseEnum, Gender, Number, PartOfSpeech}
 import org.zubtsov.dictionary.html.WiktionaryArticle
 import org.zubtsov.dictionary.html.elemet.{HTMLAdjectiveTable, HTMLTable}
 import org.zubtsov.dictionary.utils.StringFormatter
@@ -15,49 +16,45 @@ class AdjectiveParser extends Parser {
     var lexemeForms = Array[LexemeForm]()
 
     val casesTables = getCasesTable(wiktionaryArticle)
-
-    print(casesTables)
     //todo: handle empty header
     val rows = casesTables.head.child.filter(_.child.nonEmpty)
 
-    var accusativeIntex = 0
-
     for (rowNum <- 1 until rows.size) {
-      val row = rows(rowNum) \\ "td"
+      val row = wiktionaryArticle.getElementsFromNodeByTag(rows(rowNum), "td")
       if(row.length == 5){
-        val caseType = StringFormatter.normalizeString((row.head \\ "a").head.attribute("title").getOrElse("").toString)
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(1).text.trim), Array(caseType, "ед.ч.", "муж. р."))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(2).text.trim), Array(caseType, "ед.ч.", "ср. р."))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(3).text.trim), Array(caseType, "ед.ч.", "жен. р."))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(4).text.trim), Array(caseType, "мн.ч."))
+        val caseType = CaseEnum.Case(StringFormatter.normalizeString((row.head \\ "a").head.attribute("title").getOrElse("").toString)).toString()
+        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(1).text.trim), Array(caseType, Number.Singular.toString, Gender.Masculine.toString))
+        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(2).text.trim), Array(caseType, Number.Singular.toString, Gender.Neuter.toString))
+        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(3).text.trim), Array(caseType, Number.Singular.toString, Gender.Feminine.toString))
+        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(4).text.trim), Array(caseType, Number.Plural.toString))
       }
       else if(row.length == 3){
-        val caseType = "винительный"
+        val caseType = CaseEnum.Case("винительныи").toString()
         val neuterSingular = lexemeForms
-          .filter(l => l.grammaticalFeatures(0).matches(".*винительн.*")
-          && l.grammaticalFeatures(1).matches(".*ед\\.ч\\..*")
-          && l.grammaticalFeatures(2).matches(".*ср\\.\\s+р\\..*"))
+          .filter(l => l.grammaticalFeatures(0).matches(caseType)
+          && l.grammaticalFeatures(1).matches(Number.Singular.toString)
+          && l.grammaticalFeatures(2).matches(Gender.Neuter.toString))
           .head.form
         val feminineSingular = lexemeForms
-          .filter(l => l.grammaticalFeatures(0).matches(".*винительн.*")
-            && l.grammaticalFeatures(1).matches(".*ед\\.ч\\..*")
-            && l.grammaticalFeatures(2).matches(".*жен\\.\\s+р\\..*"))
+          .filter(l => l.grammaticalFeatures(0).matches(caseType)
+            && l.grammaticalFeatures(1).matches(Number.Singular.toString)
+            && l.grammaticalFeatures(2).matches(Gender.Feminine.toString))
           .head.form
-        lexemeForms +:= new LexemeForm(neuterSingular, Array(caseType, "ед.ч.", "ср. р.", "неодушевленное"))
-        lexemeForms +:= new LexemeForm(feminineSingular, Array(caseType, "ед.ч.", "жен. р.", "неодушевленное"))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(1).text.trim), Array(caseType, "ед.ч.", "муж. р.", "неодушевленное"))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(2).text.trim), Array(caseType, "мн.ч.", "неодушевленное"))
+        lexemeForms +:= new LexemeForm(neuterSingular, Array(caseType, Number.Singular.toString, Gender.Neuter.toString, Animacy.Inanimate.toString))
+        lexemeForms +:= new LexemeForm(feminineSingular, Array(caseType, Number.Singular.toString, Gender.Feminine.toString, Animacy.Inanimate.toString))
+        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(1).text.trim), Array(caseType, Number.Singular.toString, Gender.Masculine.toString, Animacy.Inanimate.toString))
+        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(2).text.trim), Array(caseType, Number.Plural.toString, Animacy.Inanimate.toString))
       }
       else if(row.length == 6){
-        val caseType = StringFormatter.normalizeString((row.head \\ "a").head.attribute("title").getOrElse("").toString)
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(2).text.trim), Array(caseType, "ед.ч.", "муж. р.", "одушевленное"))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(3).text.trim), Array(caseType, "ед.ч.", "ср. р.", "одушевленное"))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(4).text.trim), Array(caseType, "ед.ч.", "жен. р.", "одушевленное"))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(5).text.trim), Array(caseType, "мн.ч.", "одушевленное"))
+        val caseType = CaseEnum.Case(StringFormatter.normalizeString((row.head \\ "a").head.attribute("title").getOrElse("").toString)).toString()
+        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(2).text.trim), Array(caseType, Number.Singular.toString, Gender.Masculine.toString, Animacy.Animate.toString))
+        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(3).text.trim), Array(caseType, Number.Singular.toString, Gender.Neuter.toString(), Animacy.Animate.toString))
+        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(4).text.trim), Array(caseType, Number.Singular.toString, Gender.Feminine.toString, Animacy.Animate.toString))
+        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(5).text.trim), Array(caseType, Number.Plural.toString, Animacy.Animate.toString))
       }
     }
 
-    adjectives += new Lexeme(word, "прилагательное", lexemeForms)
+    adjectives += new Lexeme(word, PartOfSpeech.Adjective.toString, lexemeForms)
 
     adjectives
   }
