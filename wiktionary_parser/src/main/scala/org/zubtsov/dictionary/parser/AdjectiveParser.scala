@@ -1,10 +1,9 @@
 package org.zubtsov.dictionary.parser
 
 import org.zubtsov.dictionary.entity.{Lexeme, LexemeForm}
-import org.zubtsov.dictionary.feature.{Animacy, CaseEnum, Gender, Number, PartOfSpeech}
+import org.zubtsov.dictionary.feature.{Animacy, Gender, Number, PartOfSpeech}
 import org.zubtsov.dictionary.html.WiktionaryArticle
 import org.zubtsov.dictionary.html.elemet.{HTMLAdjectiveTable, HTMLTable}
-import org.zubtsov.dictionary.utils.StringFormatter
 
 import scala.collection.mutable.ListBuffer
 
@@ -21,40 +20,35 @@ class AdjectiveParser extends Parser {
 
     for (rowNum <- 1 until rows.size) {
       val row = wiktionaryArticle.getElementsFromNodeByTag(rows(rowNum), "td")
-      if(row.length == 5){
-        val caseType = CaseEnum.Case(StringFormatter.normalizeString((row.head \\ "a").head.attribute("title").getOrElse("").toString)).toString()
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(1).text.trim), Array(caseType, Number.Singular.toString, Gender.Masculine.toString))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(2).text.trim), Array(caseType, Number.Singular.toString, Gender.Neuter.toString))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(3).text.trim), Array(caseType, Number.Singular.toString, Gender.Feminine.toString))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(4).text.trim), Array(caseType, Number.Plural.toString))
-      }
-      else if(row.length == 3){
-        val caseType = CaseEnum.Case("винительныи").toString()
-        val neuterSingular = lexemeForms
-          .filter(l => l.grammaticalFeatures(0).matches(caseType)
-          && l.grammaticalFeatures(1).matches(Number.Singular.toString)
-          && l.grammaticalFeatures(2).matches(Gender.Neuter.toString))
-          .head.form
-        val feminineSingular = lexemeForms
-          .filter(l => l.grammaticalFeatures(0).matches(caseType)
-            && l.grammaticalFeatures(1).matches(Number.Singular.toString)
-            && l.grammaticalFeatures(2).matches(Gender.Feminine.toString))
-          .head.form
-        lexemeForms +:= new LexemeForm(neuterSingular, Array(caseType, Number.Singular.toString, Gender.Neuter.toString, Animacy.Inanimate.toString))
-        lexemeForms +:= new LexemeForm(feminineSingular, Array(caseType, Number.Singular.toString, Gender.Feminine.toString, Animacy.Inanimate.toString))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(1).text.trim), Array(caseType, Number.Singular.toString, Gender.Masculine.toString, Animacy.Inanimate.toString))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(2).text.trim), Array(caseType, Number.Plural.toString, Animacy.Inanimate.toString))
-      }
-      else if(row.length == 6){
-        val caseType = CaseEnum.Case(StringFormatter.normalizeString((row.head \\ "a").head.attribute("title").getOrElse("").toString)).toString()
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(2).text.trim), Array(caseType, Number.Singular.toString, Gender.Masculine.toString, Animacy.Animate.toString))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(3).text.trim), Array(caseType, Number.Singular.toString, Gender.Neuter.toString(), Animacy.Animate.toString))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(4).text.trim), Array(caseType, Number.Singular.toString, Gender.Feminine.toString, Animacy.Animate.toString))
-        lexemeForms +:= new LexemeForm(StringFormatter.normalizeString(row(5).text.trim), Array(caseType, Number.Plural.toString, Animacy.Animate.toString))
+
+      row.length match {
+        case 5 => {
+          val caseType = getCaseType(wiktionaryArticle, row.head)
+          lexemeForms +:= getLexemeForm(row(1), Array(caseType, Number.Singular.toString, Gender.Masculine.toString))
+          lexemeForms +:= getLexemeForm(row(2), Array(caseType, Number.Singular.toString, Gender.Neuter.toString))
+          lexemeForms +:= getLexemeForm(row(3), Array(caseType, Number.Singular.toString, Gender.Feminine.toString))
+          lexemeForms +:= getLexemeForm(row(4), Array(caseType, Number.Plural.toString))
+        }
+        case 3 => {
+          val previousRow = wiktionaryArticle.getElementsFromNodeByTag(rows(rowNum - 1), "td")
+          val caseType = getCaseType(wiktionaryArticle, previousRow.head)
+          lexemeForms +:= getLexemeForm(row(1), Array(caseType, Number.Singular.toString, Gender.Masculine.toString, Animacy.Inanimate.toString))
+          lexemeForms +:= getLexemeForm(row(2), Array(caseType, Number.Plural.toString, Animacy.Inanimate.toString))
+          lexemeForms +:= getLexemeForm(previousRow(3), Array(caseType, Number.Singular.toString, Gender.Neuter.toString, Animacy.Inanimate.toString))
+          lexemeForms +:= getLexemeForm(previousRow(4), Array(caseType, Number.Singular.toString, Gender.Feminine.toString, Animacy.Inanimate.toString))
+        }
+        case 6 => {
+          val caseType = getCaseType(wiktionaryArticle, row.head)
+          lexemeForms +:= getLexemeForm(row(2), Array(caseType, Number.Singular.toString, Gender.Masculine.toString, Animacy.Animate.toString))
+          lexemeForms +:= getLexemeForm(row(3), Array(caseType, Number.Singular.toString, Gender.Neuter.toString, Animacy.Animate.toString))
+          lexemeForms +:= getLexemeForm(row(4), Array(caseType, Number.Singular.toString, Gender.Feminine.toString, Animacy.Animate.toString))
+          lexemeForms +:= getLexemeForm(row(5), Array(caseType, Number.Plural.toString, Animacy.Animate.toString))
+        }
+        case _ => ""
       }
     }
 
-    adjectives += new Lexeme(word, PartOfSpeech.Adjective.toString, lexemeForms)
+    adjectives += Lexeme(word, PartOfSpeech.Adjective.toString, lexemeForms)
 
     adjectives
   }

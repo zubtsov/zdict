@@ -1,10 +1,9 @@
 package org.zubtsov.dictionary.parser
 
 import org.zubtsov.dictionary.entity.{Lexeme, LexemeForm}
+import org.zubtsov.dictionary.feature.{Number, PartOfSpeech}
 import org.zubtsov.dictionary.html.WiktionaryArticle
 import org.zubtsov.dictionary.html.elemet.{HTMLNounTable, HTMLTable}
-import org.zubtsov.dictionary.utils.StringFormatter
-import org.zubtsov.dictionary.feature.{CaseEnum, Number, PartOfSpeech}
 
 import scala.collection.mutable.ListBuffer
 
@@ -21,10 +20,9 @@ class NounParser extends Parser {
 
     for (rowNum <- 1 until rows.size) {
       val row = wiktionaryArticle.getElementsFromNodeByTag(rows(rowNum), "td")
-      val caseType = CaseEnum.Case(StringFormatter.normalizeString(wiktionaryArticle.getElementsFromNodeByTag(row.head, "a")
-        .head.attribute("title").getOrElse(None).toString)).toString()
-      lexemeForms +:= LexemeForm(StringFormatter.normalizeString(row(1).text.trim), Array(caseType, Number.Singular.toString))
-      lexemeForms +:= LexemeForm(StringFormatter.normalizeString(row(2).text.trim), Array(caseType, Number.Plural.toString))
+      val caseType = getCaseType(wiktionaryArticle, row.head)
+      lexemeForms +:= getLexemeForm(row(1), Array(caseType, Number.Singular.toString))
+      lexemeForms +:= getLexemeForm(row(2), Array(caseType, Number.Plural.toString))
     }
 
     nouns += Lexeme(word, PartOfSpeech.Noun.toString, lexemeForms)
