@@ -14,13 +14,13 @@ trait VerbWithStem extends BasicConjugatedForm {
   }
 
   protected def stemOfFirstPersonSingularPresentTense() = {
-    val (stem, ending) = formOfFirstOrThirdPersonPresentSingular(None)
+    val (stem, ending) = formOfFirstOrThirdPersonPresentSingular()
     (stem + ending)
       .replaceAll(toRemoveFromFirstPersonSingularPresent, "") //todo: just take stem???
   }
 
   protected def stemOfThirdPersonSingularPresentTense() = {
-    val (stem, ending) = formOfFirstOrThirdPersonPresentSingular(None)
+    val (stem, ending) = formOfFirstOrThirdPersonPresentSingular()
     (stem + ending)
       .replaceAll(toRemoveFromThirdPersonSingularPresent, "") //todo: just take stem???
   }

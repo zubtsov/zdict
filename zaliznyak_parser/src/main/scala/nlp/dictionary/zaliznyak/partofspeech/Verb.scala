@@ -2,7 +2,7 @@ package nlp.dictionary.zaliznyak.partofspeech
 
 import nlp.dictionary.zaliznyak.conjugation.BasicConjugatedForm
 import nlp.dictionary.zaliznyak.feature.common.IsPartOfSpeech
-import nlp.dictionary.zaliznyak.feature.conjugation.HasConjugationType
+import nlp.dictionary.zaliznyak.feature.conjugation.{HasConjugationType, HasEndingHint, HasReflection}
 import nlp.dictionary.zaliznyak.feature.declension.HasInitialForm
 import nlp.dictionary.zaliznyak.feature.enums.common.Number
 import nlp.dictionary.zaliznyak.feature.enums.common.Number.Number
@@ -11,12 +11,18 @@ import nlp.dictionary.zaliznyak.feature.enums.conjugation.Tense.Tense
 import nlp.dictionary.zaliznyak.feature.enums.conjugation.{Aspect, Person, Tense, Transitivity}
 import nlp.dictionary.zaliznyak.partofspeech.PartOfSpeech.PartOfSpeech
 
-class Verb extends HasInitialForm with HasConjugationType with IsPartOfSpeech {
+class Verb private() extends HasInitialForm with HasConjugationType with HasEndingHint with HasReflection with IsPartOfSpeech {
   outer =>
 
+  private var _reflexive: Boolean = _
+  private var _endingHint: Option[String] = _
   private var _conjugationType: Int = _
   private var _infinitive: String = _
 
+
+  override def isReflexive(): Boolean = _reflexive
+
+  override def endingHint: Option[String] = _endingHint
 
   override def partOfSpeech: PartOfSpeech = PartOfSpeech.Verb
 
@@ -32,20 +38,24 @@ class Verb extends HasInitialForm with HasConjugationType with IsPartOfSpeech {
 
     override def tense: Tense = t
 
-//    override def stem: String = {
-//      new NameWithStem().stemOfInfinitive(infinitive) //todo: generalize
-//    }
+    //    override def stem: String = {
+    //      new NameWithStem().stemOfInfinitive(infinitive) //todo: generalize
+    //    }
 
     override def number: Number = n
 
     override def conjugationType: Int = outer.conjugationType
 
+    override def endingHint: Option[String] = outer._endingHint
+
+    override def isReflexive(): Boolean = outer._reflexive
+
     override def partOfSpeech: PartOfSpeech = outer.partOfSpeech
 
-//    override def hasVolatileVowel: Boolean = false
+    //    override def hasVolatileVowel: Boolean = false
 
     def form(): String = {
-      val (stem, ending) = formOfFirstOrThirdPersonPresentSingular(None)
+      val (stem, ending) = formOfFirstOrThirdPersonPresentSingular()
       stem + ending
     }
 
@@ -72,8 +82,9 @@ object Verb {
       //беглая гласная
       raw"(\*{1,2})?" +
       //схема ударения
-      raw"([а|в|с]/?[а|в|с]?)" +
-      //      raw"[\w\W]*" +
+      raw"([а|в|с]/?[а|в|с]?)\s" +
+      raw"(\(-[а-я]+-\))?" + //todo: narrow it?
+      raw"[\w\W]*" +
       "$"
     ).r
 
@@ -87,15 +98,18 @@ object Verb {
       transitive,
       conjugationType,
       volatileVowelIndicator,
-      stressType
+      stressType,
+      endingHint
       ) => {
-        val reflexive = infinitive.endsWithAnyOf("ся", "сь")
         Aspect(aspect)
-        Transitivity(reflexive, Option(transitive))
+        val isReflexive = infinitive.endsWithAnyOf("ся", "сь")
+        Transitivity(isReflexive, Option(transitive))
 
         val verb = new Verb()
+        verb._reflexive = isReflexive
         verb._infinitive = infinitive
         verb._conjugationType = conjugationType.toInt
+        verb._endingHint = if (endingHint != null) Option(endingHint.dropRight(2).drop(2)) else None
         verb.inflectedForms = Seq(
           new verb.VerbForm(Person.First, Number.Singular, Tense.Present),
           new verb.VerbForm(Person.Third, Number.Singular, Tense.Present)
