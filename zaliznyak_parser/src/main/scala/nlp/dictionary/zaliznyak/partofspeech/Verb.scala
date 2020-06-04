@@ -1,23 +1,31 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
-import nlp.dictionary.zaliznyak.conjugation.BasicConjugatedForm
+import nlp.dictionary.zaliznyak.conjugation.{BasicConjugatedForm, ConjugatedForm}
 import nlp.dictionary.zaliznyak.feature.common.IsPartOfSpeech
-import nlp.dictionary.zaliznyak.feature.conjugation.{HasConjugationType, HasEndingHint, HasReflection}
+import nlp.dictionary.zaliznyak.feature.conjugation.{HasAspect, HasConjugationType, HasEndingHint, HasReflection}
 import nlp.dictionary.zaliznyak.feature.declension.HasInitialForm
+import nlp.dictionary.zaliznyak.feature.enums.common.Gender.Gender
 import nlp.dictionary.zaliznyak.feature.enums.common.Number
 import nlp.dictionary.zaliznyak.feature.enums.common.Number.Number
+import nlp.dictionary.zaliznyak.feature.enums.conjugation.Aspect.Aspect
+import nlp.dictionary.zaliznyak.feature.enums.conjugation.Mood.Mood
+import nlp.dictionary.zaliznyak.feature.enums.conjugation.PastStressType.PastStressType
 import nlp.dictionary.zaliznyak.feature.enums.conjugation.Person.Person
+import nlp.dictionary.zaliznyak.feature.enums.conjugation.PresentStressType.PresentStressType
 import nlp.dictionary.zaliznyak.feature.enums.conjugation.Tense.Tense
-import nlp.dictionary.zaliznyak.feature.enums.conjugation.{Aspect, Person, Tense, Transitivity}
+import nlp.dictionary.zaliznyak.feature.enums.conjugation.{Aspect, Mood, PastStressType, Person, PresentStressType, Tense, Transitivity}
 import nlp.dictionary.zaliznyak.partofspeech.PartOfSpeech.PartOfSpeech
 
-class Verb private() extends HasInitialForm with HasConjugationType with HasEndingHint with HasReflection with IsPartOfSpeech {
+class Verb private() extends HasInitialForm with HasConjugationType with HasEndingHint with HasReflection with HasAspect with IsPartOfSpeech {
   outer =>
 
+  private var _pastStressType: PastStressType = _
+  private var _presentStressType: PresentStressType = _
   private var _reflexive: Boolean = _
   private var _endingHint: Option[String] = _
   private var _conjugationType: Int = _
   private var _infinitive: String = _
+  private var _aspect: Aspect = _
 
 
   override def isReflexive(): Boolean = _reflexive
@@ -30,7 +38,9 @@ class Verb private() extends HasInitialForm with HasConjugationType with HasEndi
 
   override def conjugationType: Int = _conjugationType
 
-  private[Verb] class VerbForm(p: Person, n: Number, t: Tense) extends BasicConjugatedForm
+  override def aspect(): Aspect = _aspect
+
+  private[Verb] class VerbForm(p: Person, n: Number, t: Tense, g: Gender, m: Mood) extends ConjugatedForm
     with IsPartOfSpeech {
     override def person: Person = p
 
@@ -44,6 +54,12 @@ class Verb private() extends HasInitialForm with HasConjugationType with HasEndi
 
     override def number: Number = n
 
+    override def mood(): Mood = m
+
+    override def gender: Gender = g
+
+    override def aspect(): Aspect = _aspect
+
     override def conjugationType: Int = outer.conjugationType
 
     override def endingHint: Option[String] = outer._endingHint
@@ -54,8 +70,12 @@ class Verb private() extends HasInitialForm with HasConjugationType with HasEndi
 
     //    override def hasVolatileVowel: Boolean = false
 
+    override def pastStressType: PastStressType = _pastStressType
+
+    override def presentStressType: PresentStressType = _presentStressType
+
     def form(): String = {
-      val (stem, ending) = formOfFirstOrThirdPersonPresentSingular()
+      val (stem, ending) = verbForm()
       stem + ending
     }
 
@@ -101,18 +121,22 @@ object Verb {
       stressType,
       endingHint
       ) => {
-        Aspect(aspect)
         val isReflexive = infinitive.endsWithAnyOf("ся", "сь")
         Transitivity(isReflexive, Option(transitive))
 
         val verb = new Verb()
+        verb._aspect = Aspect(aspect)
+        verb._pastStressType = PastStressType(stressType)
+        verb._presentStressType = PresentStressType(stressType)
         verb._reflexive = isReflexive
         verb._infinitive = infinitive
         verb._conjugationType = conjugationType.toInt
         verb._endingHint = if (endingHint != null) Option(endingHint.dropRight(2).drop(2)) else None
         verb.inflectedForms = Seq(
-          new verb.VerbForm(Person.First, Number.Singular, Tense.Present),
-          new verb.VerbForm(Person.Third, Number.Singular, Tense.Present)
+          new verb.VerbForm(Person.First, Number.Singular, Tense.Present, null, Mood.Indicative),
+          new verb.VerbForm(Person.First, Number.Plural, Tense.Present, null, Mood.Indicative),
+          new verb.VerbForm(Person.Third, Number.Singular, Tense.Present, null, Mood.Indicative),
+          new verb.VerbForm(Person.Third, Number.Plural, Tense.Present, null, Mood.Indicative)
         )
         verb
       }
