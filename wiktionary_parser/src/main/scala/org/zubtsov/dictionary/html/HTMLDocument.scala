@@ -2,11 +2,10 @@ package org.zubtsov.dictionary.html
 
 import scala.xml.{Elem, Node, NodeSeq}
 
-//todo: think about name
-case class WiktionaryArticle(htmlDocument: Elem) {
+case class HTMLDocument(xmlElem: Elem) {
 
   def getElementsFromArticleByTag(tag: String): NodeSeq = {
-    htmlDocument \\ tag
+    xmlElem \\ tag
   }
 
   def getElementsFromNodeByTag(node: Node, tag: String*): NodeSeq = {
