@@ -11,9 +11,9 @@ class ZaliznyakParser(filepath: String) {
 
   def parse() = {
 //      val readLines = List("весь 2 мс-п 2*в @ _мн._ все, всех, всем; _Т. ед. м, с_ всем ")
-      val readLines = List("вкрасться 4 св 7в (-д-) $I")
-//    val readLines = Source.fromFile(filepath, "Windows-1251").getLines()
-//      .filter(_.trim.nonEmpty).toList
+//      val readLines = List("вкрасться 4 св 7в (-д-) $I")
+    val readLines = Source.fromFile(filepath, "Windows-1251").getLines()
+      .filter(_.trim.nonEmpty).toList
 
     val parsedLines = readLines
       .map(line => {
