@@ -10,33 +10,42 @@ trait ConjugatedForm extends VerbPrimaryConjugationType with VerbWithStress with
   }
 
   def verbForm() = {
-    val stem = (tense, aspect) match {
-      case (Tense.Present, Aspect.Perfect) | (Tense.Future, Aspect.Imperfect) => {
-        stemOfPresentFutureTense()
-      }
-      case (Tense.Past, _) => ???
+    if (
+      ((aspect == Aspect.Perfect && tense == Tense.Future) || (aspect == Aspect.Imperfect && tense == Tense.Present))
+        && number == Number.Singular
+        && (person == Person.First || person == Person.Third)
+    ) {
+      formOfFirstOrThirdPersonPresentSingular()
     }
-
-    val ending = (tense, aspect) match {
-      case (Tense.Present, Aspect.Perfect) | (Tense.Future, Aspect.Imperfect) => {
-        endingOfPresentFutureTense()
+    else {
+      val stem = (tense, aspect) match {
+        case (Tense.Present, Aspect.Imperfect) | (Tense.Future, Aspect.Perfect) => {
+          stemOfPresentFutureTense()
+        }
+        case (Tense.Past, _) => ???
       }
-      case (Tense.Past, _) => {
-        number match {
-          case Number.Singular => gender match {
-            case Gender.Masculine => "л" //todo: после согласной - нуль
-            case Gender.Feminine => "ла"
-            case Gender.Neuter => "ло"
+
+      val ending = (tense, aspect) match {
+        case (Tense.Present, Aspect.Imperfect) | (Tense.Future, Aspect.Perfect) => {
+          endingOfPresentFutureTense()
+        }
+        case (Tense.Past, _) => {
+          number match {
+            case Number.Singular => gender match {
+              case Gender.Masculine => "л" //todo: после согласной - нуль
+              case Gender.Feminine => "ла"
+              case Gender.Neuter => "ло"
+              case _ => ???
+            }
+            case Number.Plural => "ли"
             case _ => ???
           }
-          case Number.Plural => "ли"
-          case _ => ???
         }
+        case _ => ???
       }
-      case _ => ???
-    }
 
-    (stem,ending)
+      (stem, ending)
+    }
   }
 
   private def endingOfPresentFutureTense() = {

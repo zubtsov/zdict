@@ -40,8 +40,12 @@ class Verb private() extends HasInitialForm with HasConjugationType with HasEndi
 
   override def aspect(): Aspect = _aspect
 
-  private[Verb] class VerbForm(p: Person, n: Number, t: Tense, g: Gender, m: Mood) extends ConjugatedForm
+  private[Verb] class VerbForm(p: Person, n: Number, t: Tense, g: Option[Gender], m: Mood) extends ConjugatedForm
     with IsPartOfSpeech {
+    if (_aspect == Aspect.Perfect && t == Tense.Present) {
+      throw new Exception("Verbs of perfect aspect may only have past and simple future forms!")
+    }
+
     override def person: Person = p
 
     override def initialForm: String = _infinitive
@@ -56,7 +60,7 @@ class Verb private() extends HasInitialForm with HasConjugationType with HasEndi
 
     override def mood(): Mood = m
 
-    override def gender: Gender = g
+    override def gender: Option[Gender] = g
 
     override def aspect(): Aspect = _aspect
 
@@ -132,12 +136,26 @@ object Verb {
         verb._infinitive = infinitive
         verb._conjugationType = conjugationType.toInt
         verb._endingHint = if (endingHint != null) Option(endingHint.dropRight(2).drop(2)) else None
-        verb.inflectedForms = Seq(
-          new verb.VerbForm(Person.First, Number.Singular, Tense.Present, null, Mood.Indicative),
-          new verb.VerbForm(Person.First, Number.Plural, Tense.Present, null, Mood.Indicative),
-          new verb.VerbForm(Person.Third, Number.Singular, Tense.Present, null, Mood.Indicative),
-          new verb.VerbForm(Person.Third, Number.Plural, Tense.Present, null, Mood.Indicative)
-        )
+        verb.inflectedForms = if (verb._aspect == Aspect.Perfect) {
+          Seq(
+            new verb.VerbForm(Person.First, Number.Singular, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Person.First, Number.Plural, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Person.Second, Number.Singular, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Person.Second, Number.Plural, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Person.Third, Number.Singular, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Person.Third, Number.Plural, Tense.Future, None, Mood.Indicative)
+          )
+        } else if (verb._aspect == Aspect.Imperfect) {
+          Seq(
+            new verb.VerbForm(Person.First, Number.Singular, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Person.First, Number.Plural, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Person.Second, Number.Singular, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Person.Second, Number.Plural, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Person.Third, Number.Singular, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Person.Third, Number.Plural, Tense.Future, None, Mood.Indicative)
+          )
+        }
+        else ???
         verb
       }
       case _ => ???

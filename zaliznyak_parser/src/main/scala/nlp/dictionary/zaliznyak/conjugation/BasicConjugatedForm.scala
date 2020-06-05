@@ -1,13 +1,13 @@
 package nlp.dictionary.zaliznyak.conjugation
 
 import nlp.dictionary.zaliznyak.feature.common.HasNumber
-import nlp.dictionary.zaliznyak.feature.conjugation.{HasConjugationType, HasEndingHint, HasPerson, HasReflection, HasTense}
+import nlp.dictionary.zaliznyak.feature.conjugation.{HasAspect, HasConjugationType, HasEndingHint, HasPerson, HasReflection, HasTense}
 import nlp.dictionary.zaliznyak.feature.declension.HasInitialForm
 import nlp.dictionary.zaliznyak.feature.enums.common.Number
-import nlp.dictionary.zaliznyak.feature.enums.conjugation.{Person, Tense}
+import nlp.dictionary.zaliznyak.feature.enums.conjugation.{Aspect, Person, Tense}
 
 //aka Спряжение //todo: with HasStem? //todo: check endingHint existence
-trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with HasTense with HasPerson with HasNumber with HasEndingHint with HasReflection {
+trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with HasTense with HasPerson with HasNumber with HasEndingHint with HasReflection with HasAspect {
   private val ConsonantRotation = Map(
     "ск" -> "щ",
     "ст" -> "щ",
@@ -24,8 +24,8 @@ trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with Ha
     "г" -> "ж",
     "х" -> "ш",
   )
-
-  def firstPersonPresentSingularForm(): (String, String) = {
+  //tense depends on Aspect
+  def formOfFirstPersonPresentOrFutureSingularForm(): (String, String) = {
     import nlp.dictionary.zaliznyak.helper.Utils._
 
     val infinitive = if (isReflexive) initialForm.dropRight(2) else initialForm //todo: there is no such step in the dictionary...
@@ -107,8 +107,8 @@ trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with Ha
             (infinitive.dropRight(2), infinitive.takeRight(2) match {
               case "чь" => {
                 val first = Map(
-                  "г" -> ("гу", "жет"),
-                  "к" -> ("ку", "чет")
+                  "г" -> "гу",
+                  "к" -> "ку"
                 )(endingHint.get)
                 first
               }
@@ -152,9 +152,9 @@ trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with Ha
             (infinitive.dropRight(3), infinitive.takeRight(3) match {
               case "ать" | "ять" => {
                 val first = Map(
-                  "н" -> ("ну", "нет"),
-                  "м" -> ("му", "мет"),
-                  "им" -> ("иму", "имет")
+                  "н" -> "ну",
+                  "м" -> "му",
+                  "им" -> "иму"
                 )(endingHint.get)
                 first
               }
@@ -206,8 +206,8 @@ trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with Ha
 
     (newStem, ending + postfix)
   }
-
-  def thirdPersonPresentSingular(): (String, String) = {
+  //tense depends on Aspect
+  def formOfThirdPersonPresentOrFutureSingular(): (String, String) = {
     import nlp.dictionary.zaliznyak.helper.Utils._
 
     val infinitive = if (isReflexive) initialForm.dropRight(2) else initialForm //todo: there is no such step in the dictionary...
@@ -384,8 +384,8 @@ trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with Ha
 
   def formOfFirstOrThirdPersonPresentSingular(): (String, String) = {
     person match {
-      case Person.First => firstPersonPresentSingularForm()
-      case Person.Third => thirdPersonPresentSingular()
+      case Person.First => formOfFirstPersonPresentOrFutureSingularForm()
+      case Person.Third => formOfThirdPersonPresentOrFutureSingular()
       case _ => ???
     }
   }

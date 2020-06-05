@@ -7,7 +7,7 @@ import nlp.dictionary.zaliznyak.helper.Utils._
 
 trait VerbPrimaryConjugationType extends BasicConjugatedForm {
   def primaryConjugationType(): PrimaryConjugationType = {
-    val (stem, ending) = thirdPersonPresentSingular()
+    val (stem, ending) = formOfThirdPersonPresentOrFutureSingular()
     if(ending.endsWithAnyOf("ет", "ется", "ёт", "ётся"))
       PrimaryConjugationType.First
     else if (ending.endsWithAnyOf("ит", "ится"))
