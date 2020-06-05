@@ -27,7 +27,7 @@ trait ConjugatedForm extends VerbPrimaryConjugationType with VerbWithStress with
 
       val ending = (tense, aspect) match {
         case (Tense.Present, Aspect.Imperfect) | (Tense.Future, Aspect.Perfect) => {
-          endingOfPresentFutureTense()
+          endingOfPresentFutureTense(stem.takeRight(1))
         }
         case (Tense.Past, _) => {
           number match {
@@ -48,12 +48,14 @@ trait ConjugatedForm extends VerbPrimaryConjugationType with VerbWithStress with
     }
   }
 
-  private def endingOfPresentFutureTense() = {
+  private def endingOfPresentFutureTense(lastLetterOfStem: String) = {
+    import nlp.dictionary.zaliznyak.helper.Utils._
+
     primaryConjugationType() match {
       case PrimaryConjugationType.First => {
         number match {
           case Number.Singular => person match {
-            case Person.First => stressDependantEnding("ю", "у")
+            case Person.First => if (lastLetterOfStem.isVowel() || lastLetterOfStem == "ь" || lastLetterOfStem == "л") "ю" else "у"
             case Person.Second => stressDependantEnding("ёшь", "ешь")
             case Person.Third => stressDependantEnding("ёт", "ет")
             case _ => ???
@@ -61,7 +63,7 @@ trait ConjugatedForm extends VerbPrimaryConjugationType with VerbWithStress with
           case Number.Plural => person match {
             case Person.First => stressDependantEnding("ём", "ем")
             case Person.Second => stressDependantEnding("ёте", "ете")
-            case Person.Third => stressDependantEnding("ют", "ут")
+            case Person.Third => if (lastLetterOfStem.isVowel() || lastLetterOfStem == "ь" || lastLetterOfStem == "л") "ют" else "ут"
             case _ => ???
           }
           case _ => ???
