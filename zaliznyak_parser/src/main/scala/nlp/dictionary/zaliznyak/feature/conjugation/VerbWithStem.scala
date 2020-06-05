@@ -9,7 +9,7 @@ trait VerbWithStem extends BasicConjugatedForm {
 
   //todo: add reflexive parameter?
   // maybe it's better to use a separate interface to get rid of parameters?
-  protected def stemOfInfinitive(infinitive: String) = {
+  protected def stemOfInfinitive() = {
     initialForm.replaceAll(toRemoveFromInfinitive, "")
   }
 

@@ -13,7 +13,7 @@ trait ConjugatedForm extends VerbPrimaryConjugationType with VerbWithStress with
     if (
       ((aspect == Aspect.Perfect && tense == Tense.Future) || (aspect == Aspect.Imperfect && tense == Tense.Present))
         && number == Number.Singular
-        && (person == Person.First || person == Person.Third)
+        && (person == Some(Person.First) || person == Some(Person.Third))
     ) {
       formOfFirstOrThirdPersonPresentSingular()
     }
@@ -22,7 +22,12 @@ trait ConjugatedForm extends VerbPrimaryConjugationType with VerbWithStress with
         case (Tense.Present, Aspect.Imperfect) | (Tense.Future, Aspect.Perfect) => {
           stemOfPresentFutureTense()
         }
-        case (Tense.Past, _) => ???
+        case (Tense.Past, _) => {
+          conjugationType match {
+            case 7 | 8 => ???
+            case _ => stemOfInfinitive()
+          }
+        }
       }
 
       val ending = (tense, aspect) match {
@@ -55,15 +60,15 @@ trait ConjugatedForm extends VerbPrimaryConjugationType with VerbWithStress with
       case PrimaryConjugationType.First => {
         number match {
           case Number.Singular => person match {
-            case Person.First => if (lastLetterOfStem.isVowel() || lastLetterOfStem == "ь" || lastLetterOfStem == "л") "ю" else "у"
-            case Person.Second => stressDependantEnding("ёшь", "ешь")
-            case Person.Third => stressDependantEnding("ёт", "ет")
+            case Some(Person.First) => if (lastLetterOfStem.isVowel() || lastLetterOfStem == "ь" || lastLetterOfStem == "л") "ю" else "у"
+            case Some(Person.Second) => stressDependantEnding("ёшь", "ешь")
+            case Some(Person.Third) => stressDependantEnding("ёт", "ет")
             case _ => ???
           }
           case Number.Plural => person match {
-            case Person.First => stressDependantEnding("ём", "ем")
-            case Person.Second => stressDependantEnding("ёте", "ете")
-            case Person.Third => if (lastLetterOfStem.isVowel() || lastLetterOfStem == "ь" || lastLetterOfStem == "л") "ют" else "ут"
+            case Some(Person.First) => stressDependantEnding("ём", "ем")
+            case Some(Person.Second) => stressDependantEnding("ёте", "ете")
+            case Some(Person.Third) => if (lastLetterOfStem.isVowel() || lastLetterOfStem == "ь" || lastLetterOfStem == "л") "ют" else "ут"
             case _ => ???
           }
           case _ => ???
@@ -72,15 +77,15 @@ trait ConjugatedForm extends VerbPrimaryConjugationType with VerbWithStress with
       case PrimaryConjugationType.Second => {
         number match {
           case Number.Singular => person match {
-            case Person.First => "ю" //todo: после шипящих - у
-            case Person.Second => "ишь"
-            case Person.Third => "ит"
+            case Some(Person.First) => "ю" //todo: после шипящих - у
+            case Some(Person.Second) => "ишь"
+            case Some(Person.Third) => "ит"
             case _ => ???
           }
           case Number.Plural => person match {
-            case Person.First => "им"
-            case Person.Second => "ите"
-            case Person.Third => "ят" //todo: после шипящих - ат
+            case Some(Person.First) => "им"
+            case Some(Person.Second) => "ите"
+            case Some(Person.Third) => "ят" //todo: после шипящих - ат
             case _ => ???
           }
           case _ => ???
@@ -93,12 +98,12 @@ trait ConjugatedForm extends VerbPrimaryConjugationType with VerbWithStress with
   private def stemOfPresentFutureTense() = {
     primaryConjugationType match {
       case PrimaryConjugationType.First => (person, number) match {
-        case (Person.First, Number.Singular) | (Person.Third, Number.Plural) => stemOfFirstPersonSingularPresentTense()
+        case (Some(Person.First), Number.Singular) | (Some(Person.Third), Number.Plural) => stemOfFirstPersonSingularPresentTense()
         case _ => stemOfThirdPersonSingularPresentTense()
       }
       case PrimaryConjugationType.Second =>
         (person, number) match {
-          case (Person.First, Number.Singular) => stemOfFirstPersonSingularPresentTense()
+          case (Some(Person.First), Number.Singular) => stemOfFirstPersonSingularPresentTense()
           case _ => stemOfThirdPersonSingularPresentTense()
         }
       case _ => ???

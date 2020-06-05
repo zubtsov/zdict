@@ -5,7 +5,7 @@ import nlp.dictionary.zaliznyak.feature.common.IsPartOfSpeech
 import nlp.dictionary.zaliznyak.feature.conjugation.{HasAspect, HasConjugationType, HasEndingHint, HasReflection}
 import nlp.dictionary.zaliznyak.feature.declension.HasInitialForm
 import nlp.dictionary.zaliznyak.feature.enums.common.Gender.Gender
-import nlp.dictionary.zaliznyak.feature.enums.common.Number
+import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}
 import nlp.dictionary.zaliznyak.feature.enums.common.Number.Number
 import nlp.dictionary.zaliznyak.feature.enums.conjugation.Aspect.Aspect
 import nlp.dictionary.zaliznyak.feature.enums.conjugation.Mood.Mood
@@ -40,13 +40,13 @@ class Verb private() extends HasInitialForm with HasConjugationType with HasEndi
 
   override def aspect(): Aspect = _aspect
 
-  private[Verb] class VerbForm(p: Person, n: Number, t: Tense, g: Option[Gender], m: Mood) extends ConjugatedForm
+  private[Verb] class VerbForm(p: Option[Person], n: Number, t: Tense, g: Option[Gender], m: Mood) extends ConjugatedForm
     with IsPartOfSpeech {
     if (_aspect == Aspect.Perfect && t == Tense.Present) {
       throw new Exception("Verbs of perfect aspect may only have past and simple future forms!")
     }
 
-    override def person: Person = p
+    override def person: Option[Person] = p
 
     override def initialForm: String = _infinitive
 
@@ -136,23 +136,38 @@ object Verb {
         verb._infinitive = infinitive
         verb._conjugationType = conjugationType.toInt
         verb._endingHint = if (endingHint != null) Option(endingHint.dropRight(2).drop(2)) else None
+        //todo: refactor, replace with a loop or lambda
         verb.inflectedForms = if (verb._aspect == Aspect.Perfect) {
           Seq(
-            new verb.VerbForm(Person.First, Number.Singular, Tense.Future, None, Mood.Indicative),
-            new verb.VerbForm(Person.First, Number.Plural, Tense.Future, None, Mood.Indicative),
-            new verb.VerbForm(Person.Second, Number.Singular, Tense.Future, None, Mood.Indicative),
-            new verb.VerbForm(Person.Second, Number.Plural, Tense.Future, None, Mood.Indicative),
-            new verb.VerbForm(Person.Third, Number.Singular, Tense.Future, None, Mood.Indicative),
-            new verb.VerbForm(Person.Third, Number.Plural, Tense.Future, None, Mood.Indicative)
+            new verb.VerbForm(None, Number.Singular, Tense.Future, Option(Gender.Masculine), Mood.Indicative),
+            new verb.VerbForm(None, Number.Singular, Tense.Future, Option(Gender.Feminine), Mood.Indicative),
+            new verb.VerbForm(None, Number.Singular, Tense.Future, Option(Gender.Neuter), Mood.Indicative),
+            new verb.VerbForm(None, Number.Plural, Tense.Future, Option(Gender.Masculine), Mood.Indicative),
+            new verb.VerbForm(None, Number.Plural, Tense.Future, Option(Gender.Feminine), Mood.Indicative),
+            new verb.VerbForm(None, Number.Plural, Tense.Future, Option(Gender.Neuter), Mood.Indicative),
+
+            new verb.VerbForm(Option(Person.First), Number.Singular, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Option(Person.First), Number.Plural, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Option(Person.Second), Number.Singular, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Option(Person.Second), Number.Plural, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Option(Person.Third), Number.Singular, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Option(Person.Third), Number.Plural, Tense.Future, None, Mood.Indicative)
           )
         } else if (verb._aspect == Aspect.Imperfect) {
           Seq(
-            new verb.VerbForm(Person.First, Number.Singular, Tense.Future, None, Mood.Indicative),
-            new verb.VerbForm(Person.First, Number.Plural, Tense.Future, None, Mood.Indicative),
-            new verb.VerbForm(Person.Second, Number.Singular, Tense.Future, None, Mood.Indicative),
-            new verb.VerbForm(Person.Second, Number.Plural, Tense.Future, None, Mood.Indicative),
-            new verb.VerbForm(Person.Third, Number.Singular, Tense.Future, None, Mood.Indicative),
-            new verb.VerbForm(Person.Third, Number.Plural, Tense.Future, None, Mood.Indicative)
+            new verb.VerbForm(None, Number.Singular, Tense.Future, Option(Gender.Masculine), Mood.Indicative),
+            new verb.VerbForm(None, Number.Singular, Tense.Future, Option(Gender.Feminine), Mood.Indicative),
+            new verb.VerbForm(None, Number.Singular, Tense.Future, Option(Gender.Neuter), Mood.Indicative),
+            new verb.VerbForm(None, Number.Plural, Tense.Future, Option(Gender.Masculine), Mood.Indicative),
+            new verb.VerbForm(None, Number.Plural, Tense.Future, Option(Gender.Feminine), Mood.Indicative),
+            new verb.VerbForm(None, Number.Plural, Tense.Future, Option(Gender.Neuter), Mood.Indicative),
+
+            new verb.VerbForm(Option(Person.First), Number.Singular, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Option(Person.First), Number.Plural, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Option(Person.Second), Number.Singular, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Option(Person.Second), Number.Plural, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Option(Person.Third), Number.Singular, Tense.Future, None, Mood.Indicative),
+            new verb.VerbForm(Option(Person.Third), Number.Plural, Tense.Future, None, Mood.Indicative)
           )
         }
         else ???

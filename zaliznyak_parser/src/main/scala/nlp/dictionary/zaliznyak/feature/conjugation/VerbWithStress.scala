@@ -4,7 +4,7 @@ import nlp.dictionary.zaliznyak.feature.common.{HasNumber}
 import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}
 import nlp.dictionary.zaliznyak.feature.enums.conjugation.{Mood, PastStressType, Person, PresentStressType, Tense}
 
-trait VerbWithStress extends HasPastAndPresentStressType with HasTense with HasNumber with HasPerson with HasMood with OptionallyHasGender {
+trait VerbWithStress extends HasPastAndPresentStressType with HasTense with HasNumber with OptionallyHasPerson with HasMood with OptionallyHasGender {
   def isStemStressed(): Boolean = {
     tense match {
       case Tense.Present | Tense.Future => presentStressType match {
