@@ -7,16 +7,16 @@ import org.zubtsov.dictionary.html.elemet.{HTMLNounTable, HTMLTable}
 
 import scala.collection.mutable.ListBuffer
 
-class NounParser extends Parser {
+class NounParser extends CommonNameParser {
 
   override def parse(htmlDocument: HTMLDocument, word: String): ListBuffer[Lexeme] = {
 
     val nouns = new ListBuffer[Lexeme]()
-    val casesTables = getCasesTable(htmlDocument)
+    val casesTables = getFormsTable(htmlDocument)
 
     casesTables.foreach(table => {
       val lexemeForms = ListBuffer[LexemeForm]()
-      val rows = table.child.filter(_.child.nonEmpty)
+      val rows = htmlDocument.getChildElements(table)
       for (rowNum <- 1 until rows.size) {
         val row = htmlDocument.getElementsFromNodeByTag(rows(rowNum), "td")
         val caseType = getCase(htmlDocument, row.head)

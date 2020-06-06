@@ -3,7 +3,7 @@ package org.zubtsov.dictionary.wiktionary
 import java.io.FileWriter
 
 import com.google.gson.Gson
-import org.zubtsov.dictionary.config.{AdjectiveConfig, Config, NounConfig}
+import org.zubtsov.dictionary.config.{AdjectiveConfig, Config, NounConfig,VerbConfig}
 import org.zubtsov.dictionary.extractor.URLExtractor
 import org.zubtsov.dictionary.html.HTMLDocument
 
@@ -40,11 +40,12 @@ object WiktionaryParser {
     val htmlDocument = URLExtractor.extractDataFromHTML("https://ru.wiktionary.org/wiki/" + word)
 
     htmlDocument.getElementsFromArticleByTag("a")
-      .map(anchor => anchor.attribute("title").getOrElse(None).toString)
-      .filter(anchor => anchor.contains("существительное") || anchor.contains("прилагательное"))
+      .map(anchor => htmlDocument.getAttributeValue(anchor, "title"))
+      .filter(anchor => anchor.contains("существительное") || anchor.contains("прилагательное") || anchor.contains("глагол"))
       .map(anchor => {
         if (anchor.contains("существительное")) NounConfig
-        else AdjectiveConfig
+        else if (anchor.contains("прилагательное")) AdjectiveConfig
+        else VerbConfig
       })
       .distinct
       .foreach(config => parseConfig(config, htmlDocument, word, outputPath))

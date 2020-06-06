@@ -1,13 +1,13 @@
 package org.zubtsov.dictionary.parser
 
+import org.jsoup.nodes.Element
 import org.zubtsov.dictionary.entity.{Lexeme, LexemeForm}
-import org.zubtsov.dictionary.feature.CaseEnum
 import org.zubtsov.dictionary.html.HTMLDocument
 import org.zubtsov.dictionary.html.elemet.HTMLTable
 import org.zubtsov.dictionary.utils.StringFormatter
 
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
-import scala.xml.{Node, NodeSeq}
 
 trait Parser {
 
@@ -15,42 +15,35 @@ trait Parser {
 
   def getTableHeader(): HTMLTable
 
-  def getCasesTable(htmlDocument: HTMLDocument): Seq[Node] = {
+  def getFormsTable(htmlDocument: HTMLDocument) = {
     for {
       table <- htmlDocument.getElementsFromArticleByTag("tbody")
-      tableHeader = htmlDocument.getElementsFromNodeByTag(table, Seq("tr", "th"))
-      if isCasesTable(htmlDocument, tableHeader)
+      tableHeader = htmlDocument.getElementsFromNodeByTag(table, Seq("tr", "th", "a"))
+      if isFormsTable(htmlDocument, tableHeader)
     } yield table
   }
 
-  def isCasesTable(htmlDocument: HTMLDocument, header: NodeSeq): Boolean = {
+  def isFormsTable(htmlDocument: HTMLDocument, header: mutable.Buffer[Element]): Boolean = {
     val htmlTableHeader = getTableHeader()
     (header.length == htmlTableHeader.headerSize
-      && (header.map(thNode =>
-      htmlDocument.getElementsFromNodeByTag(thNode, "a").text) zip htmlTableHeader.header)
+      && (header.map(column => column.text()) zip htmlTableHeader.header)
       .forall(column => column._1.matches(column._2)))
   }
 
-  def getCase(htmlDocument: HTMLDocument, caseNode: Node): String = {
-    CaseEnum.Case(
-      StringFormatter
-        .normalizeString(
-          htmlDocument.getElementsFromNodeByTag(caseNode, "a")
-            .head
-            .attribute("title")
-            .getOrElse(None)
-            .toString))
-      .toString()
+  def getRowTitle(htmlDocument: HTMLDocument, caseElement: Element): String = {
+    StringFormatter
+      .normalizeString(
+        htmlDocument.getAttributeValue(htmlDocument.getElementsFromNodeByTag(caseElement, "a").head, "title"))
   }
 
-  def getLexemeForm(node: Node, grammaticalFeatures: Array[String]): LexemeForm = {
-    LexemeForm(StringFormatter.normalizeString(node.text.trim), grammaticalFeatures :+ getStressIndex(node))
+  def getLexemeForm(element: Element, grammaticalFeatures: Array[String]): LexemeForm = {
+    LexemeForm(StringFormatter.normalizeString(element.text.trim), grammaticalFeatures :+ getStressIndex(element))
   }
 
-  def getStressIndex(node: Node) = {
-    val stressIndex = "\\p{M}".r.findAllMatchIn(node.text.trim).map(_.start).toList.headOption
-    if(stressIndex.isDefined) (stressIndex.get - 1).toString
-      //todo ???
+  def getStressIndex(element: Element) = {
+    val stressIndex = "\\p{M}".r.findAllMatchIn(element.text.trim).map(_.start).toList.headOption
+    if (stressIndex.isDefined) (stressIndex.get - 1).toString
+    //todo ???
     else ""
   }
 }
