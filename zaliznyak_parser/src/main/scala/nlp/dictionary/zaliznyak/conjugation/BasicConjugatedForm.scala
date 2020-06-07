@@ -5,32 +5,13 @@ import nlp.dictionary.zaliznyak.feature.conjugation._
 import nlp.dictionary.zaliznyak.feature.declension.HasInitialForm
 import nlp.dictionary.zaliznyak.feature.enums.common.Number
 import nlp.dictionary.zaliznyak.feature.enums.conjugation.Person
+import BasicConjugatedForm._
+import nlp.dictionary.zaliznyak.helper.Utils._
 
 //aka Спряжение
-// todo: with HasStem?
-// todo: check endingHint existence
-trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with OptionallyHasPerson with HasNumber with HasEndingHint with HasReflection with HasAspect {
-  private val ConsonantRotation = Map(
-    "ск" -> "щ",
-    "ст" -> "щ",
-    "к" -> "ч",
-    "т" -> "ч", //sometimes it's "щ"
-    "б" -> "бл",
-    "п" -> "пл",
-    "в" -> "вл",
-    "ф" -> "фл",
-    "м" -> "мл",
-    "з" -> "ж",
-    "с" -> "ш",
-    "д" -> "ж",
-    "г" -> "ж",
-    "х" -> "ш",
-  )
-
-  //tense depends on Aspect
+//tense depends on aspect
+trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with OptionallyHasPerson with HasNumber with HasEndingHint with HasReflection with HasAspect { // todo: with HasStem?
   def formOfFirstPersonPresentOrFutureSingularForm(): (String, String) = {
-    import nlp.dictionary.zaliznyak.helper.Utils._
-
     val infinitive = if (isReflexive) initialForm.dropRight(2) else initialForm //todo: there is no such step in the dictionary...
 
     val (initialStem, ending) = conjugationType match {
@@ -178,18 +159,10 @@ trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with Op
     }
 
     val newStem = conjugationType match {
-      case 4 | 5 if (
-        person == Some(Person.First) //todo: or person == Some(Person.First)?
+      case 4 | 5 | 6 if (
+        person == Some(Person.First)
           && number == Number.Singular
-        ) => {
-        applyConsonantRotation(initialStem)
-      }
-      case 6 if (
-        (person == Some(Person.First)) //todo: or person == Some(Person.First)?
-          && number == Number.Singular
-        ) => {
-        applyConsonantRotation(initialStem)
-      }
+        ) => applyConsonantRotation(initialStem)
       case _ => initialStem
     }
 
@@ -203,10 +176,7 @@ trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with Op
     (newStem, ending + postfix)
   }
 
-  //tense depends on Aspect
   def formOfThirdPersonPresentOrFutureSingular(): (String, String) = {
-    import nlp.dictionary.zaliznyak.helper.Utils._
-
     val infinitive = if (isReflexive) initialForm.dropRight(2) else initialForm //todo: there is no such step in the dictionary...
 
     val (initialStem, ending) = conjugationType match {
@@ -355,11 +325,9 @@ trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with Op
 
     val newStem = conjugationType match {
       case 6 if (
-        person == Some(Person.Third) //todo: or person == Some(Person.First)?
+        person == Some(Person.Third)
           && number == Number.Singular
-        ) => {
-        applyConsonantRotation(initialStem)
-      }
+        ) => applyConsonantRotation(initialStem)
       case _ => initialStem
     }
 
@@ -382,8 +350,6 @@ trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with Op
   }
 
   private def applyConsonantRotation(stem: String) = {
-    import nlp.dictionary.zaliznyak.helper.Utils._
-
     val replaced = if (!stem.endsWithAnyOf(ConsonantRotation.keys))
       stem
     else if (endingHint.forall(_ == "щ")
@@ -398,4 +364,23 @@ trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with Op
 
     replaced
   }
+}
+
+object BasicConjugatedForm {
+  private val ConsonantRotation = Map(
+    "ск" -> "щ",
+    "ст" -> "щ",
+    "к" -> "ч",
+    "т" -> "ч", //sometimes it's "щ"
+    "б" -> "бл",
+    "п" -> "пл",
+    "в" -> "вл",
+    "ф" -> "фл",
+    "м" -> "мл",
+    "з" -> "ж",
+    "с" -> "ш",
+    "д" -> "ж",
+    "г" -> "ж",
+    "х" -> "ш",
+  )
 }
