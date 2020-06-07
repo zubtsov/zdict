@@ -3,7 +3,7 @@ package nlp.dictionary.zaliznyak.feature.enums.conjugation
 object PresentStressType extends Enumeration {
   type PresentStressType = Value
   val TypeA, TypeB, TypeC = Value
-
+  //todo: remove code duplication (see PastStressType class)
   def apply(st: String): PresentStressType = {
     val stressType = if (st.contains("/")) {
       st.split("/")(0)

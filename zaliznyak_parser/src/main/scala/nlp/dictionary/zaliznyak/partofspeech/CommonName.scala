@@ -1,6 +1,6 @@
 package nlp.dictionary.zaliznyak.partofspeech
 
-import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber, IsPartOfSpeech}
+import nlp.dictionary.zaliznyak.feature.common.{HasNumber, IsPartOfSpeech}
 import nlp.dictionary.zaliznyak.feature.declension._
 import nlp.dictionary.zaliznyak.feature.enums.declension.DeclensionType.DeclensionType
 import nlp.dictionary.zaliznyak.feature.enums.declension.PrimaryStressType.PrimaryStressType

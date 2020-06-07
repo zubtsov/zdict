@@ -17,7 +17,7 @@ trait ConjugatedForm extends VerbPrimaryConjugationType with VerbWithStress with
         && number == Number.Singular
         && (person == Some(Person.First) || person == Some(Person.Third))
     ) {
-      formOfFirstOrThirdPersonPresentSingular()
+      formOfFirstOrThirdPersonPresentOrFutureSingular()
     }
     else {
       val stem = (tense, aspect) match {

@@ -7,8 +7,6 @@ trait VerbWithStem extends BasicConjugatedForm {
   private val toRemoveFromFirstPersonSingularPresent = "(усь|юсь|у|ю)$"
   private val toRemoveFromThirdPersonSingularPresent = "(ется|ётся|ится|ет|ёт|ит)$"
 
-  //todo: add reflexive parameter?
-  // maybe it's better to use a separate interface to get rid of parameters?
   protected def stemOfInfinitive() = {
     initialForm.replaceAll(toRemoveFromInfinitive, "")
   }

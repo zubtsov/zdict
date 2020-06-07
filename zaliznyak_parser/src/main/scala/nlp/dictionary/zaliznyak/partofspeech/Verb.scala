@@ -45,6 +45,19 @@ class Verb private() extends HasInitialForm with HasConjugationType with HasEndi
     if (_aspect == Aspect.Perfect && t == Tense.Present) {
       throw new Exception("Verbs of perfect aspect may only have past and simple future forms!")
     }
+    if (t == Tense.Past) {
+      if (g.isEmpty && n == Number.Singular)
+        throw new Exception("You must specify gender for the singular past form")
+      if (p.isDefined)
+        throw new Exception("Person is not applicable for the past form")
+    }
+    if (t == Tense.Present || t == Tense.Future) {
+      if (p.isEmpty)
+        throw new Exception("You must specify person for the past form")
+      if (g.isDefined)
+        throw new Exception("Gender is not applicable for the present and future form")
+    }
+
 
     override def person: Option[Person] = p
 

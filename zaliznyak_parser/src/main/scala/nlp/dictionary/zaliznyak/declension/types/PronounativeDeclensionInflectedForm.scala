@@ -1,7 +1,7 @@
 package nlp.dictionary.zaliznyak.declension.types
 
-import nlp.dictionary.zaliznyak.feature.common.{HasGender, HasNumber}
-import nlp.dictionary.zaliznyak.feature.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, NameWithStress}
+import nlp.dictionary.zaliznyak.feature.common.HasNumber
+import nlp.dictionary.zaliznyak.feature.declension.{HasAnimacy, HasCase, HasDeclensionTypeAndSubtype, HasGender, NameWithStress}
 import nlp.dictionary.zaliznyak.feature.enums.common
 import nlp.dictionary.zaliznyak.feature.enums.common.{Gender, Number}
 import nlp.dictionary.zaliznyak.feature.enums.declension.{Animacy, Case}

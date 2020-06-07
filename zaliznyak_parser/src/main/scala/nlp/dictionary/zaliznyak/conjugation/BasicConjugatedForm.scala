@@ -11,7 +11,7 @@ import nlp.dictionary.zaliznyak.helper.Utils._
 //aka Спряжение
 //tense depends on aspect
 trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with OptionallyHasPerson with HasNumber with HasEndingHint with HasReflection with HasAspect { // todo: with HasStem?
-  def formOfFirstPersonPresentOrFutureSingularForm(): (String, String) = {
+  protected def formOfFirstPersonPresentOrFutureSingularForm(): (String, String) = {
     val infinitive = if (isReflexive) initialForm.dropRight(2) else initialForm //todo: there is no such step in the dictionary...
 
     val (initialStem, ending) = conjugationType match {
@@ -176,7 +176,7 @@ trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with Op
     (newStem, ending + postfix)
   }
 
-  def formOfThirdPersonPresentOrFutureSingular(): (String, String) = {
+  protected def formOfThirdPersonPresentOrFutureSingular(): (String, String) = {
     val infinitive = if (isReflexive) initialForm.dropRight(2) else initialForm //todo: there is no such step in the dictionary...
 
     val (initialStem, ending) = conjugationType match {
@@ -341,7 +341,7 @@ trait BasicConjugatedForm extends HasInitialForm with HasConjugationType with Op
     (newStem, ending + postfix)
   }
 
-  def formOfFirstOrThirdPersonPresentSingular(): (String, String) = {
+  protected def formOfFirstOrThirdPersonPresentOrFutureSingular(): (String, String) = {
     person match {
       case Some(Person.First) => formOfFirstPersonPresentOrFutureSingularForm()
       case Some(Person.Third) => formOfThirdPersonPresentOrFutureSingular()
