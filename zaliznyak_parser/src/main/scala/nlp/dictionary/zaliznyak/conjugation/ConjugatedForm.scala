@@ -10,6 +10,8 @@ trait ConjugatedForm extends VerbPrimaryConjugationType with VerbWithStress with
   }
 
   def verbForm() = {
+    import nlp.dictionary.zaliznyak.helper.Utils._
+
     if (
       ((aspect == Aspect.Perfect && tense == Tense.Future) || (aspect == Aspect.Imperfect && tense == Tense.Present))
         && number == Number.Singular
@@ -24,7 +26,7 @@ trait ConjugatedForm extends VerbPrimaryConjugationType with VerbWithStress with
         }
         case (Tense.Past, _) => {
           conjugationType match {
-            case 7 | 8 => ???
+            case 7 | 8 => stemOfFirstPersonSingularPresentOrFutureTense() //todo: implement additional notes
             case _ => stemOfInfinitive()
           }
         }
@@ -37,16 +39,16 @@ trait ConjugatedForm extends VerbPrimaryConjugationType with VerbWithStress with
         case (Tense.Past, _) => {
           number match {
             case Number.Singular => gender match {
-              case Gender.Masculine => "л" //todo: после согласной - нуль
-              case Gender.Feminine => "ла"
-              case Gender.Neuter => "ло"
-              case _ => ???
+              case Some(Gender.Masculine) => if (stem.takeRight(1).isConsonant()) "" else "л"
+              case Some(Gender.Feminine) => "ла"
+              case Some(Gender.Neuter) => "ло"
+              case _ => throw new Exception("Unknown gender!")
             }
             case Number.Plural => "ли"
-            case _ => ???
+            case _ => throw new Exception("Unknown number!")
           }
         }
-        case _ => ???
+        case _ => throw new Exception("Unknown tense or aspect!")
       }
 
       (stem, ending)
@@ -98,13 +100,13 @@ trait ConjugatedForm extends VerbPrimaryConjugationType with VerbWithStress with
   private def stemOfPresentFutureTense() = {
     primaryConjugationType match {
       case PrimaryConjugationType.First => (person, number) match {
-        case (Some(Person.First), Number.Singular) | (Some(Person.Third), Number.Plural) => stemOfFirstPersonSingularPresentTense()
-        case _ => stemOfThirdPersonSingularPresentTense()
+        case (Some(Person.First), Number.Singular) | (Some(Person.Third), Number.Plural) => stemOfFirstPersonSingularPresentOrFutureTense()
+        case _ => stemOfThirdPersonSingularPresentOrFutureTense()
       }
       case PrimaryConjugationType.Second =>
         (person, number) match {
-          case (Some(Person.First), Number.Singular) => stemOfFirstPersonSingularPresentTense()
-          case _ => stemOfThirdPersonSingularPresentTense()
+          case (Some(Person.First), Number.Singular) => stemOfFirstPersonSingularPresentOrFutureTense()
+          case _ => stemOfThirdPersonSingularPresentOrFutureTense()
         }
       case _ => ???
     }

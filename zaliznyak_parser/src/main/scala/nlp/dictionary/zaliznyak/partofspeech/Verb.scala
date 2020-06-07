@@ -139,12 +139,10 @@ object Verb {
         //todo: refactor, replace with a loop or lambda
         verb.inflectedForms = if (verb._aspect == Aspect.Perfect) {
           Seq(
-            new verb.VerbForm(None, Number.Singular, Tense.Future, Option(Gender.Masculine), Mood.Indicative),
-            new verb.VerbForm(None, Number.Singular, Tense.Future, Option(Gender.Feminine), Mood.Indicative),
-            new verb.VerbForm(None, Number.Singular, Tense.Future, Option(Gender.Neuter), Mood.Indicative),
-            new verb.VerbForm(None, Number.Plural, Tense.Future, Option(Gender.Masculine), Mood.Indicative),
-            new verb.VerbForm(None, Number.Plural, Tense.Future, Option(Gender.Feminine), Mood.Indicative),
-            new verb.VerbForm(None, Number.Plural, Tense.Future, Option(Gender.Neuter), Mood.Indicative),
+            new verb.VerbForm(None, Number.Singular, Tense.Past, Option(Gender.Masculine), Mood.Indicative),
+            new verb.VerbForm(None, Number.Singular, Tense.Past, Option(Gender.Feminine), Mood.Indicative),
+            new verb.VerbForm(None, Number.Singular, Tense.Past, Option(Gender.Neuter), Mood.Indicative),
+            new verb.VerbForm(None, Number.Plural, Tense.Past, None, Mood.Indicative),
 
             new verb.VerbForm(Option(Person.First), Number.Singular, Tense.Future, None, Mood.Indicative),
             new verb.VerbForm(Option(Person.First), Number.Plural, Tense.Future, None, Mood.Indicative),
@@ -155,12 +153,12 @@ object Verb {
           )
         } else if (verb._aspect == Aspect.Imperfect) {
           Seq(
-            new verb.VerbForm(None, Number.Singular, Tense.Future, Option(Gender.Masculine), Mood.Indicative),
-            new verb.VerbForm(None, Number.Singular, Tense.Future, Option(Gender.Feminine), Mood.Indicative),
-            new verb.VerbForm(None, Number.Singular, Tense.Future, Option(Gender.Neuter), Mood.Indicative),
-            new verb.VerbForm(None, Number.Plural, Tense.Future, Option(Gender.Masculine), Mood.Indicative),
-            new verb.VerbForm(None, Number.Plural, Tense.Future, Option(Gender.Feminine), Mood.Indicative),
-            new verb.VerbForm(None, Number.Plural, Tense.Future, Option(Gender.Neuter), Mood.Indicative),
+            new verb.VerbForm(None, Number.Singular, Tense.Past, Option(Gender.Masculine), Mood.Indicative),
+            new verb.VerbForm(None, Number.Singular, Tense.Past, Option(Gender.Feminine), Mood.Indicative),
+            new verb.VerbForm(None, Number.Singular, Tense.Past, Option(Gender.Neuter), Mood.Indicative),
+            new verb.VerbForm(None, Number.Plural, Tense.Past, Option(Gender.Masculine), Mood.Indicative),
+            new verb.VerbForm(None, Number.Plural, Tense.Past, Option(Gender.Feminine), Mood.Indicative),
+            new verb.VerbForm(None, Number.Plural, Tense.Past, Option(Gender.Neuter), Mood.Indicative),
 
             new verb.VerbForm(Option(Person.First), Number.Singular, Tense.Future, None, Mood.Indicative),
             new verb.VerbForm(Option(Person.First), Number.Plural, Tense.Future, None, Mood.Indicative),

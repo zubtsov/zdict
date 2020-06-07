@@ -12,14 +12,14 @@ trait VerbWithStem extends BasicConjugatedForm {
   protected def stemOfInfinitive() = {
     initialForm.replaceAll(toRemoveFromInfinitive, "")
   }
-
-  protected def stemOfFirstPersonSingularPresentTense() = {
+  //tense depends on aspect
+  protected def stemOfFirstPersonSingularPresentOrFutureTense() = {
     val (stem, ending) = formOfFirstPersonPresentOrFutureSingularForm()
     (stem + ending)
       .replaceAll(toRemoveFromFirstPersonSingularPresent, "") //todo: just take stem???
   }
-
-  protected def stemOfThirdPersonSingularPresentTense() = {
+  //tense depends on aspect
+  protected def stemOfThirdPersonSingularPresentOrFutureTense() = {
     val (stem, ending) = formOfThirdPersonPresentOrFutureSingular()
     (stem + ending)
       .replaceAll(toRemoveFromThirdPersonSingularPresent, "") //todo: just take stem???
