@@ -20,8 +20,8 @@ class NounParser extends CommonNameParser {
       for (rowNum <- 1 until rows.size) {
         val row = htmlDocument.getElementsFromNodeByTag(rows(rowNum), "td")
         val caseType = getCase(htmlDocument, row.head)
-        lexemeForms += getLexemeForm(row(1), Array(caseType, Number.Singular.toString))
-        lexemeForms += getLexemeForm(row(2), Array(caseType, Number.Plural.toString))
+        lexemeForms ++= getLexemeForm(row(1), Array(caseType, Number.Singular.toString))
+        lexemeForms ++= getLexemeForm(row(2), Array(caseType, Number.Plural.toString))
       }
       nouns += Lexeme(word, PartOfSpeech.Noun.toString, lexemeForms)
     })

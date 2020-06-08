@@ -18,7 +18,7 @@ trait Parser {
   def getFormsTable(htmlDocument: HTMLDocument) = {
     for {
       table <- htmlDocument.getElementsFromArticleByTag("tbody")
-      tableHeader = htmlDocument.getElementsFromNodeByTag(table, Seq("tr", "th", "a"))
+      tableHeader = htmlDocument.getTableHeader(table)
       if isFormsTable(htmlDocument, tableHeader)
     } yield table
   }
@@ -36,8 +36,11 @@ trait Parser {
         htmlDocument.getAttributeValue(htmlDocument.getElementsFromNodeByTag(caseElement, "a").head, "title"))
   }
 
-  def getLexemeForm(element: Element, grammaticalFeatures: Array[String]): LexemeForm = {
-    LexemeForm(StringFormatter.normalizeString(element.text.trim), grammaticalFeatures :+ getStressIndex(element))
+  def getLexemeForm(element: Element, grammaticalFeatures: Array[String]): ListBuffer[LexemeForm] = {
+    val rowValues = element.text.trim.split("\\s+")
+    val lexemeForms = ListBuffer[LexemeForm]()
+    rowValues.foreach(value => lexemeForms += LexemeForm(StringFormatter.normalizeString(value), grammaticalFeatures :+ getStressIndex(element)))
+    lexemeForms
   }
 
   def getStressIndex(element: Element) = {

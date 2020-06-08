@@ -8,6 +8,10 @@ import scala.collection.mutable
 
 case class HTMLDocument(document: Document) {
 
+  def getTableHeader(element: Element): mutable.Buffer[Element] ={
+   getElementsFromNodeByTag(element, Seq("tr", "th", "a"))
+  }
+
   def getElementsFromArticleByTag(tag: String) = {
     asScalaBuffer(document.body().getElementsByTag(tag))
   }

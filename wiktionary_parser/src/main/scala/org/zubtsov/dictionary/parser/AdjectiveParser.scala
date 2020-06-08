@@ -23,25 +23,25 @@ class AdjectiveParser extends CommonNameParser {
         row.length match {
           case 5 => {
             val caseType = getCase(htmlDocument, row.head)
-            lexemeForms += getLexemeForm(row(1), Array(caseType, Number.Singular.toString, Gender.Masculine.toString))
-            lexemeForms += getLexemeForm(row(2), Array(caseType, Number.Singular.toString, Gender.Neuter.toString))
-            lexemeForms += getLexemeForm(row(3), Array(caseType, Number.Singular.toString, Gender.Feminine.toString))
-            lexemeForms += getLexemeForm(row(4), Array(caseType, Number.Plural.toString))
+            lexemeForms ++= getLexemeForm(row(1), Array(caseType, Number.Singular.toString, Gender.Masculine.toString))
+            lexemeForms ++= getLexemeForm(row(2), Array(caseType, Number.Singular.toString, Gender.Neuter.toString))
+            lexemeForms ++= getLexemeForm(row(3), Array(caseType, Number.Singular.toString, Gender.Feminine.toString))
+            lexemeForms ++= getLexemeForm(row(4), Array(caseType, Number.Plural.toString))
           }
           case 3 => {
             val previousRow = htmlDocument.getElementsFromNodeByTag(rows(rowNum - 1), "td")
             val caseType = getCase(htmlDocument, previousRow.head)
-            lexemeForms += getLexemeForm(row(1), Array(caseType, Number.Singular.toString, Gender.Masculine.toString, Animacy.Inanimate.toString))
-            lexemeForms += getLexemeForm(row(2), Array(caseType, Number.Plural.toString, Animacy.Inanimate.toString))
-            lexemeForms += getLexemeForm(previousRow(3), Array(caseType, Number.Singular.toString, Gender.Neuter.toString, Animacy.Inanimate.toString))
-            lexemeForms += getLexemeForm(previousRow(4), Array(caseType, Number.Singular.toString, Gender.Feminine.toString, Animacy.Inanimate.toString))
+            lexemeForms ++= getLexemeForm(row(1), Array(caseType, Number.Singular.toString, Gender.Masculine.toString, Animacy.Inanimate.toString))
+            lexemeForms ++= getLexemeForm(row(2), Array(caseType, Number.Plural.toString, Animacy.Inanimate.toString))
+            lexemeForms ++= getLexemeForm(previousRow(3), Array(caseType, Number.Singular.toString, Gender.Neuter.toString, Animacy.Inanimate.toString))
+            lexemeForms ++= getLexemeForm(previousRow(4), Array(caseType, Number.Singular.toString, Gender.Feminine.toString, Animacy.Inanimate.toString))
           }
           case 6 => {
             val caseType = getCase(htmlDocument, row.head)
-            lexemeForms += getLexemeForm(row(2), Array(caseType, Number.Singular.toString, Gender.Masculine.toString, Animacy.Animate.toString))
-            lexemeForms += getLexemeForm(row(3), Array(caseType, Number.Singular.toString, Gender.Neuter.toString, Animacy.Animate.toString))
-            lexemeForms += getLexemeForm(row(4), Array(caseType, Number.Singular.toString, Gender.Feminine.toString, Animacy.Animate.toString))
-            lexemeForms += getLexemeForm(row(5), Array(caseType, Number.Plural.toString, Animacy.Animate.toString))
+            lexemeForms ++= getLexemeForm(row(2), Array(caseType, Number.Singular.toString, Gender.Masculine.toString, Animacy.Animate.toString))
+            lexemeForms ++= getLexemeForm(row(3), Array(caseType, Number.Singular.toString, Gender.Neuter.toString, Animacy.Animate.toString))
+            lexemeForms ++= getLexemeForm(row(4), Array(caseType, Number.Singular.toString, Gender.Feminine.toString, Animacy.Animate.toString))
+            lexemeForms ++= getLexemeForm(row(5), Array(caseType, Number.Plural.toString, Animacy.Animate.toString))
           }
           //todo: ???
           case _ => ""

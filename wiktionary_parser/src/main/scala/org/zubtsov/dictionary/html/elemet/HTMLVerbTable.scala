@@ -5,6 +5,6 @@ class HTMLVerbTable extends HTMLTable {
   override def headerSize: Int = 3
 
   override def header: Array[String] = {
-    Array(".*наст\\..*", ".*прош\\..*", ".*повелит\\..*")
+    Array(".*наст\\.|будущ\\..*", ".*прош\\..*", ".*повелит\\..*")
   }
 }
