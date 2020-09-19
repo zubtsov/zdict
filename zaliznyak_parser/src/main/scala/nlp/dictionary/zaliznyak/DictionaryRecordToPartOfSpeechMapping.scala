@@ -1,25 +1,15 @@
 package nlp.dictionary.zaliznyak
 
-import nlp.dictionary.zaliznyak.partofspeech.{Adjective, Noun, Verb}
+import nlp.dictionary.zaliznyak.partofspeech.{Adjective, Noun, PartOfSpeech, Verb}
 
-import scala.util.Try
-
-//todo: refactor
-class DictionaryRecordToPartOfSpeechMapping {
+object DictionaryRecordToPartOfSpeechMapping {
   def map(dictrecord: String) = {
-//    val noun = Try(Noun(dictrecord))
-//    if (noun.isSuccess)
-//      noun.get
-//    else {
-//      val adjective = Try(Adjective(dictrecord))
-//      if (adjective.isSuccess)
-//        adjective.get
-//      else {
-        val verb = Try(Verb(dictrecord))
-        if (verb.isSuccess)
-          verb.get
-        else ???
-//      }
-//    }
+
+    DictionaryRecord(dictrecord).getPartOfSpeech() match {
+      case PartOfSpeech.Noun => Noun(dictrecord)
+      case PartOfSpeech.Adjective => Adjective(dictrecord)
+      case PartOfSpeech.Verb => Verb(dictrecord)
+      case _ => throw new Exception(s"Unknown part of speech: $dictrecord")
+    }
   }
 }

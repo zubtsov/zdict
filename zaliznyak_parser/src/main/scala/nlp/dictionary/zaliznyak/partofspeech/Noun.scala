@@ -69,8 +69,10 @@ class Noun private() extends CommonName with HasGender with HasAnimacy {
 }
 
 object Noun {
+  final class NotANounException(message: String) extends Exception(message)
+
   private val primarySyntacticCharacteristic = raw"м|ж|с|мо|жо|со|мо\-жо"
-  private val regex = CommonName.regexPattern.format(primarySyntacticCharacteristic).r
+  val regex = CommonName.regexPattern.format(primarySyntacticCharacteristic).r
 
   def apply(record: String) = {
     record match {
@@ -108,7 +110,7 @@ object Noun {
 
         noun
       }
-      case _ => ???
+      case _ => throw new NotANounException(s"Not a noun: $record")
     }
   }
 }

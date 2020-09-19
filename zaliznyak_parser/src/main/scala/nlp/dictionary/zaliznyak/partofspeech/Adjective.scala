@@ -58,8 +58,10 @@ class Adjective extends CommonName {
 }
 
 object Adjective {
+  final class NotAnAdjectiveException(message: String) extends Exception(message)
+
   private val primarySyntacticCharacteristic = raw"п"
-  private val regex = CommonName.regexPattern.format(primarySyntacticCharacteristic).r
+  val regex = CommonName.regexPattern.format(primarySyntacticCharacteristic).r
 
   def apply(record: String) = {
     record match {
@@ -98,7 +100,7 @@ object Adjective {
 
         adjective
       }
-      case _ => ???
+      case _ => throw new NotAnAdjectiveException(s"Not an adjective: $record")
     }
   }
 }

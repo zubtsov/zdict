@@ -105,6 +105,7 @@ class Verb private() extends HasInitialForm with HasConjugationType with HasEndi
 }
 
 object Verb {
+  final class NotAVerbException(message: String) extends Exception(message)
   val regex = (
     //начальная форма глагола (инфинитив)
     raw"^([а-яА-Я\-]+)\s" +
@@ -184,7 +185,7 @@ object Verb {
         else ???
         verb
       }
-      case _ => ???
+      case _ => throw new NotAVerbException(s"Not a verb: $dictionaryRecord")
     }
   }
 }
